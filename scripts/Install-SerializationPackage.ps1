@@ -44,7 +44,7 @@
             $params += "Description=$Description"
         }
 
-        Start-Process "$scriptPath\..\lib\curl\curl.exe" $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait
+        Start-Process "$scriptPath\..\tools\curl\curl.exe" $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait
         Get-Content "$($env:TEMP)\install-serializationPackage-std.txt"
 
         if($Publish) {
