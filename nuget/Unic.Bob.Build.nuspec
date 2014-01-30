@@ -9,6 +9,8 @@
     <description>Bob's build server tools</description>
   </metadata>
   <files>
+    <file src="..\scripts\New-SerializationPackage.ps1" target="tools" />
+    <file src="..\scripts\Install-SerializationPackage.ps1" target="tools" />
     <file src="..\scripts\modules\common\*" target="tools\modules\common" />
     <file src="..\scripts\modules\build\*" target="tools\modules\build" />
 	<file src="..\scripts\init-build.ps1" target="tools\init.ps1" />
