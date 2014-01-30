@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unic.Bob.Development</id>
+	<title>Unic Bob Development Tools</title>
+    <version>0.1.0</version>
+    <authors>Unic AG</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Bob's development tools</description>
+  </metadata>
+  <files>
+    <file src="..\scripts\modules\common\*" target="tools\modules\common" />
+    <file src="..\scripts\modules\development\*" target="tools\modules\development" />
+	<file src="..\scripts\init-development.ps1" target="tools\init.ps1" />
+  </files>
+</package>
