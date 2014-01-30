@@ -27,6 +27,6 @@
             $OutputFile = Join-Path $PWD $OutputFile
         }
 
-        & "$scriptPath\..\tools\sitecore-courier\Sitecore.Courier.Runner.exe" /source:$Source /target:$Target /output:$OutputFile
+        & "$scriptPath\..\..\..\tools\sitecore-courier\Sitecore.Courier.Runner.exe" /source:$Source /target:$Target /output:$OutputFile
     }
 }
