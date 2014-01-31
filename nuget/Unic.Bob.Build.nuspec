@@ -3,7 +3,7 @@
   <metadata>
     <id>Unic.Bob.Build</id>
 	<title>Unic Bob Build Tools</title>
-    <version></version>
+    <version>0.0.0.0</version>
     <authors>Unic AG</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Bob's build server tools</description>
