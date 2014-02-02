@@ -9,8 +9,8 @@
     <description>Bob's build server tools</description>
   </metadata>
   <files>
-    <file src="..\scripts\New-SerializationPackage.ps1" target="tools\scripts" />
-    <file src="..\scripts\Install-SerializationPackage.ps1" target="tools\scripts" />
+    <file src="..\scripts\BobCanDo-BuildPackage.ps1" target="tools\scripts" />
+    <file src="..\scripts\BobCanDo-InstallPackage.ps1" target="tools\scripts" />
     <file src="..\scripts\modules\common\*" target="tools\scripts\modules\common" />
     <file src="..\scripts\modules\build\*" target="tools\scripts\modules\build" />
 	<file src="..\scripts\init-build.ps1" target="tools\init.ps1" />
