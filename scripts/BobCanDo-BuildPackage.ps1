@@ -7,4 +7,4 @@ Remove-Item $outputPath -Force -Recurse
 New-Item -ItemType Directory -Force -Path $outputPath
 
 Import-Module (Join-Path $modulesPath build) -Force
-New-SerializationPackage $args[0] $args[1] $args[2]
+New-ScSerializationPackage $args[0] $args[1] $args[2]

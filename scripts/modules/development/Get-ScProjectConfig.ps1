@@ -1,4 +1,4 @@
-﻿Function Get-ProjectConfig
+﻿Function Get-ScProjectConfig
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,

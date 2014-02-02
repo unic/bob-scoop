@@ -1,4 +1,4 @@
-﻿Function New-SerializationPackage
+﻿Function New-ScSerializationPackage
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,
