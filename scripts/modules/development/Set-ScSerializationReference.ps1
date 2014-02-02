@@ -1,4 +1,4 @@
-﻿Function Set-SerializationReference
+﻿Function Set-ScSerializationReference
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,
@@ -39,7 +39,7 @@
         $SerializationFolderName = $localSetupConfig.SerializationFolder
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
 
-       Write-Verbose "Start  Set-SerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
+       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
 
        $serializationPath = Join-Path $ProjectPath $SerializationFolderName;
 
@@ -88,8 +88,8 @@
 		$node.InnerText = $elementValue
 
       $config.Save($configPath);
-        Write-Host "Set serializationReference in '$configPath' to $elementValue"
-       Write-Verbose "End  Set-SerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
+        Write-Host "Set serialization reference in '$configPath' to $elementValue"
+       Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
 
 
 

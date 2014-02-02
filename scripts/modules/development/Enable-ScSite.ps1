@@ -1,6 +1,6 @@
 ﻿[System.Reflection.Assembly]::LoadFrom("C:\windows\system32\inetsrv\Microsoft.Web.Administration.dll") | out-null;
 
-Function Enable-SitecoreSite
+Function Enable-ScSite
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,

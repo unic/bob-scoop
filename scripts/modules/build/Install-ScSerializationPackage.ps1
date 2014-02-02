@@ -1,4 +1,4 @@
-﻿Function Install-SerializationPackage
+﻿Function Install-ScSerializationPackage
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,
@@ -51,7 +51,7 @@
             if(-not $PublishMode) {
                 throw "You have to provide the parameter 'PublishMode'"
             }
-            Publish-SerializationPackage -Url $Url -Mode $PublishMode -Source $PublishSource -Targets $PublishTargets -Lanugages $PublishLanugages
+            Publish-ScSerializationPackage -Url $Url -Mode $PublishMode -Source $PublishSource -Targets $PublishTargets -Lanugages $PublishLanugages
         }
     }
 

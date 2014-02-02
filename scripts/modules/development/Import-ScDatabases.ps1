@@ -1,4 +1,4 @@
-Function Import-SitecoreDatabases
+Function Import-ScDatabases
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,
@@ -47,7 +47,7 @@ Function Import-SitecoreDatabases
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Path
 
 		Import-Module  (Join-Path $scriptPath "..\..\..\tools\sitecore-powercore\DBUtils.psm1") -Force
-        Write-Verbose "Start  Import-SitecoreDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
+        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
 
 	    $config = [xml](Get-Content $ConnectionStringsFile)
 	   
@@ -85,7 +85,7 @@ Function Import-SitecoreDatabases
 
        }
 	  
-       Write-Verbose "End  Import-SitecoreDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
+       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
 
     }
 
