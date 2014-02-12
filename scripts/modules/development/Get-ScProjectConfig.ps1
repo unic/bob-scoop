@@ -1,29 +1,27 @@
 ﻿Function Get-ScProjectConfig
 {
     [CmdletBinding(
-    	SupportsShouldProcess=$True,
+        SupportsShouldProcess=$True,
         ConfirmImpact="Low"
     )]
     Param(
-		[String]$ProjectPath = "",
-        [String]$ConfigName = ""
-	)
+        [String]$ProjectRootPath = "",
+        [String]$ConfigFilePath = "Misc",
+        [String]$ConfigFileName = "Bob.xml"
+    )
     Begin{}
 
     Process
     {
-        if(-not $ProjectPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
-			$project = Get-Project 
-            if($Project) {
-			    $ProjectPath = Split-Path (Split-Path $project.FullName -Parent) -Parent
-            }
-		}
-
-        if(-not $ProjectPath) {
-            throw "No ProjectPath could be found. Please provide one."
+        if(-not $ProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-ScProjectRootPath"})) {
+            $ProjectRootPath = Get-ScProjectRootPath
         }
 
-        $path = Join-Path (Join-Path $ProjectPath "Misc" ) "$ConfigName.xml"
+        if(-not $ProjectRootPath) {
+            throw "ProjectRootPath not found. Please provide one."
+        }
+        
+        $path = Join-Path (Join-Path $ProjectRootPath "$ConfigFilePath") "$ConfigFileName"
         if(Test-Path $path) {
             return ([xml](Get-Content $path)).Configuration
         }

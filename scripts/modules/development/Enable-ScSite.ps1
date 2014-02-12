@@ -3,13 +3,14 @@
 Function Enable-ScSite
 {
     [CmdletBinding(
-    	SupportsShouldProcess=$True,
+        SupportsShouldProcess=$True,
         ConfirmImpact="Low"
     )]
     Param(
-		[String]$ProjectPath = ""
-	)
+        [String]$ProjectRootPath = ""
+    )
     Begin{}
+    
     Process
     {
         $script:iisStoped = $false
@@ -20,7 +21,7 @@ Function Enable-ScSite
             }
         }
 
-        $localSetupConfig = Get-ProjectConfig -ProjectPath $ProjectPath -ConfigName "LocalSetup"
+        $localSetupConfig = Get-ScProjectConfig
         $siteName = $localSetupConfig.WebsiteCodeName
 
         $serverManager = New-Object Microsoft.Web.Administration.ServerManager;
@@ -30,7 +31,8 @@ Function Enable-ScSite
             $appPool = $serverManager.ApplicationPools.Add($siteName);
             $appPool.ManagedRuntimeVersion = $localSetupConfig.AppPoolRuntime
             $serverManager.CommitChanges();   
-            "Added ApplicationPool '$siteName' with Runtime '$($localSetupConfig.AppPoolRuntime)'" 
+            "Added ApplicationPool '$siteName' with Runtime '$($localSetupConfig.AppPoolRuntime)'"
+            
             # Wait for the changes to apply
             Start-sleep -milliseconds 1000
 
@@ -45,7 +47,7 @@ Function Enable-ScSite
             $serverManager.CommitChanges();    
             "Added Site '$siteName' with pointing to '$webPath'. URL: $($localSetupConfig.Protocol)://$($localSetupConfig.LocalHostName)" 
     
-                # Wait for the changes to apply
+            # Wait for the changes to apply
             Start-sleep -milliseconds 1000
         }
             
