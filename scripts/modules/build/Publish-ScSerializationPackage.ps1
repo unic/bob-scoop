@@ -11,7 +11,7 @@
         [string]$Mode,
         [string]$Source,
         [string]$Targets,
-        [string]$Lanugages
+        [string]$Languages
     
 	)
     Begin{}
@@ -33,8 +33,8 @@
         if($Targets) {
             $data += "targets=$Targets"
         }
-        if($Lanugages) {
-            $data += "languages=$Lanugages"
+        if($Languages) {
+            $data += "languages=$Languages"
         }
 
         $params += [string]::Join($data, "&");
