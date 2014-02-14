@@ -1,8 +1,10 @@
 ﻿<# 
 .SYNOPSIS 
+    NOT USED BY BOB!
+    ----------------
     Traverses directories, starting with the project directory, testing for a RootIdentifier.
 .DESCRIPTION 
-    n/a
+    Not used at the moment as Bob.config has been moved to project specific /App_Config folder!
 .NOTES 
     Author     :  Unic AG
 .LINK 
