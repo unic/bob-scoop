@@ -18,7 +18,8 @@ Function Get-ScProjectRootPath
     )]
     Param(
         [String]$ProjectPath = "",
-        [String]$RootIdentifier = "Misc"
+        [String]$RootIdentifier = "misc",
+        [String]$stopString = ":"
     )
     Begin{}
 
@@ -37,12 +38,12 @@ Function Get-ScProjectRootPath
 
         $currentPath = Get-Item $projectPath
         
-        while (-not (Get-ChildItem $currentPath -Directory | Where-Object {$_.Name -eq $RootIdentifier}) -and ($currentPath.Name.Length -gt 3))
+        while (-not (Get-ChildItem $currentPath -Directory | Where-Object {$_.Name -eq $RootIdentifier}) -and (-not $currentPath.Name.Contains($stopString)))
         {    
             $currentPath = Get-Item (Split-Path $currentPath.FullName -Parent)
         }
         
-        if($currentPath.Name.Length -le 3) {
+        if($currentPath.Name.Contains($stopString)) {
             throw "No ProjectRootPath found based on $RootIdentifier. Please check if $RootIdentifier is correct."
         }
         
