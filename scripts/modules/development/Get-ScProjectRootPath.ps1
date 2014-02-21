@@ -38,7 +38,7 @@ Function Get-ScProjectRootPath
 
         $currentPath = Get-Item $projectPath
         
-        while (-not (Get-ChildItem $currentPath -Directory | Where-Object {$_.Name -eq $RootIdentifier}) -and (-not $currentPath.Name.Contains($stopString)))
+        while (-not (Get-ChildItem $currentPath | Where-Object {$_.Name -eq $RootIdentifier}) -and (-not $currentPath.Name.Contains($stopString)))
         {    
             $currentPath = Get-Item (Split-Path $currentPath.FullName -Parent)
         }
