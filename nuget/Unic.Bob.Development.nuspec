@@ -9,8 +9,10 @@
     <description>Bob's development tools</description>
   </metadata>
   <files>
+    <file src="..\content\**" target="content" />
     <file src="..\scripts\modules\common\*" target="tools\scripts\modules\common" />
     <file src="..\scripts\modules\development\*" target="tools\scripts\modules\development" />
 	<file src="..\scripts\init-development.ps1" target="tools\init.ps1" />
+    <file src="..\tools\sitecore-powercore\*" target="tools\tools\sitecore-powercore" />
   </files>
 </package>

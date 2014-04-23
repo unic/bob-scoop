@@ -1,49 +1,45 @@
 ﻿Function Set-ScSerializationReference
 {
     [CmdletBinding(
-    	SupportsShouldProcess=$True,
+        SupportsShouldProcess=$True,
         ConfirmImpact="Low"
     )]
     Param(
-		[String]$ProjectPath = "",
-		[String]$WebPath = ""
-	)
+        [String]$ProjectRootPath = "",
+        [String]$WebPath = ""
+    )
     Begin{}
 
     Process
     {
-		if(-not $ProjectPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
-			$project = Get-Project 
+        if(-not $ProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-ScProjectRootPath"})) {
+            $ProjectRootPath = Get-ScProjectRootPath
+        }
 
-			$ProjectPath = Split-Path (Split-Path $project.FullName -Parent) -Parent
-		}
-
-		if(-not $ProjectPath) {
-			throw "ProjectPath not found. Please provide one."
-		}
+        if(-not $ProjectRootPath) {
+            throw "ProjectRootPath not found. Please provide one."
+        }
         
-        $localSetupConfig = Get-ProjectConfig $ProjectPath "LocalSetup"
+        $localSetupConfig = Get-ScProjectConfig
 
-
-		if(-not $WebPath) {
+        if(-not $WebPath) {
             if($localSetupConfig.GlobalWebPath -and $localSetupConfig.WebsiteCodeName) {
-			    $WebPath = Join-Path (Join-Path  $localSetupConfig.GlobalWebPath ($localSetupConfig.WebsiteCodeName)) $localSetupConfig.WebFolderName
+                $WebPath = Join-Path (Join-Path  $localSetupConfig.GlobalWebPath ($localSetupConfig.WebsiteCodeName)) $localSetupConfig.WebFolderName
             }
+        }
 
-		}
-
-		if(-not $WebPath) {
-			throw "WebPath not found. Please provide one."
-		}
+        if(-not $WebPath) {
+            throw "WebPath not found. Please provide one."
+        }
         
         $SerializationFolderName = $localSetupConfig.SerializationFolder
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
 
-       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
+       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
 
-       $serializationPath = Join-Path $ProjectPath $SerializationFolderName;
+       $serializationPath = Join-Path $ProjectRootPath $SerializationFolderName;
 
-	   $elementValue = (Join-Path $ProjectPath $SerializationFolderName).ToString()
+       $elementValue = (Join-Path $ProjectRootPath $SerializationFolderName).ToString()
 
        $configPath = Join-Path $WebPath $configFilePath ;
 
@@ -54,45 +50,41 @@
 
        if(-not $config) {
             $config = [xml]$localSetupConfig.SerializationReferenceTemplate.InnerText
-       }
+        }
 
-       $serializationNodePath = $localSetupConfig.SerializationReferenceXPath
-	   
-		$nsManager = new-object System.Xml.XmlNamespaceManager $config.NameTable
-		$nsManager.AddNamespace("set", "http://www.sitecore.net/xmlconfig/set/");
+        $serializationNodePath = $localSetupConfig.SerializationReferenceXPath
+       
+        $nsManager = new-object System.Xml.XmlNamespaceManager $config.NameTable
+        $nsManager.AddNamespace("set", "http://www.sitecore.net/xmlconfig/set/");
 
-       $node = $config.SelectSingleNode($serializationNodePath, $nsManager)
+        $node = $config.SelectSingleNode($serializationNodePath, $nsManager)
 
-       if(-not $node){
-        $currentNodePath = "";
-        $nodeNames =   $serializationNodePath.Split('/');
-        $parentNode = $config
-        foreach($nodeName in $nodeNames ) {
-			$currentNodePath += "/" + $nodeName
-			$node = $config.SelectSingleNode($currentNodePath, $nsManager)   
-				
-			if(-not $nodeName.StartsWith("@")) { 
-				if(-not $node) {
-					$newNode = $config.CreateElement($nodeName)
-					$parentNode.AppendChild($newNode) | Out-Null;
-					$node = $config.SelectSingleNode($currentNodePath, $nsManager)
-				}
-			}
+        if(-not $node){
+            $currentNodePath = "";
+            $nodeNames =   $serializationNodePath.Split('/');
+            $parentNode = $config
+            foreach($nodeName in $nodeNames ) {
+                $currentNodePath += "/" + $nodeName
+                $node = $config.SelectSingleNode($currentNodePath, $nsManager)   
+                    
+                if(-not $nodeName.StartsWith("@")) { 
+                    if(-not $node) {
+                        $newNode = $config.CreateElement($nodeName)
+                        $parentNode.AppendChild($newNode) | Out-Null;
+                        $node = $config.SelectSingleNode($currentNodePath, $nsManager)
+                    }
+                }
 
-            $parentNode = $node
-        
-        } 
-       }
+                $parentNode = $node
+            } 
+        }
 
 
-		$node.InnerText = $elementValue
+        $node.InnerText = $elementValue
 
       $config.Save($configPath);
         Write-Host "Set serialization reference in '$configPath' to $elementValue"
-       Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectPath '$ProjectPath' ";
-
-
-
+        Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
     }
 
     End{}

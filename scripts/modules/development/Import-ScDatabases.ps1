@@ -1,42 +1,42 @@
 Function Import-ScDatabases
 {
     [CmdletBinding(
-    	SupportsShouldProcess=$True,
+        SupportsShouldProcess=$True,
         ConfirmImpact="Low"
     )]
     Param(
-		[String]$ConnectionStringsFile = "",
-        [String]$VSProjectPath = "",
-        [String]$ProjectPath =""
-	)
+        [String]$ConnectionStringsFile = "",
+        [String]$VSProjectRootPath = "",
+        [String]$ProjectRootPath = ""
+    )
     Begin{}
 
     Process
     {
 
-        if(-not $VSProjectPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
-			$project = Get-Project 
-			if($project) {
-				$VSProjectPath = Split-Path $project.FullName -Parent
-			}
-		}
-
-        if(-not $ProjectPath -and $VSProjectPath) {
-            $ProjectPath = Split-Path $VSProjectPath -Parent
+        if(-not $VSProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
+            $project = Get-Project 
+            if($project) {
+                $VSProjectRootPath = Split-Path $project.FullName -Parent
+            }
         }
 
-        if(-not $ProjectPath) {
-            throw "ProjectPath could not be found. Please provide one."
+        if(-not $ProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-ScProjectRootPath"})) {
+            $ProjectRootPath = Get-ScProjectRootPath
+        }
+
+        if(-not $ProjectRootPath) {
+            throw "ProjectRootPath not found. Please provide one."
         }
 
 
         
-
-		$Server = $localSetupConfig.DatabaseServer;
+        $localSetupConfig = Get-ScProjectConfig
+        $Server = $localSetupConfig.DatabaseServer;
         $BackupShare = $localSetupConfig.DatabaseBackupShare;
 
-        if(-not $ConnectionStringsFile -and $VSProjectPath) {
-				$ConnectionStringsFile = Join-Path $VSProjectPath $localSetupConfig.ConnectionStringsFolder
+        if(-not $ConnectionStringsFile -and $VSProjectRootPath) {
+                $ConnectionStringsFile = Join-Path $VSProjectRootPath $localSetupConfig.ConnectionStringsFolder
         }
 
         if(-not $ConnectionStringsFile) {
@@ -46,11 +46,11 @@ Function Import-ScDatabases
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Path
 
-		Import-Module  (Join-Path $scriptPath "..\..\..\tools\sitecore-powercore\DBUtils.psm1") -Force
-        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
+        Import-Module  (Join-Path $scriptPath "..\..\..\tools\sitecore-powercore\DBUtils.psm1") -Force
+        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
 
-	    $config = [xml](Get-Content $ConnectionStringsFile)
-	   
+        $config = [xml](Get-Content $ConnectionStringsFile)
+       
         $databases = @();
         
         foreach($item in $config.connectionStrings.add) {
@@ -84,8 +84,8 @@ Function Import-ScDatabases
             Restore-Database $sqlServer $databaseName ($file.FullName)
 
        }
-	  
-       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectPath '$ProjectPath' -VSProjectPath '$VSProjectPath'";
+      
+       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
 
     }
 
