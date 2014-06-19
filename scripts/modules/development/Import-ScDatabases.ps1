@@ -7,7 +7,8 @@ Function Import-ScDatabases
     Param(
         [String]$ConnectionStringsFile = "",
         [String]$VSProjectRootPath = "",
-        [String]$ProjectRootPath = ""
+        [String]$ProjectRootPath = "",
+        [String]$DatabasePath = ""
     )
     Begin{}
 
@@ -73,19 +74,18 @@ Function Import-ScDatabases
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
             {
-                Create-Database $sqlServer $databaseName
+                Create-Database $sqlServer $databaseName -DatabasePath $DatabasePath
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
             $file.FullName
 
             
             $sqlServer.KillAllProcesses($databaseName);
-
             Restore-Database $sqlServer $databaseName ($file.FullName)
 
        }
       
-       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
+       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
 
     }
 
