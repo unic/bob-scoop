@@ -24,24 +24,53 @@
 
         if(-not $WebPath) {
             if($localSetupConfig.GlobalWebPath -and $localSetupConfig.WebsiteCodeName) {
-                $WebPath = Join-Path (Join-Path  $localSetupConfig.GlobalWebPath ($localSetupConfig.WebsiteCodeName)) $localSetupConfig.WebFolderName
+                if(-not (Test-Path $localSetupConfig.GlobalWebPath)) {
+                    Write-Error "The GlobalWebPath '$($localSetupConfig.GlobalWebPath)' does not exist. Please specify a correct path in Bob.config"
+                    exit
+                } 
+                $webSitePath = Join-Path  $localSetupConfig.GlobalWebPath $localSetupConfig.WebsiteCodeName
+                if(-not (Test-Path $webSitePath)) {
+                    Write-Error "The path of the Website '$webSitePath' does not exist. Please specify correct values in Bob.config"
+                    exit
+                }
+                $WebPath = Join-Path  $webSitePath $localSetupConfig.WebFolderName
+                if(-not (Test-Path $WebPath)) {
+                    Write-Error "The path of the Web-Folder '$WebPath' does not exist. Please specify correct values in Bob.config"
+                    exit
+                }
+            }
+            else {
+                Write-Error "GlobalWebPath or WebsiteCodeName are not valid in Bob.config. Please configure this values."
+                exit
             }
         }
 
         if(-not $WebPath) {
-            throw "WebPath not found. Please provide one."
+            Write-Error "WebPath not found. Please provide one."
+            exit
         }
         
         $SerializationFolderName = $localSetupConfig.SerializationFolder
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
+        if(-not $configFilePath) {
+            Write-Error "No SerializationReferenceFilePath was specified in Bob.config. Please provide a value for SerializationReferenceFilePath."
+            exit
+        }
 
        Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
 
        $serializationPath = Join-Path $ProjectRootPath $SerializationFolderName;
 
+
        $elementValue = (Join-Path $ProjectRootPath $SerializationFolderName).ToString()
 
        $configPath = Join-Path $WebPath $configFilePath ;
+       if(-not (Test-Path $configPath)) {
+            $configFileDirecotry = Split-Path $configPath
+            if($configFileDirecotry -and -not (Test-Path $configFileDirecotry) ){
+                mkdir $configFileDirecotry | Out-Null
+            }
+       }
 
 
        if(Test-Path $configPath){
