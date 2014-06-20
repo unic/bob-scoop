@@ -81,7 +81,18 @@ Function Import-ScDatabases
 
             
             $sqlServer.KillAllProcesses($databaseName);
-            Restore-Database $sqlServer $databaseName ($file.FullName)
+            try {
+                Restore-Database $sqlServer $databaseName ($file.FullName)
+            }
+            catch {
+                $sqlEx = (GetSqlExcpetion $_.Exception )
+                if($sqlEx) {
+                    Write-Error $sqlEx
+                }
+                else {
+                    Write-Error $_
+                }
+            }
 
        }
       
@@ -90,4 +101,17 @@ Function Import-ScDatabases
     }
 
     End{}
+}
+
+function GetSqlExcpetion {
+    param ($ex) 
+
+    if($ex -is [System.Data.SqlClient.SqlException]) {
+        $ex
+    }
+    else{
+        if($ex.InnerException) {
+            GetSqlExcpetion $ex.InnerException
+        }
+    }
 }

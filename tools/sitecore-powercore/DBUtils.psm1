@@ -126,8 +126,8 @@ Function Restore-Database ($server, $database, $backupFile)
 		}
 		[Void]$Restore.RelocateFiles.Add($RestoreData)
 	}
-    
 	$Restore.SqlRestore($server)
+
     "Backup restored: " + $server + $backupFile 
 }
 
