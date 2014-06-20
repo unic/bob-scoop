@@ -36,6 +36,10 @@ Function Import-ScDatabases
         $Server = $localSetupConfig.DatabaseServer;
         $BackupShare = $localSetupConfig.DatabaseBackupShare;
 
+        if((-not $BackupShare) -or ( -not (Test-Path $BackupShare))) {
+            Write-Error "The backups location '$($BackupShare)' could not be found, please check if you have access to this location and if it is well configured in the Bob.config file."
+            exit
+        }
         if(-not $ConnectionStringsFile -and $VSProjectRootPath) {
                 $ConnectionStringsFile = Join-Path $VSProjectRootPath $localSetupConfig.ConnectionStringsFolder
         }
