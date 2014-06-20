@@ -7,7 +7,8 @@
 	.DESCRIPTION
 		Creates new database on specified SQL server. Existing DB will be overwritten
 #>
-Function Create-Database ($server, $databaseName, $DatabasePath)
+
+Function New-Database ($server, $databaseName, $DatabasePath)
 {
     if($DatabasePath) {
         if(-not (Test-Path $DatabasePath)) {
@@ -77,7 +78,7 @@ Function Create-Database ($server, $databaseName, $DatabasePath)
 	.DESCRIPTION
 		Deletes the database on the specified SQL server. 
 #>
-Function Delete-Database ($server, $databaseName)
+Function Remove-Database ($server, $databaseName)
 {
     "Removing the database - " + $databaseName
     IF ($server.databases[$databaseName] -ne $NULL) {
@@ -160,7 +161,7 @@ Function Backup-Database ($d, $server, $dbName)
 	.DESCRIPTION
 		Attaches database on specified SQL server. Existing DB will be detached
 #>
-Function Attach-Database ($server, $databaseName, $dataFileName, $logFileName)
+Function Set-Database ($server, $databaseName, $dataFileName, $logFileName)
 {
     if ($server.databases[$databaseName] -ne $NULL) {
         $server.DetachDatabase($databaseName, $false)
@@ -178,15 +179,20 @@ Function Attach-Database ($server, $databaseName, $dataFileName, $logFileName)
 	.DESCRIPTION
 		Executes SQL file at the specified server / database
 #>
-Function Execute-File ($server, $database, $file) 
+Function Invoke-File ($server, $database, $file) 
 {
     Write-Output "Executin Sql file $file at $server/$database"
     Invoke-SqlCmd -inputfile $file -serverinstance $server -database $database
 }
+
+New-Alias -Name Create-Database  -Value New-Database
+New-Alias -Name Delete-Database  -Value Remove-Database
+New-Alias -Name Execute-File  -Value Invoke-File
+New-Alias -Name Attach-Database  -Value Set-Database
   
-Export-ModuleMember -function Create-Database
-Export-ModuleMember -function Delete-Database
+Export-ModuleMember -function New-Database
 Export-ModuleMember -function Restore-Database
+Export-ModuleMember -function Remove-Database
 Export-ModuleMember -function Backup-Database
-Export-ModuleMember -function Attach-Database
-Export-ModuleMember -function Execute-File
+Export-ModuleMember -function Set-Database
+Export-ModuleMember -function Invoke-File
