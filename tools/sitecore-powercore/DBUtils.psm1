@@ -196,3 +196,5 @@ Export-ModuleMember -function Remove-Database
 Export-ModuleMember -function Backup-Database
 Export-ModuleMember -function Set-Database
 Export-ModuleMember -function Invoke-File
+
+Export-ModuleMember -Alias *
