@@ -102,15 +102,30 @@ Function Import-ScDatabases
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
             {
-                Create-Database $sqlServer $databaseName -DatabasePath $DatabasePath
+            
+                try {
+                    Create-Database $sqlServer $databaseName -DatabasePath $DatabasePath
+                }
+                
+                catch {
+                    $sqlEx = (GetSqlExcpetion $_.Exception )
+                    if($sqlEx) {
+                        Write-Error $sqlEx
+                    }
+                    else {
+                        Write-Error $_
+                    }
+                    continue
+                }
+
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
             if($file) {
                 $file.FullName
 
             
-                $sqlServer.KillAllProcesses($databaseName);
                 try {
+                    $sqlServer.KillAllProcesses($databaseName);
                     Restore-Database $sqlServer $databaseName ($file.FullName)
                 }
                 catch {

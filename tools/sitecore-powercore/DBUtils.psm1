@@ -11,9 +11,6 @@
 Function New-Database ($server, $databaseName, $DatabasePath)
 {
     if($DatabasePath) {
-        if(-not (Test-Path $DatabasePath)) {
-            mkdir $DatabasePath | Out-Null
-        }
         $dataFileFolder = $DatabasePath
         $logFileFolder = $DatabasePath
 
