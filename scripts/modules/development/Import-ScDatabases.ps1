@@ -54,12 +54,25 @@ Function Import-ScDatabases
         Import-Module  (Join-Path $scriptPath "..\..\..\tools\sitecore-powercore\DBUtils.psm1") -Force
         Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
 
+        if((-not $ConnectionStringsFile) -or -not (Test-Path $ConnectionStringsFile)) {
+            Write-Error "Could not find ConnectionStrings file at '$ConnectionStringsFile'"
+            exit
+        }
+
         $config = [xml](Get-Content $ConnectionStringsFile)
        
         $databases = @();
         
+        if(-not $config.connectionStrings.add) {
+            Write-Warning "No ConnectionStrings found in '$ConnectionStringsFile'"
+        }
+
         foreach($item in $config.connectionStrings.add) {
             $connectionString = $item.connectionString;
+            if(-not $item.connectionString) {
+                Write-Warning "ConnectionString '$($item.name)' in '$ConnectionStringsFile' is empty."
+            }
+
             $parts = $connectionString.split(';');
             foreach($part in $parts) 
             {
@@ -71,31 +84,47 @@ Function Import-ScDatabases
         }
 
 
-       $sqlServer = New-Object ("Microsoft.SqlServer.Management.Smo.Server") $server
+        $sqlServer = New-Object ("Microsoft.SqlServer.Management.Smo.Server") $server
+       
+        try {
+            if(-not $sqlServer.Version) {
+                Write-Error "Could no connect to SQL Server '$server'"
+                exit
+            }
+        }
+        catch {
+            Write-Error "Could no connect to SQL Server '$server'"
+            exit
+        }
 
 
-       foreach($databaseName in $databases) {
+        foreach($databaseName in $databases) {
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
             {
                 Create-Database $sqlServer $databaseName -DatabasePath $DatabasePath
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
-            $file.FullName
+            if($file) {
+                $file.FullName
 
             
-            $sqlServer.KillAllProcesses($databaseName);
-            try {
-                Restore-Database $sqlServer $databaseName ($file.FullName)
+                $sqlServer.KillAllProcesses($databaseName);
+                try {
+                    Restore-Database $sqlServer $databaseName ($file.FullName)
+                }
+                catch {
+                    $sqlEx = (GetSqlExcpetion $_.Exception )
+                    if($sqlEx) {
+                        Write-Error $sqlEx
+                    }
+                    else {
+                        Write-Error $_
+                    }
+                }
             }
-            catch {
-                $sqlEx = (GetSqlExcpetion $_.Exception )
-                if($sqlEx) {
-                    Write-Error $sqlEx
-                }
-                else {
-                    Write-Error $_
-                }
+            else {
+                Write-Error "No *.bak file found for database $databaseName on file sharee $BackupShare"
             }
 
        }
