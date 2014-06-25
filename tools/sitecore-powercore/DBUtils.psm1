@@ -11,9 +11,6 @@
 Function New-Database ($server, $databaseName, $DatabasePath)
 {
     if($DatabasePath) {
-        if(-not (Test-Path $DatabasePath)) {
-            mkdir $DatabasePath | Out-Null
-        }
         $dataFileFolder = $DatabasePath
         $logFileFolder = $DatabasePath
 
@@ -126,8 +123,8 @@ Function Restore-Database ($server, $database, $backupFile)
 		}
 		[Void]$Restore.RelocateFiles.Add($RestoreData)
 	}
-    
 	$Restore.SqlRestore($server)
+
     "Backup restored: " + $server + $backupFile 
 }
 
@@ -196,3 +193,5 @@ Export-ModuleMember -function Remove-Database
 Export-ModuleMember -function Backup-Database
 Export-ModuleMember -function Set-Database
 Export-ModuleMember -function Invoke-File
+
+Export-ModuleMember -Alias *
