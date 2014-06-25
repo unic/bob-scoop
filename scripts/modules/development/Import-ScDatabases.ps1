@@ -77,7 +77,8 @@ Function Import-ScDatabases
             foreach($part in $parts) 
             {
                 $keyValue = $part.split('=');
-                if($keyValue[0].trim() -eq "Database") {
+                $key = $keyValue[0].trim();
+                if(("Database", "Initial Catalog") -contains $key) {
                     $databases += $keyValue[1]
                 }
             }
