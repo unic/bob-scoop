@@ -44,9 +44,20 @@
             $params += "Description=$Description"
         }
 
-        Start-Process "$scriptPath\..\..\..\tools\curl\curl.exe" $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait
-        Get-Content "$($env:TEMP)\install-serializationPackage-std.txt"
-
+        $process = Start-Process "$scriptPath\..\..\..\tools\curl\curl.exe" $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait -PassThru
+        
+        $logPath = "$((Resolve-Path $Path).Path).log"
+        cp "$($env:TEMP)\install-serializationPackage-std.txt" $logPath
+        if($process.ExitCode -eq 0) {
+            Write-Host "Installed SerializationPackage $Path with API-Url '$("$url/services/package/install/fileupload")'  "            
+            Write-Host "The log was written at $logPath"
+            
+        }
+        else {
+            Write-Error ("Install SerializationPackage $Path with API-Url '$("$url/services/package/install/fileupload") failed`n" + (Get-Content "$($env:TEMP)\install-serializationPackage-error.txt"))
+        
+            exit
+        }
         if($Publish) {
             if(-not $PublishMode) {
                 throw "You have to provide the parameter 'PublishMode'"
