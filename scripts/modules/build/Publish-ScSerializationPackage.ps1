@@ -1,4 +1,26 @@
-﻿Function Publish-ScSerializationPackage
+﻿<#
+.SYNOPSIS
+Triggers a remote publishing job.
+.DESCRIPTION
+Triggers a remote publishing job.
+.PARAMETER Url
+The Base-Url of the Sitecore Environment to install the package.
+.PARAMETER Mode
+Must be one of the following values: 
+ - full
+ - smart
+ - incremental
+
+.PARAMETER Source
+Detault is master
+.PARAMETER Targets
+Default is web
+.PARAMETER Languages
+Default is en
+.EXAMPLE
+Publish-ScSerializationPackage -Url http://local.post.ch
+#>
+Function Publish-ScSerializationPackage
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,

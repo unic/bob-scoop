@@ -1,5 +1,13 @@
 ﻿[System.Reflection.Assembly]::LoadFrom("C:\windows\system32\inetsrv\Microsoft.Web.Administration.dll") | out-null;
+<#
+.SYNOPSIS
+Creates the IIS Site and IIS Application Pool for the current Sitecore Website project.
+.DESCRIPTION
+Creates the IIS Site and IIS Application Pool for the current Sitecore Website project and adds a Host-Name entry in the Hosts file.
 
+.EXAMPLE
+Enable-ScSite
+#>
 Function Enable-ScSite
 {
     [CmdletBinding(
@@ -7,7 +15,8 @@ Function Enable-ScSite
         ConfirmImpact="Low"
     )]
     Param(
-        [String]$ProjectRootPath = ""
+	  # Not in use anymore
+      #  [String]$ProjectRootPath = ""
     )
     Begin{}
     

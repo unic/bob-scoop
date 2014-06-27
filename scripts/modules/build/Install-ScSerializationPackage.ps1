@@ -1,4 +1,34 @@
-﻿Function Install-ScSerializationPackage
+﻿<#
+.SYNOPSIS
+Installs a Sitecore Package with Sitecore Ship
+.DESCRIPTION
+This command can be used to install a Sitecore package with the help of Sitecore Ship by specifying the location of an update package file to upload to the server. Optionaly a Publish job will be triggered after the installation.
+.PARAMETER Path
+The Path to the Sitecore update pacakge
+.PARAMETER Url
+The Base-Url of the Sitecore Environment to install the package.
+.PARAMETER PackageId
+If recordInstallationHistory  is enabled you have to provide this parameter.
+.PARAMETER Description
+If recordInstallationHistory  is enabled you have to provide this parameter.
+.PARAMETER Publish
+If this switch is added a publish jobb will be triggered after the package install
+.PARAMETER PublishMode
+Must be one of the following values: 
+ - full
+ - smart
+ - incremental
+
+.PARAMETER PublishSource
+Detault is master
+.PARAMETER PublishTargets
+Default is web
+.PARAMETER PublishLanugages
+Default is en
+.EXAMPLE
+Install-ScSerializationPackage -Path D:\Deployment\64-items.update -Url http://local.post.ch
+#>
+Function Install-ScSerializationPackage
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,

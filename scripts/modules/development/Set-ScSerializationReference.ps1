@@ -1,4 +1,20 @@
-﻿Function Set-ScSerializationReference
+﻿<#
+.SYNOPSIS
+Sets the SerializationReference path of the current project.
+.DESCRIPTION
+Creates or edits the serialization reference configuration path in the local IIS web path to a specific directory in the project root directory.
+This configuration is used by Sitecore to know where items should be automaticaly serialized.
+
+.PARAMETER ProjectRootPath
+The root path of the project where the sereialization folder is located.
+.PARAMETER WebPath
+The Web-Folder of the IIS Site.
+
+.EXAMPLE
+Set-ScSerializationReference
+
+#>
+Function Set-ScSerializationReference
 {
     [CmdletBinding(
         SupportsShouldProcess=$True,

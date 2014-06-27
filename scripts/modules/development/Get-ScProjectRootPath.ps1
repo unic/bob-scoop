@@ -1,14 +1,17 @@
 ﻿<# 
 .SYNOPSIS 
-    NOT USED BY BOB!
-    ----------------
     Traverses directories, starting with the project directory, testing for a RootIdentifier.
 .DESCRIPTION 
-    Not used at the moment as Bob.config has been moved to project specific /App_Config folder!
-.NOTES 
-    Author     :  Unic AG
-.LINK 
-    http://sitecore.unic.com
+    Traverses directories upwards, starting with the project directory, 
+	testing if the folder contains a folder with name of RootIdentifier which is misc per defaualt.
+.PARAMETER ProjectPath
+The path where to start with searching. If none is provided the path of the current Visual Studio Project is taken.
+.PARAMETER RootIdentifier
+The folder name which the project path must contain.
+.PARAMETER stopString
+Specifies until which folder the function should search the project root path.
+.EXAMPLE
+Get-ScProjectRootPath
 #>
 Function Get-ScProjectRootPath
 {
