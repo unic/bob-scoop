@@ -1,4 +1,21 @@
-﻿Function New-ScSerializationPackage
+﻿<#
+.SYNOPSIS
+Builds a Sitecore Update packages automatically with the help of Sitecore Courier, by analyzing two Sitecore packages and packaging only changed items.
+.DESCRIPTION
+Builds a Sitecore Update packages automatically with the help of Sitecore Courier, by analyzing two Sitecore packages and packaging only changed items.
+.PARAMETER Source
+Path, which should point to the baseline serialization folder (this is the older version of the serialized item tree). If this path points to an empty folder, an update package with all serialized items in the target folder will be generated
+The path must be either absolute or relative to the current working directory.
+.PARAMETER Target
+Path, which should point to the latest (target) version of the serialized folder.
+The path must be either absolute or relative to the current working directory.
+
+.PARAMETER OutputFile
+The file wheree the Update Package should be written to
+.EXAMPLE
+New-ScSerializationPackage -Source D:\sourceSerialization -Target D:\targetSerialization -OutputFile D:\package.update
+#>
+Function New-ScSerializationPackage
 {
     [CmdletBinding(
     	SupportsShouldProcess=$True,

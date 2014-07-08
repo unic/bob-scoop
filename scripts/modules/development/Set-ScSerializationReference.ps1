@@ -1,4 +1,20 @@
-﻿Function Set-ScSerializationReference
+﻿<#
+.SYNOPSIS
+Sets the SerializationReference path of the current project.
+.DESCRIPTION
+Creates or edits the serialization reference configuration path in the local IIS web path to a specific directory in the project root directory.
+This configuration is used by Sitecore to know where items should be automaticaly serialized.
+
+.PARAMETER ProjectRootPath
+The root path of the project where the sereialization folder is located.
+.PARAMETER WebPath
+The Web-Folder of the IIS Site.
+
+.EXAMPLE
+Set-ScSerializationReference
+
+#>
+Function Set-ScSerializationReference
 {
     [CmdletBinding(
         SupportsShouldProcess=$True,
@@ -24,24 +40,53 @@
 
         if(-not $WebPath) {
             if($localSetupConfig.GlobalWebPath -and $localSetupConfig.WebsiteCodeName) {
-                $WebPath = Join-Path (Join-Path  $localSetupConfig.GlobalWebPath ($localSetupConfig.WebsiteCodeName)) $localSetupConfig.WebFolderName
+                if(-not (Test-Path $localSetupConfig.GlobalWebPath)) {
+                    Write-Error "The GlobalWebPath '$($localSetupConfig.GlobalWebPath)' does not exist. Please specify a correct path in Bob.config"
+                    exit
+                } 
+                $webSitePath = Join-Path  $localSetupConfig.GlobalWebPath $localSetupConfig.WebsiteCodeName
+                if(-not (Test-Path $webSitePath)) {
+                    Write-Error "The path of the Website '$webSitePath' does not exist. Please specify correct values in Bob.config"
+                    exit
+                }
+                $WebPath = Join-Path  $webSitePath $localSetupConfig.WebFolderName
+                if(-not (Test-Path $WebPath)) {
+                    Write-Error "The path of the Web-Folder '$WebPath' does not exist. Please specify correct values in Bob.config"
+                    exit
+                }
+            }
+            else {
+                Write-Error "GlobalWebPath or WebsiteCodeName are not valid in Bob.config. Please configure this values."
+                exit
             }
         }
 
         if(-not $WebPath) {
-            throw "WebPath not found. Please provide one."
+            Write-Error "WebPath not found. Please provide one."
+            exit
         }
         
         $SerializationFolderName = $localSetupConfig.SerializationFolder
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
+        if(-not $configFilePath) {
+            Write-Error "No SerializationReferenceFilePath was specified in Bob.config. Please provide a value for SerializationReferenceFilePath."
+            exit
+        }
 
        Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
 
        $serializationPath = Join-Path $ProjectRootPath $SerializationFolderName;
 
+
        $elementValue = (Join-Path $ProjectRootPath $SerializationFolderName).ToString()
 
        $configPath = Join-Path $WebPath $configFilePath ;
+       if(-not (Test-Path $configPath)) {
+            $configFileDirecotry = Split-Path $configPath
+            if($configFileDirecotry -and -not (Test-Path $configFileDirecotry) ){
+                mkdir $configFileDirecotry | Out-Null
+            }
+       }
 
 
        if(Test-Path $configPath){
