@@ -10,4 +10,4 @@ As with his front and rear shovels (scoops), Scoop provides a PSH based toolset 
 
 ## Documentation 
 
-<https://me.unic.com/display/BULLWCMS/Travis+Framework>
+<https://me.unic.com/display/BULLWCMS/Scoop>
