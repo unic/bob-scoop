@@ -26,7 +26,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="scripts\" />
+    <Folder Include="scripts\modules\" />
+    <Folder Include="scripts\modules\build\" />
+    <Folder Include="scripts\modules\common\" />
+    <Folder Include="scripts\modules\development\" />
+    <Folder Include="tools\" />
+    <Folder Include="tools\sitecore-powercore\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="scripts\BobCanDo-BuildPackage.ps1" />
+    <Compile Include="scripts\BobCanDo-InstallPackage.ps1" />
+    <Compile Include="scripts\init-build.ps1" />
+    <Compile Include="scripts\init-development.ps1" />
+    <Compile Include="scripts\modules\build\build.psm1" />
+    <Compile Include="scripts\modules\build\Install-ScSerializationPackage.ps1" />
+    <Compile Include="scripts\modules\build\New-ScSerializationPackage.ps1" />
+    <Compile Include="scripts\modules\build\Publish-ScSerializationPackage.ps1" />
+    <Compile Include="scripts\modules\common\common.psm1" />
+    <Compile Include="scripts\modules\development\development.psm1" />
+    <Compile Include="scripts\modules\development\Enable-ScSite.ps1" />
+    <Compile Include="scripts\modules\development\Get-ScProjectConfig.ps1" />
+    <Compile Include="scripts\modules\development\Get-ScProjectRootPath.ps1" />
+    <Compile Include="scripts\modules\development\Import-ScDatabases.ps1" />
+    <Compile Include="scripts\modules\development\Set-ScSerializationReference.ps1" />
+    <Compile Include="tools\sitecore-powercore\DBUtils.psm1" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
 </Project>

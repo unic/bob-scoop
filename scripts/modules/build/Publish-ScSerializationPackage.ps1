@@ -2,7 +2,7 @@
 .SYNOPSIS
 Triggers a remote publishing job.
 .DESCRIPTION
-Triggers a remote publishing job.
+Triggers a remote publishing job with Sitecore Ship.
 .PARAMETER Url
 The Base-Url of the Sitecore Environment to install the package.
 .PARAMETER Mode
