@@ -31,14 +31,14 @@ Install-ScSerializationPackage -Path D:\Deployment\64-items.update -Url http://l
 Function Install-ScSerializationPackage
 {
     [CmdletBinding(
-    	SupportsShouldProcess=$True,
+        SupportsShouldProcess=$True,
         ConfirmImpact="Low"
     )]
     Param(
         [Parameter(Mandatory=$true)]
-		[String]$Path,
+        [String]$Path,
         [Parameter(Mandatory=$true)]
-		[String]$Url,
+        [String]$Url,
         [bool]$DisableIndexing=$false,
         [String]$PackageId,
         [String]$Description,
@@ -48,17 +48,18 @@ Function Install-ScSerializationPackage
         [string]$PublishTargets,
         [string]$PublishLanugages
     
-	)
+    )
     Begin{}
 
     Process
     {
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Definition -Parent
-		
+        
         $Path = (Resolve-Path $Path).Path
 
         $params = @();
+        $params += "-k"
         $params += "$url/services/package/install/fileupload"
         $params += "-F"
         $params += "file=@$Path"
