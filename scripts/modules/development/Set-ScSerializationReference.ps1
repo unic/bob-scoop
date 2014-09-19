@@ -35,15 +35,20 @@ Function Set-ScSerializationReference
         if(-not $ProjectRootPath) {
             throw "ProjectRootPath not found. Please provide one."
         }
-        
         $localSetupConfig = Get-ScProjectConfig
+
+        if(-not $localSetupConfig.SerializationReferenceTemplate) {
+          Write-Error "The configuration SerializationReferenceTemplate could not be found in Bob.config"
+          exit
+        }
+
 
         if(-not $WebPath) {
             if($localSetupConfig.GlobalWebPath -and $localSetupConfig.WebsiteCodeName) {
                 if(-not (Test-Path $localSetupConfig.GlobalWebPath)) {
                     Write-Error "The GlobalWebPath '$($localSetupConfig.GlobalWebPath)' does not exist. Please specify a correct path in Bob.config"
                     exit
-                } 
+                }
                 $webSitePath = Join-Path  $localSetupConfig.GlobalWebPath $localSetupConfig.WebsiteCodeName
                 if(-not (Test-Path $webSitePath)) {
                     Write-Error "The path of the Website '$webSitePath' does not exist. Please specify correct values in Bob.config"
@@ -65,7 +70,7 @@ Function Set-ScSerializationReference
             Write-Error "WebPath not found. Please provide one."
             exit
         }
-        
+
         $SerializationFolderName = $localSetupConfig.SerializationFolder
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
         if(-not $configFilePath) {
@@ -94,11 +99,11 @@ Function Set-ScSerializationReference
        }
 
        if(-not $config) {
-            $config = [xml]$localSetupConfig.SerializationReferenceTemplate.InnerText
+            $config = [xml]$localSetupConfig.SerializationReferenceTemplate
         }
 
         $serializationNodePath = $localSetupConfig.SerializationReferenceXPath
-       
+
         $nsManager = new-object System.Xml.XmlNamespaceManager $config.NameTable
         $nsManager.AddNamespace("set", "http://www.sitecore.net/xmlconfig/set/");
 
@@ -110,9 +115,9 @@ Function Set-ScSerializationReference
             $parentNode = $config
             foreach($nodeName in $nodeNames ) {
                 $currentNodePath += "/" + $nodeName
-                $node = $config.SelectSingleNode($currentNodePath, $nsManager)   
-                    
-                if(-not $nodeName.StartsWith("@")) { 
+                $node = $config.SelectSingleNode($currentNodePath, $nsManager)
+
+                if(-not $nodeName.StartsWith("@")) {
                     if(-not $node) {
                         $newNode = $config.CreateElement($nodeName)
                         $parentNode.AppendChild($newNode) | Out-Null;
@@ -121,7 +126,7 @@ Function Set-ScSerializationReference
                 }
 
                 $parentNode = $node
-            } 
+            }
         }
 
 

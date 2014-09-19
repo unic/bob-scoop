@@ -19,7 +19,7 @@ Function Enable-ScSite
       #  [String]$ProjectRootPath = ""
     )
     Begin{}
-    
+
     Process
     {
         $script:iisStoped = $false
@@ -39,9 +39,9 @@ Function Enable-ScSite
 
             $appPool = $serverManager.ApplicationPools.Add($siteName);
             $appPool.ManagedRuntimeVersion = $localSetupConfig.AppPoolRuntime
-            $serverManager.CommitChanges();   
+            $serverManager.CommitChanges();
             "Added ApplicationPool '$siteName' with Runtime '$($localSetupConfig.AppPoolRuntime)'"
-            
+
             # Wait for the changes to apply
             Start-sleep -milliseconds 1000
 
@@ -53,23 +53,23 @@ Function Enable-ScSite
             $webSite = $serverManager.Sites.Add($siteName, $localSetupConfig.Protocol, ":80:" + $localSetupConfig.LocalHostName, $webPath);
             $webSite.Applications[0].ApplicationPoolName = $siteName;
             Start-sleep -milliseconds 1000
-            $serverManager.CommitChanges();    
-            "Added Site '$siteName' with pointing to '$webPath'. URL: $($localSetupConfig.Protocol)://$($localSetupConfig.LocalHostName)" 
-    
+            $serverManager.CommitChanges();
+            "Added Site '$siteName' with pointing to '$webPath'. URL: $($localSetupConfig.Protocol)://$($localSetupConfig.LocalHostName)"
+
             # Wait for the changes to apply
             Start-sleep -milliseconds 1000
         }
-            
-        $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
-        if (-not (Test-Path -Path $hostFilePath)){            
-            Throw "Hosts file not found"            
-        }            
+
+        $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"
+        if (-not (Test-Path -Path $hostFilePath)){
+            Throw "Hosts file not found"
+        }
 
         $ip = "127.0.0.1"
 
-        $hostFile = Get-Content -Path $hostFilePath    
-        $hostEntry =  "$ip       $($localSetupConfig.LocalHostName) #$($localSetupConfig.HostsFileComment)"     
-            
+        $hostFile = Get-Content -Path $hostFilePath
+        $hostEntry =  "$ip       $($localSetupConfig.LocalHostName) #$($localSetupConfig.HostsFileComment)"
+
         $hostFileEntryExist = $false;
 
         foreach($line in ($hostFile -split '[\r\n]') ){
@@ -77,7 +77,7 @@ Function Enable-ScSite
             if($line.StartsWith("$ip")) {
                 $line = $line.Substring($ip.Length).Trim();
                 if($line.Contains("#")) {
-                    $line = $line.Substring(0, $line.IndexOf("#")).Trim();    
+                    $line = $line.Substring(0, $line.IndexOf("#")).Trim();
                 }
 
                 if($line -eq $localSetupConfig.LocalHostName) {
@@ -86,17 +86,16 @@ Function Enable-ScSite
                 }
             }
         }
-              
+
         if(-not $hostFileEntryExist) {
             $hostFile += $hostEntry
-            Set-Content -Value $hostFile -Path $hostFilePath -Force -Encoding ASCII     
-        
+            Set-Content -Value $hostFile -Path $hostFilePath -Force -Encoding ASCII
+
             Write-Output "Hosts file updated"
-        }  
+        }
 
         if($script:iisStoped) {
             iisreset /start
         }
     }
 }
-
