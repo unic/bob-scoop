@@ -10,7 +10,8 @@ The path of the project for which the config shoud be readed.
 .PARAMETER ConfigFilePath
 The folder in which the config file is located. The path must be relative to the project path.
 .PARAMETER ConfigFileName
-The filename of the config file.
+The names of the config files
+
 
 .EXAMPLE
 Get-ScProjectConfig
@@ -37,6 +38,16 @@ Function Get-ScProjectConfig
             $project = Get-Project
             if($Project) {
                 $ProjectPath = Split-Path $project.FullName -Parent
+                if(($ConfigFileName | ? {Test-Path (Join-Path (Join-Path $ProjectPath "$ConfigFilePath") "$_")}).Count -eq 0 ) {
+                  $ProjectPath = ""
+                }
+            }
+
+            if(-not $ProjectPath) {
+              $project = Get-Project "*.Website"
+              if($Project) {
+                $ProjectPath = Split-Path $project.FullName -Parent
+              }
             }
         }
 
@@ -58,7 +69,6 @@ Function Get-ScProjectConfig
                 }
               }
             }
-
           }
         }
         return $config;
