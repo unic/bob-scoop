@@ -55,7 +55,9 @@ Function Get-ScProjectConfig
             throw "No ProjectPath could be found. Please provide one."
         }
 
-        $config = @{}
+        $config = @{
+          "WebsitePath" = $ProjectPath
+        }
         foreach($configFile in $ConfigFileName) {
           $path = Join-Path (Join-Path $ProjectPath "$ConfigFilePath") "$configFile"
           if(Test-Path $path) {
