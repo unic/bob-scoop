@@ -2,31 +2,50 @@ function Install-Sitecore
 {
   [CmdletBinding()]
   Param(
-    [switch]$Force = $True
+    [switch]$Backup = $true,
+    [switch]$Force = $true
   )
   Process
   {
-    $config = Get-ScProjectConfig
-    $webPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.WebFolderName
-    $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
-    $filePatterns = $config.BackupFilter
+    try {
+      $config = Get-ScProjectConfig
+      $webPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.WebFolderName
+      $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
+      $filePatterns = $config.BackupFilter
+      $tempBackup = Join-Path $env:TEMP ([GUID]::NewGuid())
+      mkdir $tempBackup | Out-Null
 
-    if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
-    {
-      if($Force)
+      if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
       {
-        Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
-        Write-Verbose "Backup $webPatah to $backupPath"
-        Backup-ScWebRoot -WebRoot $webPath -BackupFolder $backupPath -FilePatterns $filePatterns
-        rm $webPath -Recurse -Force
+        if($Force)
+        {
+          Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
+          Write-Verbose "Backup $webPath to $backupPath"
+          $backupArgs = @{}
+          if(-not $Backup) {
+            $backupArgs["FilePatterns"] = $config.UnamangedFilter
+          }
+          Backup-ScWebRoot -WebRoot $webPath -BackupFolder $tempBackup @backupArgs
+          rm $webPath -Recurse -Force
+        }
+        else
+        {
+          Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
+          return
+        }
       }
-      else
-      {
-        Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
-        return
+
+      Write-Verbose "Install Sitecore distribution to $webPath"
+      Install-SitecorePackage -OutputLocation $webPath
+      Restore-ScWebRootUnmanaged -WebRoot $webPath -BackupFolder $tempBackup -FilePatterns $config.UnamangedFilter
+    }
+    catch {
+      Write-Error $_
+    }
+    finally {
+      if(Test-Path $tempBackup) {
+        rm $tempBackup -Recurse
       }
     }
-
-    Install-SitecorePackage -OutputLocation $webPath
   }
 }
