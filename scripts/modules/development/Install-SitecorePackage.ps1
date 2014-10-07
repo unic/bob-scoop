@@ -33,18 +33,27 @@ function Install-SitecorePackage
   }
 }
 
-$nugetCoreName = [NuGet.VisualStudio.ServiceLocator].Assembly.GetReferencedAssemblies() | ? {$_.Name -eq "NuGet.Core"}
-$nugetCore = [AppDomain]::CurrentDomain.GetAssemblies() | ? {$_.FullName -eq $nugetCoreName.FullName}
-
-Add-Type -ReferencedAssemblies $nugetCore -TypeDefinition @"
-    public class CustomPathResolver : NuGet.DefaultPackagePathResolver
-    {
-        public CustomPathResolver(string path) :base(path) {}
-
-        public override string GetPackageDirectory(string packageId, NuGet.SemanticVersion version)
+if($dte) {
+  $nugetCoreName = [NuGet.VisualStudio.ServiceLocator].Assembly.GetReferencedAssemblies() | ? {$_.Name -eq "NuGet.Core"}
+  $nugetCore = [AppDomain]::CurrentDomain.GetAssemblies() | ? {$_.FullName -eq $nugetCoreName.FullName}
+  try
+  {
+    [CustomPathResolver] | Out-null
+  }
+  catch
+  {
+    #Type CustomPathResolver does not exists
+    Add-Type -ReferencedAssemblies $nugetCore -TypeDefinition @"
+        public class CustomPathResolver : NuGet.DefaultPackagePathResolver
         {
-            return "";
+            public CustomPathResolver(string path) :base(path) {}
+
+            public override string GetPackageDirectory(string packageId, NuGet.SemanticVersion version)
+            {
+                return "";
+            }
         }
-    }
 
 "@
+  }
+}

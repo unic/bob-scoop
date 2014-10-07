@@ -46,6 +46,7 @@ function Install-Sitecore
       }
       finally {
         Restore-ScWebRootUnmanaged -WebRoot $webPath -BackupFolder $tempBackup -FilePatterns $config.UnamangedFilter
+        Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
       }
     }
     catch {
