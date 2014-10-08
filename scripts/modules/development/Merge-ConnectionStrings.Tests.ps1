@@ -1,11 +1,10 @@
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 . "$here\$sut"
-. "$here\Get-ScProjectConfig.ps1"
 
 Describe "Merge-ConnectionStrings" {
   Context "connectionStrings.config and Bob.config are provided" {
-    Mock Get-ScProjectConfig {return @{
+    function global:Get-ScProjectConfig() {return @{
       "WebsitePath" = "TestDrive:\";
       "ConnectionStringsFolder" = "input.config"
       "DatabaseServer" = "testserver";
