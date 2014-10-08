@@ -1,7 +1,7 @@
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
-
-Import-Module "$here\development.psm1"
+. "$here\$sut"
+. "$here\Get-ScProjectConfig.ps1"
 
 Describe "Merge-ConnectionStrings" {
   Context "connectionStrings.config and Bob.config are provided" {
@@ -9,7 +9,7 @@ Describe "Merge-ConnectionStrings" {
       "WebsitePath" = "TestDrive:\";
       "ConnectionStringsFolder" = "input.config"
       "DatabaseServer" = "testserver";
-    }} -ModuleName development
+    }}
 
     @"
 <?xml version="1.0" encoding="utf-8"?>
