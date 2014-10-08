@@ -14,7 +14,7 @@ If recordInstallationHistory  is enabled you have to provide this parameter.
 .PARAMETER Publish
 If this switch is added a publish jobb will be triggered after the package install
 .PARAMETER PublishMode
-Must be one of the following values: 
+Must be one of the following values:
  - full
  - smart
  - incremental
@@ -47,7 +47,7 @@ Function Install-ScSerializationPackage
         [string]$PublishSource,
         [string]$PublishTargets,
         [string]$PublishLanugages
-    
+
     )
     Begin{}
 
@@ -55,7 +55,7 @@ Function Install-ScSerializationPackage
     {
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Definition -Parent
-        
+
         $Path = (Resolve-Path $Path).Path
 
         $params = @();
@@ -74,19 +74,19 @@ Function Install-ScSerializationPackage
             $params += "-F";
             $params += "Description=$Description"
         }
-
+        Write-Host "Installing the SerializationPackage (This can take some time!)"
         $process = Start-Process "$scriptPath\..\..\..\tools\curl\curl.exe" $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait -PassThru
-        
+
         $logPath = "$((Resolve-Path $Path).Path).log"
         cp "$($env:TEMP)\install-serializationPackage-std.txt" $logPath
         if($process.ExitCode -eq 0) {
-            Write-Host "Installed SerializationPackage $Path with API-Url '$("$url/services/package/install/fileupload")'  "            
+            Write-Host "Installed SerializationPackage $Path with API-Url '$("$url/services/package/install/fileupload")'  "
             Write-Host "The log was written at $logPath"
-            
+
         }
         else {
             Write-Error ("Install SerializationPackage $Path with API-Url '$("$url/services/package/install/fileupload") failed`n" + (Get-Content "$($env:TEMP)\install-serializationPackage-error.txt"))
-        
+
             exit
         }
         if($Publish) {
@@ -99,5 +99,3 @@ Function Install-ScSerializationPackage
 
     End{}
 }
-
-
