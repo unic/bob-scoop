@@ -1,3 +1,5 @@
+[System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\..\tools\SharpZipLib\lib\20\ICSharpCode.SharpZipLib.dll") | Out-Null
+
 function Install-Sitecore
 {
   [CmdletBinding()]
@@ -29,6 +31,19 @@ function Install-Sitecore
               $backupArgs["FilePatterns"] = $config.UnamangedFilter
             }
             Backup-ScWebRoot -WebRoot $webPath -BackupFolder $tempBackup @backupArgs
+            if($Backup) {
+              if(-not (Test-Path $backupPath)) {
+                mkdir $backupPath | Out-Null
+              }
+              $backupFile = Join-Path $backupPath "Fullbackup.zip"
+              if(Test-Path $backupFile) {
+                Write-Verbose "Remove backup file $backupFile"
+                rm $backupFile
+              }
+              $zip = New-Object ICSharpCode.SharpZipLib.Zip.FastZip
+              $zip.CreateZip($backupFile, $tempBackup,$true, $null)
+
+            }
             rm $webPath -Recurse -Force
           }
           else

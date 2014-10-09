@@ -2,7 +2,7 @@
 .SYNOPSIS
 Restores all Databases of a project from a file share.
 .DESCRIPTION
-Restores all Databases which are referenced in the ConnectionStrings file of the Project. 
+Restores all Databases which are referenced in the ConnectionStrings file of the Project.
 The location where the backups to restore are taken must be configured in the Bob.config file.
 If a database already exists it will be replaced. If not it will be created at the default location or in the DatabasePath.
 
@@ -10,7 +10,7 @@ If a database already exists it will be replaced. If not it will be created at t
 .PARAMETER ConnectionStringsFile
 The path which of the configuration file which contains the ConnectionStrings
 .PARAMETER VSProjectRootPath
-The folder where the Visual Studio project is located. 
+The folder where the Visual Studio project is located.
 This is only used if no ConnectionStringsFile is provided to search the ConnectionStringsFile inside of this folder.
 If this Parameter is also not provided the ConnectionStringsFile is searched in the current Visual Studio project.
 .PARAMETER ProjectRootPath
@@ -41,7 +41,7 @@ Function Import-ScDatabases
     {
 
         if(-not $VSProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
-            $project = Get-Project 
+            $project = Get-Project
             if($project) {
                 $VSProjectRootPath = Split-Path $project.FullName -Parent
             }
@@ -56,7 +56,7 @@ Function Import-ScDatabases
         }
 
 
-        
+
         $localSetupConfig = Get-ScProjectConfig
         $Server = $localSetupConfig.DatabaseServer;
         $BackupShare = $localSetupConfig.DatabaseBackupShare;
@@ -85,9 +85,9 @@ Function Import-ScDatabases
         }
 
         $config = [xml](Get-Content $ConnectionStringsFile)
-       
+
         $databases = @();
-        
+
         if(-not $config.connectionStrings.add) {
             Write-Warning "No ConnectionStrings found in '$ConnectionStringsFile'"
         }
@@ -99,7 +99,7 @@ Function Import-ScDatabases
             }
 
             $parts = $connectionString.split(';');
-            foreach($part in $parts) 
+            foreach($part in $parts)
             {
                 $keyValue = $part.split('=');
                 $key = $keyValue[0].trim();
@@ -111,7 +111,7 @@ Function Import-ScDatabases
 
 
         $sqlServer = New-Object ("Microsoft.SqlServer.Management.Smo.Server") $server
-       
+
         try {
             if(-not $sqlServer.Version) {
                 Write-Error "Could no connect to SQL Server '$server'"
@@ -128,11 +128,11 @@ Function Import-ScDatabases
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
             {
-            
+
                 try {
                     Create-Database $sqlServer $databaseName -DatabasePath $DatabasePath
                 }
-                
+
                 catch {
                     $sqlEx = (GetSqlExcpetion $_.Exception )
                     if($sqlEx) {
@@ -149,7 +149,7 @@ Function Import-ScDatabases
             if($file) {
                 $file.FullName
 
-            
+
                 try {
                     $sqlServer.KillAllProcesses($databaseName);
                     Restore-Database $sqlServer $databaseName ($file.FullName)
@@ -169,7 +169,7 @@ Function Import-ScDatabases
             }
 
        }
-      
+
        Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
 
     }
@@ -178,7 +178,7 @@ Function Import-ScDatabases
 }
 
 function GetSqlExcpetion {
-    param ($ex) 
+    param ($ex)
 
     if($ex -is [System.Data.SqlClient.SqlException]) {
         $ex
