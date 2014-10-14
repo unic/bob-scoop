@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+Backup the web root nased on a specific file pattern.
+.DESCRIPTION
+Backup the web root nased on a specific file pattern.
+
+.PARAMETER WebRoot
+The folder to backup.
+
+.PARAMTER BackupFolder
+The folder where the files should be backuped to.
+
+.PARAMTER FilePatterns
+A semicolon separated list of file patterns.
+If this paramter is specified only files which matches the pattern will be copied.
+
+.EXAMPLE
+Backup-ScWebRoot -WebRoot D:\web\post-internet\Web -BackupFolder d:\temp\bak -FilePatterns "App_Config\*;Web.config"
+#>
 function Backup-ScWebRoot
 {
   [CmdletBinding()]
