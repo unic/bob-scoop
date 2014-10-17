@@ -6,6 +6,6 @@ function Copy-UnmanagedFiles
   {
     $config = Get-ScProjectConfig
     $webPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.WebFolderName
-    Copy-FilesByPattern -Source $config.WebsitePath -Target $webPath -FilePatterns $config.UnamangedFilter
+    Copy-FilesByPattern -Source $config.WebsitePath -Target $webPath -FilePatterns $config.UnmanagedFiles
   }
 }

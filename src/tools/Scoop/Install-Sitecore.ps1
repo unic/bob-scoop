@@ -28,7 +28,7 @@ function Install-Sitecore
             Write-Verbose "Backup $webPath to $backupPath"
             $backupArgs = @{}
             if(-not $Backup) {
-              $backupArgs["FilePatterns"] = $config.UnamangedFilter
+              $backupArgs["FilePatterns"] = $config.UnmanagedFiles
             }
             Backup-ScWebRoot -WebRoot $webPath -BackupFolder $tempBackup @backupArgs
             if($Backup) {
@@ -60,7 +60,7 @@ function Install-Sitecore
         Write-Error $_
       }
       finally {
-        Restore-ScWebRootUnmanaged -WebRoot $webPath -BackupFolder $tempBackup -FilePatterns $config.UnamangedFilter
+        Restore-ScWebRootUnmanaged -WebRoot $webPath -BackupFolder $tempBackup -FilePatterns $config.UnmanagedFiles
         Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
       }
     }
