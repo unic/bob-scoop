@@ -23,8 +23,8 @@
   <DatabaseBackupShare xdt:Transform="InsertIfMissing">\\corp.unic.com\sys\backup\unic-dev-mssql2</DatabaseBackupShare>
   <ConnectionStringsFolder xdt:Transform="InsertIfMissing">App_Config\ConnectionStrings.config</ConnectionStringsFolder>
 
-  <UnamangedFilter>
+  <UnmanagedFiles>
     App_Config\ConnectionStrings.config;
     App_Config\Unmanaged\*
-  </UnamangedFilter>
+  </UnmanagedFiles>
 </Configuration>
