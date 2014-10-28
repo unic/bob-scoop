@@ -1,5 +1,3 @@
-[System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\..\tools\SharpZipLib\lib\20\ICSharpCode.SharpZipLib.dll") | Out-Null
-
 function Install-Sitecore
 {
   [CmdletBinding()]
@@ -28,9 +26,9 @@ function Install-Sitecore
             Write-Verbose "Backup $webPath to $backupPath"
             $backupArgs = @{}
             if(-not $Backup) {
-              $backupArgs["FilePatterns"] = $config.UnmanagedFiles
+              $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
             }
-            Backup-ScWebRoot -WebRoot $webPath -BackupFolder $tempBackup @backupArgs
+            Copy-RubbleItem -Path $webPath -Destination $tempBackup @backupArgs
             if($Backup) {
               if(-not (Test-Path $backupPath)) {
                 mkdir $backupPath | Out-Null
@@ -40,8 +38,8 @@ function Install-Sitecore
                 Write-Verbose "Remove backup file $backupFile"
                 rm $backupFile
               }
-              $zip = New-Object ICSharpCode.SharpZipLib.Zip.FastZip
-              $zip.CreateZip($backupFile, $tempBackup,$true, $null)
+
+              Write-RubbleArchive -Path $webPath -OutputLocation $backupFile
 
             }
             rm $webPath -Recurse -Force
@@ -60,7 +58,7 @@ function Install-Sitecore
         Write-Error $_
       }
       finally {
-        Restore-ScWebRootUnmanaged -WebRoot $webPath -BackupFolder $tempBackup -FilePatterns $config.UnmanagedFiles
+        Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
         Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
       }
     }
