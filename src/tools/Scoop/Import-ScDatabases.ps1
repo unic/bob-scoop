@@ -76,7 +76,7 @@ Function Import-ScDatabases
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Path
 
-        Import-Module  (Join-Path $scriptPath "..\..\..\tools\sitecore-powercore\DBUtils.psm1") -Force
+        Import-Module  (Join-Path $scriptPath "..\tools\sitecore-powercore\DBUtils.psm1") -Force
         Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
 
         if((-not $ConnectionStringsFile) -or -not (Test-Path $ConnectionStringsFile)) {
@@ -123,6 +123,19 @@ Function Import-ScDatabases
             exit
         }
 
+        $serverManager = New-Object Microsoft.Web.Administration.ServerManager
+        if($serverManager.ApplicationPools) {
+            $appPoolName = $localSetupConfig.WebsiteCodeName
+            if($appPoolName) {
+                $appPool = $serverManager.ApplicationPools[$appPoolName]
+                if($appPool -and $appPool.State -eq "Started") {
+                    $appPool.Stop()
+                    while( $appPool.State -ne "Stopped") {
+                        sleep -s 1
+                    }
+                }
+            }
+        }
 
         foreach($databaseName in $databases) {
             $database = $sqlServer.databases[$databaseName]
@@ -168,6 +181,13 @@ Function Import-ScDatabases
                 Write-Error "No *.bak file found for database $databaseName on file sharee $BackupShare"
             }
 
+       }
+
+       if($appPool -and $appPool.State -eq "Stopped") {
+           $appPool.Start()
+           while( $appPool.State -ne "Started") {
+               sleep -s 1
+           }
        }
 
        Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
