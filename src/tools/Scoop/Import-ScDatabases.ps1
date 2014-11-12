@@ -76,7 +76,9 @@ Function Import-ScDatabases
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
         $scriptPath = Split-Path $scriptInvocation.MyCommand.Path
 
-        Import-Module  (Join-Path $scriptPath "..\tools\sitecore-powercore\DBUtils.psm1") -Force
+        $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
+        Import-Module $dbutils -Force
+
         Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
 
         if((-not $ConnectionStringsFile) -or -not (Test-Path $ConnectionStringsFile)) {

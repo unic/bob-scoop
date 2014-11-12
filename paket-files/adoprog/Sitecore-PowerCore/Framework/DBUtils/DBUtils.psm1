@@ -7,7 +7,6 @@
 	.DESCRIPTION
 		Creates new database on specified SQL server. Existing DB will be overwritten
 #>
-
 Function New-Database ($server, $databaseName, $DatabasePath)
 {
     if($DatabasePath) {
@@ -79,7 +78,8 @@ Function Remove-Database ($server, $databaseName)
 {
     "Removing the database - " + $databaseName
     IF ($server.databases[$databaseName] -ne $NULL) {
-        $server.databases[$databaseName].drop()
+        $server.KillAllProcesses($databaseName)
+        $server.KillDatabase($databaseName)
     }
 }
 
