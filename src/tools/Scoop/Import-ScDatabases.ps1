@@ -72,10 +72,7 @@ Function Import-ScDatabases
         if(-not $ConnectionStringsFile) {
             throw "No ConnectionStringsFile found. Please provide one."
         }
-
-        $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
-        $scriptPath = Split-Path $scriptInvocation.MyCommand.Path
-
+        
         $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
         Import-Module $dbutils -Force
 
