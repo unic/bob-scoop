@@ -22,6 +22,10 @@ Function Enable-ScSite
 
     Process
     {
+        if(-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+            Write-Error "Visual Studio is not running as Administrator. Please restart Visual Studio as Administrator."
+        }
+
         $script:iisStoped = $false
         Function Stop-IIS {
             if(-not $iisStoped) {
