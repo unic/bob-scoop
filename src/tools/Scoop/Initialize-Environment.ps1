@@ -5,10 +5,10 @@ function Initialize-Environment
     )
     Process
     {
-        Enable-ScSite
-        Install-Sitecore
-        Set-ScSerializationReference
-        Import-ScDatabases
+        Enable-ScSite -Verbose
+        Install-Sitecore -Verbose
+        Set-ScSerializationReference -Verbose
+        Import-ScDatabases -Verbose
     }
 }
 
