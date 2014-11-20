@@ -55,8 +55,6 @@ Function Import-ScDatabases
             throw "ProjectRootPath not found. Please provide one."
         }
 
-
-
         $localSetupConfig = Get-ScProjectConfig
         $Server = $localSetupConfig.DatabaseServer;
         $BackupShare = $localSetupConfig.DatabaseBackupShare;
@@ -72,7 +70,7 @@ Function Import-ScDatabases
         if(-not $ConnectionStringsFile) {
             throw "No ConnectionStringsFile found. Please provide one."
         }
-        
+
         $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
         Import-Module $dbutils -Force
 
@@ -128,7 +126,8 @@ Function Import-ScDatabases
             if($appPoolName) {
                 $appPool = $serverManager.ApplicationPools[$appPoolName]
                 if($appPool -and $appPool.State -eq "Started") {
-                    $appPool.Stop()
+                    $appPool.Stop() | Out-Null
+                    Write-Verbose "Stopped application pool $appPoolName"
                     while( $appPool.State -ne "Stopped") {
                         sleep -s 1
                     }
