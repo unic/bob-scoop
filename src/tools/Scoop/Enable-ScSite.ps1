@@ -53,7 +53,10 @@ Function Enable-ScSite
 
         if (-not $serverManager.Sites[$siteName] ) {
             Stop-IIS
-            $webPath = Join-Path (Join-Path  $localSetupConfig.GlobalWebPath ($localSetupConfig.WebsiteCodeName)) $localSetupConfig.WebFolderName
+            $webPath = $localSetupConfig.WebRoot
+            if(-not $webPath ) {
+                Write-Error "Could not find WebRoot. Please configure it in the Bob.config"
+            }
             $webSite = $serverManager.Sites.Add($siteName, $localSetupConfig.Protocol, ":80:" + $localSetupConfig.LocalHostName, $webPath);
             $webSite.Applications[0].ApplicationPoolName = $siteName;
             Start-sleep -milliseconds 1000

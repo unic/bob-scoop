@@ -42,32 +42,12 @@ Function Set-ScSerializationReference
           exit
         }
 
-
         if(-not $WebPath) {
-            if($localSetupConfig.GlobalWebPath -and $localSetupConfig.WebsiteCodeName) {
-                if(-not (Test-Path $localSetupConfig.GlobalWebPath)) {
-                    Write-Error "The GlobalWebPath '$($localSetupConfig.GlobalWebPath)' does not exist. Please specify a correct path in Bob.config"
-                    exit
-                }
-                $webSitePath = Join-Path  $localSetupConfig.GlobalWebPath $localSetupConfig.WebsiteCodeName
-                if(-not (Test-Path $webSitePath)) {
-                    Write-Error "The path of the Website '$webSitePath' does not exist. Please specify correct values in Bob.config"
-                    exit
-                }
-                $WebPath = Join-Path  $webSitePath $localSetupConfig.WebFolderName
-                if(-not (Test-Path $WebPath)) {
-                    Write-Error "The path of the Web-Folder '$WebPath' does not exist. Please specify correct values in Bob.config"
-                    exit
-                }
-            }
-            else {
-                Write-Error "GlobalWebPath or WebsiteCodeName are not valid in Bob.config. Please configure this values."
-                exit
-            }
+            $WebPath = $localSetupConfig.WebRoot
         }
 
         if(-not $WebPath) {
-            Write-Error "WebPath not found. Please provide one."
+            Write-Error "WebRoot not found. Please provide one."
             exit
         }
 
@@ -94,11 +74,10 @@ Function Set-ScSerializationReference
        }
 
 
-       if(Test-Path $configPath){
-        [XML]$config = Get-Content $configPath
-       }
-
-       if(-not $config) {
+        if(Test-Path $configPath){
+            [XML]$config = Get-Content $configPath
+        }
+        else {
             $config = [xml]$localSetupConfig.SerializationReferenceTemplate
         }
 

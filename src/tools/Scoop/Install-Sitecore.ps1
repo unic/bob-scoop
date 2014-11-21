@@ -9,7 +9,10 @@ function Install-Sitecore
   {
     try {
       $config = Get-ScProjectConfig
-      $webPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.WebFolderName
+      $webPath = $config.WebRoot
+      if(-not $WebPath) {
+        Write-Error "Could not find WebRoot. Please provide one."
+      }
       $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
 
       $tempBackup = Join-Path $env:TEMP ([GUID]::NewGuid())
