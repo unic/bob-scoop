@@ -1,3 +1,4 @@
+<div class="chapterlogo">![Scoop](Scoop.jpg)</div>
 # Scoop
 
 As with his front and rear shovels (scoops), Scoop provides a PSH based toolset for developers using Visual Studio.
@@ -15,7 +16,7 @@ Running all this tasks in a sequence can be done by running the following comman
 
 ## Install Scoop
 Scoop can be installed by running the following command in the "Package Manager Console"
-    
+
     Install-Package Unic.Bob.Scoop
 
 ## Module development
