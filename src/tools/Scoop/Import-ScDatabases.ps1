@@ -158,12 +158,13 @@ Function Import-ScDatabases
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
             if($file) {
-                $file.FullName
-
+                $tempPath = "${env:TEMP}\$($file.Name)"
+                Write-Verbose "Copy backup file from $($file.FullName) to $tempPath"
+                cp $file.FullName $tempPath
 
                 try {
                     $sqlServer.KillAllProcesses($databaseName);
-                    Restore-Database $sqlServer $databaseName ($file.FullName)
+                    Restore-Database $sqlServer $databaseName ($tempPath)
                 }
                 catch {
                     $sqlEx = (GetSqlExcpetion $_.Exception )
@@ -173,6 +174,9 @@ Function Import-ScDatabases
                     else {
                         Write-Error $_
                     }
+                }
+                finally {
+                    rm $tempPath
                 }
             }
             else {
