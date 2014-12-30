@@ -1,77 +1,81 @@
 function Install-Sitecore
 {
-  [CmdletBinding()]
-  Param(
-    [switch]$Backup = $true,
-    [switch]$Force = $true
-  )
-  Process
-  {
-    try {
-      $config = Get-ScProjectConfig
-      $webPath = $config.WebRoot
-      if(-not $WebPath) {
-        Write-Error "Could not find WebRoot. Please provide one."
-      }
-      $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
-
-      $tempBackup = Join-Path $env:TEMP ([GUID]::NewGuid())
-      mkdir $tempBackup | Out-Null
-
-      try
-      {
-
-        if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
+    [CmdletBinding()]
+    Param(
+        [switch]$Backup = $true,
+        [switch]$Force = $true
+    )
+    Process
+    {
+        try
         {
-          if($Force)
-          {
-            Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
-            Write-Verbose "Backup $webPath to $backupPath"
-            $backupArgs = @{}
-            if(-not $Backup) {
-              $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
+            $config = Get-ScProjectConfig
+            $webPath = $config.WebRoot
+            if(-not $WebPath) {
+                Write-Error "Could not find WebRoot. Please provide one."
             }
-            Copy-RubbleItem -Path $webPath -Destination $tempBackup @backupArgs
-            if($Backup) {
-              if(-not (Test-Path $backupPath)) {
-                mkdir $backupPath | Out-Null
-              }
-              $backupFile = Join-Path $backupPath "Fullbackup.zip"
-              if(Test-Path $backupFile) {
-                Write-Verbose "Remove backup file $backupFile"
-                rm $backupFile
-              }
+            $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
 
-              Write-RubbleArchive -Path $webPath -OutputLocation $backupFile
+            $tempBackup = Join-Path $env:TEMP ([GUID]::NewGuid())
+            mkdir $tempBackup | Out-Null
 
+            try
+            {
+                if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
+                {
+                    if($Force)
+                    {
+                        Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
+
+                        $backupArgs = @{}
+                        if(-not $Backup) {
+                            $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
+                        }
+                        Write-Verbose "Backup $webPath to temporary location $tempBackup"
+                        Copy-RubbleItem -Path $webPath -Destination $tempBackup @backupArgs
+                        if($Backup) {
+                            if(-not (Test-Path $backupPath)) {
+                                mkdir $backupPath | Out-Null
+                            }
+                            $backupFile = Join-Path $backupPath "Fullbackup.zip"
+                            if(Test-Path $backupFile) {
+                                Write-Verbose "Remove old backup file $backupFile"
+                                rm $backupFile
+                            }
+                            Write-Verbose "Write backup to $backupFile"
+                            Write-RubbleArchive -Path $webPath -OutputLocation $backupFile
+                        }
+                        rm $webPath -Recurse -Force
+                    }
+                    else
+                    {
+                        Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
+                        return
+                    }
+                }
+
+                Write-Verbose "Install Sitecore distribution to $webPath"
+                Install-SitecorePackage -OutputLocation $webPath
             }
-            rm $webPath -Recurse -Force
-          }
-          else
-          {
-            Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
-            return
-          }
+            catch
+            {
+                Write-Error $_
+            }
+            finally
+            {
+                Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
+                Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
+            }
         }
-
-        Write-Verbose "Install Sitecore distribution to $webPath"
-        Install-SitecorePackage -OutputLocation $webPath
-      }
-      catch {
-        Write-Error $_
-      }
-      finally {
-        Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
-        Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
-      }
+        catch
+        {
+            Write-Error $_
+        }
+        finally
+        {
+            if(Test-Path $tempBackup) {
+                rm $tempBackup -Recurse
+            }
+        }
     }
-    catch {
-      Write-Error $_
-    }
-    finally {
-      if(Test-Path $tempBackup) {
-        rm $tempBackup -Recurse
-      }
-    }
-  }
 }
