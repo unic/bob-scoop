@@ -3,7 +3,7 @@
 Restores all databases of a project from a file share.
 .DESCRIPTION
 Restores all databases which are referenced in the ConnectionStrings file of the project to the local database server.
-The backup will be copied to the $env:TEMP directory before restoring it.
+The backup will be copied to the C:\Temp directory before restoring it.
 The location of the backups to restore must be configured in the Bob.config file.
 If a database already exists it will be replaced. If not it will be created at the default location or in the DatabasePath.
 
@@ -136,6 +136,12 @@ Function Import-ScDatabases
             }
         }
 
+        $myTemp = "C:\temp"
+        if(-not (Test-Path $myTemp)) {
+            Write-Verbose "Creating temp path $myTemp"
+            mkdir $myTemp | Out-Null
+        }
+
         foreach($databaseName in $databases) {
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
@@ -159,7 +165,7 @@ Function Import-ScDatabases
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
             if($file) {
-                $tempPath = "${env:TEMP}\$($file.Name)"
+                $tempPath = "$myTemp\$($file.Name)"
                 Write-Verbose "Copy backup file from $($file.FullName) to $tempPath"
                 cp $file.FullName $tempPath
 
@@ -185,6 +191,10 @@ Function Import-ScDatabases
             }
 
        }
+
+        if(-not (ls $myTemp)) {
+            rm $myTemp
+        }
 
        if($appPool -and $appPool.State -eq "Stopped") {
            $appPool.Start()
