@@ -136,6 +136,12 @@ Function Import-ScDatabases
             }
         }
 
+        $myTemp = "C:\temp"
+        if(-not (Test-Path $myTemp)) {
+            Write-Verbose "Creating temp path $myTemp"
+            mkdir $myTemp | Out-Null
+        }
+
         foreach($databaseName in $databases) {
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
@@ -159,7 +165,7 @@ Function Import-ScDatabases
             }
             $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
             if($file) {
-                $tempPath = "${env:TEMP}\$($file.Name)"
+                $tempPath = "$myTemp\$($file.Name)"
                 Write-Verbose "Copy backup file from $($file.FullName) to $tempPath"
                 cp $file.FullName $tempPath
 
@@ -185,6 +191,10 @@ Function Import-ScDatabases
             }
 
        }
+
+        if(-not (ls $myTemp)) {
+            rm $myTemp
+        }
 
        if($appPool -and $appPool.State -eq "Stopped") {
            $appPool.Start()
