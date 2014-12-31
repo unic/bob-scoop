@@ -193,7 +193,7 @@ Function Import-ScDatabases
        }
 
         if(-not (ls $myTemp)) {
-            rm $myTemps
+            rm $myTemp
         }
 
        if($appPool -and $appPool.State -eq "Stopped") {
