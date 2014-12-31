@@ -181,7 +181,7 @@ Function Import-ScDatabases
                 }
             }
             else {
-                Write-Error "No *.bak file found for database $databaseName on file sharee $BackupShare"
+                Write-Error "No *.bak file found for database $databaseName on file share $BackupShare"
             }
 
        }
