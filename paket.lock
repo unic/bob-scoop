@@ -4,7 +4,7 @@ NUGET
     Pester (3.2.0)
   remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
   specs:
-    Unic.Bob.Keith (0.3.0-unstable0002)
+    Unic.Bob.Keith (0.3.0-unstable0022)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
   specs:
