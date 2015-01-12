@@ -1,5 +1,4 @@
-﻿[System.Reflection.Assembly]::LoadFrom("C:\windows\system32\inetsrv\Microsoft.Web.Administration.dll") | out-null;
-<#
+﻿<#
 .SYNOPSIS
 Creates the IIS Site and IIS Application Pool for the current Sitecore Website project.
 .DESCRIPTION
