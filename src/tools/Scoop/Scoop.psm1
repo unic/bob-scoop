@@ -13,6 +13,12 @@ function ResolvePath() {
   Write-Error "No path found for $RelativePath in package $PackageId"
 }
 
+if(Test-Path "C:\windows\system32\inetsrv\Microsoft.Web.Administration.dll") {
+    [System.Reflection.Assembly]::LoadFrom("C:\windows\system32\inetsrv\Microsoft.Web.Administration.dll") | out-null
+}
+else {
+    Write-Warning "Could not find the Microsoft.Web.Administration.dll from IIS. All cmdlets using IIS won't work."
+}
 
 $partentPath = (Get-Item $PSScriptRoot).Parent.FullName
 
