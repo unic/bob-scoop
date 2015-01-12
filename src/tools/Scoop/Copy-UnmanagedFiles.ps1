@@ -1,4 +1,4 @@
-ps<#
+<#
 .SYNOPSIS
 Copies all unmanaged files of the current project to the WebRoot.
 .DESCRIPTION
