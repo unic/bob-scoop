@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Installs Sitecore with the correct version to the WebRoot
+
+.DESCRIPTION
+Installs Sitecore distribution with the correct version to the WebRoot
+of the current project.
+The Sitecore version is calculated by looking for Sitecore.Mvc.Config
+or Sitecore.WebForms.Config installed to the Website project.
+Optionally a backup of the WebRoot will be performed before everything will be overwritten.
+In each case all unmanaged files will be backed-up and restored.
+Additionally the connectionStrings.config file will be transformed by taking the ConnectionStrings.config
+from the project as base, and the name of the SQL instance  from Bob.config.
+
+.PARAMETER Backup
+If $true a backup of the entire WebRoot will be done before everything gets overwritten by Scoop.
+
+.PARAMETER Force
+If $false nothing will be done if the WebRoot is not empty.
+
+.EXAMPLE
+Install-Sitecore
+
+.EXAMPLE
+Install-Sitecore -Backup:$false
+
+.EXAMPLE
+Install-Sitecore -Force:$false
+
+#>
 function Install-Sitecore
 {
     [CmdletBinding()]

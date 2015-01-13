@@ -1,3 +1,13 @@
+<#
+.SYNOPSIS
+Copies all unmanaged files of the current project to the WebRoot.
+.DESCRIPTION
+Copies all unmanaged files of the current project to the WebRoot.
+
+.EXAMPLE
+Copy-UnmanagedFiles
+
+#>
 function Copy-UnmanagedFiles
 {
   [CmdletBinding()]
