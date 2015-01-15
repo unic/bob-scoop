@@ -3,6 +3,7 @@
 Copies all unmanaged files of the current project to the WebRoot.
 .DESCRIPTION
 Copies all unmanaged files of the current project to the WebRoot.
+`Copy-UnmanagedFiles` uses Rubble to copy the files.
 
 .EXAMPLE
 Copy-UnmanagedFiles
