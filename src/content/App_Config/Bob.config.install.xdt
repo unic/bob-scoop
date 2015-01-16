@@ -16,7 +16,7 @@
 		]]>
   </SerializationReferenceTemplate>
   <SerializationReferenceXPath xdt:Transform="InsertIfMissing">configuration/sitecore/settings/setting/@set:value</SerializationReferenceXPath>
-  <SerializationFolder xdt:Transform="InsertIfMissing">Serialization</SerializationFolder>
+  <SerializationPath xdt:Transform="InsertIfMissing">..\..\Serialization</SerializationPath>
   <SerializationReferenceFilePath xdt:Transform="InsertIfMissing">App_Config\Include\Unic.SerializationReference.config</SerializationReferenceFilePath>
 
   <DatabaseServer xdt:Transform="InsertIfMissing">localhost</DatabaseServer>
