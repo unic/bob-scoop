@@ -14,8 +14,7 @@ The path which of the configuration file which contains the ConnectionStrings
 The folder where the Visual Studio project is located.
 This is only used if no ConnectionStringsFile is provided to search the ConnectionStringsFile inside of this folder.
 If this Parameter is also not provided the ConnectionStringsFile is searched in the current Visual Studio project.
-.PARAMETER ProjectRootPath
-Not used in this anymore!
+
 .PARAMETER DatabasePath
 The path where databases which does not exists yet should be created.
 
@@ -33,7 +32,6 @@ Function Import-ScDatabases
     Param(
         [String]$ConnectionStringsFile = "",
         [String]$VSProjectRootPath = "",
-        [String]$ProjectRootPath = "",
         [String]$DatabasePath = ""
     )
     Begin{}
@@ -46,14 +44,6 @@ Function Import-ScDatabases
             if($project) {
                 $VSProjectRootPath = Split-Path $project.FullName -Parent
             }
-        }
-
-        if(-not $ProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-ScProjectRootPath"})) {
-            $ProjectRootPath = Get-ScProjectRootPath
-        }
-
-        if(-not $ProjectRootPath) {
-            throw "ProjectRootPath not found. Please provide one."
         }
 
         $localSetupConfig = Get-ScProjectConfig
@@ -75,7 +65,7 @@ Function Import-ScDatabases
         $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
         Import-Module $dbutils -Force
 
-        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath'";
+        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -VSProjectRootPath '$VSProjectRootPath'";
 
         if((-not $ConnectionStringsFile) -or -not (Test-Path $ConnectionStringsFile)) {
             Write-Error "Could not find ConnectionStrings file at '$ConnectionStringsFile'"
@@ -203,7 +193,7 @@ Function Import-ScDatabases
            }
        }
 
-       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -ProjectRootPath '$ProjectRootPath' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
+       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
 
     }
 
