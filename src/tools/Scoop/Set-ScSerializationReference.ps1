@@ -2,7 +2,7 @@
 .SYNOPSIS
 Sets the SerializationReference path of the current project.
 .DESCRIPTION
-Creates or edits the serialization reference configuration path in the local IIS web path to a specific directory in the project root directory.
+Creates or edits the serialization reference configuration path in the local IIS web path to a configured directoy in Bob.config.
 This configuration is used by Sitecore to know where items should be automaticaly serialized.
 
 .PARAMETER WebPath
