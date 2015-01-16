@@ -2,11 +2,9 @@
 .SYNOPSIS
 Sets the SerializationReference path of the current project.
 .DESCRIPTION
-Creates or edits the serialization reference configuration path in the local IIS web path to a specific directory in the project root directory.
+Creates or edits the serialization reference configuration path in the local IIS web path to a configured directoy in Bob.config.
 This configuration is used by Sitecore to know where items should be automaticaly serialized.
 
-.PARAMETER ProjectRootPath
-The root path of the project where the sereialization folder is located.
 .PARAMETER WebPath
 The Web-Folder of the IIS Site.
 
@@ -21,20 +19,12 @@ Function Set-ScSerializationReference
         ConfirmImpact="Low"
     )]
     Param(
-        [String]$ProjectRootPath = "",
         [String]$WebPath = ""
     )
     Begin{}
 
     Process
     {
-        if(-not $ProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-ScProjectRootPath"})) {
-            $ProjectRootPath = Get-ScProjectRootPath
-        }
-
-        if(-not $ProjectRootPath) {
-            throw "ProjectRootPath not found. Please provide one."
-        }
         $localSetupConfig = Get-ScProjectConfig
 
         if(-not $localSetupConfig.SerializationReferenceTemplate) {
@@ -51,19 +41,20 @@ Function Set-ScSerializationReference
             exit
         }
 
-        $SerializationFolderName = $localSetupConfig.SerializationFolder
+        $serializationPath = $localSetupConfig.SerializationPath
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
         if(-not $configFilePath) {
             Write-Error "No SerializationReferenceFilePath was specified in Bob.config. Please provide a value for SerializationReferenceFilePath."
             exit
         }
 
-       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
+       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' "
 
-       $serializationPath = Join-Path $ProjectRootPath $SerializationFolderName;
-
-
-       $elementValue = (Join-Path $ProjectRootPath $SerializationFolderName).ToString()
+       $Path = Join-Path $localSetupConfig.WebsitePath $serializationPath
+       if(-not (Test-Path $Path)) {
+            mkdir $Path | Out-Null
+       }
+       $elementValue = (Resolve-Path $Path).Path
 
        $configPath = Join-Path $WebPath $configFilePath ;
        if(-not (Test-Path $configPath)) {
@@ -113,7 +104,7 @@ Function Set-ScSerializationReference
 
       $config.Save($configPath);
         Write-Host "Set serialization reference in '$configPath' to $elementValue"
-        Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath' -ProjectRootPath '$ProjectRootPath' ";
+        Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath'  ";
     }
 
     End{}
