@@ -15,8 +15,7 @@ Function Enable-ScSite
         ConfirmImpact="Low"
     )]
     Param(
-	  # Not in use anymore
-      #  [String]$ProjectRootPath = ""
+        [switch] $Force = $false
     )
     Begin{}
 
@@ -37,8 +36,10 @@ Function Enable-ScSite
         $localSetupConfig = Get-ScProjectConfig .
         $siteName = $localSetupConfig.WebsiteCodeName
 
+
         Import-Module WebAdministration -Verbose:$false
         $serverManager = New-Object Microsoft.Web.Administration.ServerManager;
+
         if(-not $serverManager.ApplicationPools[$siteName]) {
             Stop-IIS
 
@@ -93,10 +94,15 @@ Function Enable-ScSite
         }
 
 
-        $existingBindings = Get-WebBinding -Name $siteName | % {
-            $parts = $_.bindingInformation.Split(":")
-             @{"ip"= $parts[0] ; "port" = $parts[1]; "host" = $parts[2]; "protocol" = $_.protocol}
+        if(-not $Force) {
+            $existingBindings = Get-WebBinding -Name $siteName | % {
+                $parts = $_.bindingInformation.Split(":")
+                 @{"ip"= $parts[0] ; "port" = $parts[1]; "host" = $parts[2]; "protocol" = $_.protocol}
 
+            }
+        }
+        else {
+            Get-WebBinding -Name $siteName | Remove-WebBinding
         }
 
         $IPs = @()
