@@ -19,6 +19,21 @@ Scoop can be installed by running the following command in the "Package Manager 
 
     Install-Package Unic.Bob.Scoop
 
+## Settings
+
+| AppPoolRuntime | |
+| HostsFileComment | |
+| BackupFolderName | |
+| SerializationReferenceTemplate | |
+| SerializationReferenceXPath | |
+| SerializationPath | |
+| SerializationReferenceFilePath | |
+| DatabaseServer | |
+| DatabaseBackupShare | |
+| ConnectionStringsFolder | |
+| UnmanagedFiles | |
+| IISBindings | |
+
 ## Module development
 
 Scoop can also be used in Modules. The installation is the same as for Websites. Make sure you configure the WebRoot key in Bob.config is set.

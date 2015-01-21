@@ -2,7 +2,8 @@
 .SYNOPSIS
 Creates the IIS Site and IIS Application Pool for the current Sitecore Website project.
 .DESCRIPTION
-Creates the IIS Site and IIS Application Pool for the current Sitecore Website project and adds a Host-Name entry in the Hosts file.
+Creates the IIS Site and IIS Application Pool for the current Sitecore Website project
+and adds all  host-names to the hosts file.
 
 .EXAMPLE
 Enable-ScSite
@@ -76,11 +77,16 @@ Function Enable-ScSite
             if(-not $webPath ) {
                 Write-Error "Could not find WebRoot. Please configure it in the Bob.config"
             }
-            $webSite = $serverManager.Sites.Add($siteName, $bindings[0].protocol, ":" + $bindings[0].port + ":" + $bindings[0].host, $webPath);
+            $protocol = $bindings[0].protocol
+            $port = $bindings[0].port
+            $host = $bindings[0].host
+            $ip = $bindings[0].ip
+
+            $webSite = $serverManager.Sites.Add($siteName, $protocol, $ip + ":" + $port + ":" + $host, $webPath);
             $webSite.Applications[0].ApplicationPoolName = $siteName;
             Start-sleep -milliseconds 1000
             $serverManager.CommitChanges();
-            "Added Site '$siteName' with pointing to '$webPath'. URL: $($localSetupConfig.Protocol)://$($localSetupConfig.LocalHostName)"
+            "Added site '$siteName' with the WebRoot '$webPath'. URL: ${protocol}://${host}:${port}"
 
             # Wait for the changes to apply
             Start-sleep -milliseconds 1000
@@ -113,7 +119,7 @@ Function Enable-ScSite
                 ? {$_.port -eq $port -and $_.host -eq $host -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
 
                 New-WebBinding -Name $siteName -Protocol $protocol -Port $port -IPAddress $ip -HostHeader $host
-                Write-Verbose "Addeed binding $protocol, $host, $port on IP '$ip'"
+                Write-Verbose "Added binding $protocol, $host, $port on IP '$ip'"
             }
         }
 
