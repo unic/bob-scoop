@@ -14,5 +14,6 @@
     <files>
         <file src="src\**" />
         <file src="paket-files\**" target="tools\paket-files" />
+        <file src="tools\**" target="tools\bin" />
     </files>
 </package>

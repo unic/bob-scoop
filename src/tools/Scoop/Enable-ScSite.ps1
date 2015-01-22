@@ -105,9 +105,11 @@ Function Enable-ScSite
             Get-WebBinding -Name $siteName | Remove-WebBinding
         }
 
+        $CAName = "Scoop"
         $IPs = @()
 
         foreach($binding in $bindings) {
+
             $port = $binding.port
             $protocol = $binding.protocol
             $host = $binding.host
@@ -127,6 +129,33 @@ Function Enable-ScSite
                 New-WebBinding -Name $siteName -Protocol $protocol -Port $port -IPAddress $ip -HostHeader $host
                 Write-Verbose "Added binding $protocol, $host, $port on IP '$ip'"
             }
+
+            if($protocol -eq "https") {
+                $ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
+                if(-not $ca) {
+                    New-CertCA $CAName
+                    Write-Host "Created certificate authority $CAName"
+                }
+                Add-TrustedCaToFirefox $CAName
+
+                $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$Host, $ScoopCertificatePath"}
+                if(-not $cert) {
+                    New-Cert $Host -CA $CAName
+                    Write-Host "Created certificate for host $Host"
+                }
+
+                $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$Host, $ScoopCertificatePath"}
+
+                $sslBinding = "IIS:\SslBindings\$ip!$port"
+                if(Test-Path $sslBinding) {
+                    Set-Item -Path "IIS:\SslBindings\$ip!$port" -Value $cert
+                }
+                else {
+                    New-Item -Path "IIS:\SslBindings\$ip!$port" -Value $cert
+                }
+            }
+
+
         }
 
         $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"
