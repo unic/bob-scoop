@@ -109,7 +109,6 @@ Function Enable-ScSite
         $IPs = @()
 
         foreach($binding in $bindings) {
-
             $port = $binding.port
             $protocol = $binding.protocol
             $host = $binding.host
@@ -154,8 +153,6 @@ Function Enable-ScSite
                     New-Item -Path "IIS:\SslBindings\$ip!$port" -Value $cert
                 }
             }
-
-
         }
 
         $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"
@@ -163,32 +160,54 @@ Function Enable-ScSite
             Throw "Hosts file not found"
         }
 
+        $ipHash = @{}
+
         foreach($ipHostName in $IPs) {
             $ip = $ipHostName.ip
             $hostName = $ipHostName.host
+            if($ipHash[$hostName] -and $ipHash[$hostName] -ne $ip) {
+                Write-Warning "Hostname $hostName has multiple IPs. The IP $ip will not be written to the hosts file."
+                continue;
+            }
+            $ipHash[$hostName] = $ip
+
             $hostFile = Get-Content -Path $hostFilePath
-            $hostEntry =  "$ip       $($hostName) #$($localSetupConfig.HostsFileComment)"
+            $hostFile = $hostFile -split '[\r\n]'
 
             $hostFileEntryExist = $false;
 
-            foreach($line in ($hostFile -split '[\r\n]') ){
-                $line = $line.Trim();
-                if($line.StartsWith("$ip")) {
-                    $line = $line.Substring($ip.Length).Trim();
-                    if($line.Contains("#")) {
-                        $line = $line.Substring(0, $line.IndexOf("#")).Trim();
-                    }
+            [string[]]$newHostFile = @()
 
-                    if($line -eq $hostName) {
-                        $hostFileEntryExist = $true;
-                        break;
+            $hostFileRegex = "^((?:\d\d?\d?\.){3}\d\d?\d?)\s*(.+?)(#.*)?$"
+
+            foreach($line in $hostFile) {
+                if($line -match $hostFileRegex) {
+                    $lineIp = $matches[1]
+                    $lineHost = $matches[2].Trim()
+                    if($lineHost -eq $hostName) {
+                        if($ip -eq $lineIp) {
+                            $newHostFile += $line
+                            $hostFileEntryExist = $true
+                        }
+                        else {
+                            Write-Warning "$hostName has currently the IP $lineIp in the hosts file. This will be overwritten by the new IP $ip"
+                            $newHostFile += "#" +  $line
+                        }
                     }
+                    else {
+                        $newHostFile += $line
+                    }
+                }
+                else {
+                    $newHostFile += $line
                 }
             }
 
             if(-not $hostFileEntryExist) {
-                $hostFile += $hostEntry
-                Set-Content -Value $hostFile -Path $hostFilePath -Force -Encoding ASCII
+                $newHostFile +=  "$ip       $($hostName) #$($localSetupConfig.HostsFileComment)"
+
+                Set-Content -Value ([string]::Join("`r`n",$newHostFile )) -Path $hostFilePath -Force -Encoding ASCII
+                sleep -m 2
 
                 Write-Output "Hosts file updated"
             }
