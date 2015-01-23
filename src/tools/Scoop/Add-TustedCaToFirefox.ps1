@@ -26,7 +26,7 @@ function Add-TrustedCaToFirefox
         $profiles = ls C:\Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*
         if($profiles) {
             $isTrusted = (($profiles | %  {
-                $trusted = & "$PSScriptRoot\..\..\..\tools\certutil.exe" -L -d $_.FullName
+                $trusted = & (ResolveBinPath "certutil.exe") -L -d $_.FullName
                 ($trusted | % {$_.Contains($Name + " ")}) -gt 0
             } | ? {$_ -eq $true}).Count -eq $profiles.Count)
 
