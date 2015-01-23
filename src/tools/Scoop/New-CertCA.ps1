@@ -1,12 +1,16 @@
 <#
 .SYNOPSIS
+Generates a new certificate which can be used as certificate authority.
 
 .DESCRIPTION
+Generates a new certificate which can be used as certificate authority. The certificate will be placed in the machine-wide "Trusted Certificate
+Authorities" and will have a validity of 20 years.
 
-
-.PARAMETER
+.PARAMETER Name
+The name of the certificate authority.
 
 .EXAMPLE
+New-CertCA -Name Scoop
 
 #>
 function New-CertCA

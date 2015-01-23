@@ -1,12 +1,16 @@
 <#
 .SYNOPSIS
+Adds a trusted certificate authority to Firefox.
 
 .DESCRIPTION
+Adds a trusted certificate authority to the Firefox key store.
+*Note*: Firefox mustn't run when executing this command.
 
-
-.PARAMETER
+.PARAMETER Name
+The common name of the certificate.
 
 .EXAMPLE
+Add-TrustedCaToFirefox -Name Scoop
 
 #>
 function Add-TrustedCaToFirefox

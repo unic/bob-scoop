@@ -2,8 +2,9 @@
 .SYNOPSIS
 Creates the IIS Site and IIS Application Pool for the current Sitecore Website project.
 .DESCRIPTION
-Creates the IIS Site and IIS Application Pool for the current Sitecore Website project
-and adds all  host-names to the hosts file.
+Creates the IIS Site and IIS Application Pool for the current Sitecore Website
+project and adds all host-names to the hosts file. Additionally it creates an
+SSL certificate for every HTTPS binding specified in the Bob.config. 
 
 .EXAMPLE
 Enable-ScSite
