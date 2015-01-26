@@ -46,7 +46,7 @@ function Install-Sitecore
             }
             $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
 
-            $tempBackup = Join-Path $env:TEMP ([GUID]::NewGuid())
+            $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
             mkdir $tempBackup | Out-Null
 
             try
@@ -62,20 +62,17 @@ function Install-Sitecore
                             $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
                         }
                         Write-Verbose "Backup $webPath to temporary location $tempBackup"
-                        Copy-RubbleItem -Path $webPath -Destination $tempBackup @backupArgs
+                        mv $webPath\* $tempBackup
+                        
                         if($Backup) {
-                            if(-not (Test-Path $backupPath)) {
-                                mkdir $backupPath | Out-Null
-                            }
                             $backupFile = Join-Path $backupPath "Fullbackup.zip"
                             if(Test-Path $backupFile) {
                                 Write-Verbose "Remove old backup file $backupFile"
                                 rm $backupFile
                             }
                             Write-Verbose "Write backup to $backupFile"
-                            Write-RubbleArchive -Path $webPath -OutputLocation $backupFile
+                            Write-RubbleArchive -Path $tempBackup -OutputLocation $backupFile
                         }
-                        rm $webPath -Recurse -Force
                     }
                     else
                     {
