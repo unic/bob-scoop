@@ -24,4 +24,22 @@ $partentPath = (Get-Item $PSScriptRoot).Parent.FullName
 
 Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude "*.Tests.ps1" | Foreach-Object{ . $_.FullName }
 Export-ModuleMember -Function * -Alias *
+
 $VerbosePreference = "Continue"
+$ScoopCertificatePath = "O=Unic AG, OU=Unic AG"
+
+function ResolveBinPath() {
+    param($Path)
+
+    $paths = @("$PSScriptRoot\..\..\..\tools", "$PSScriptRoot\..\bin")
+    foreach($toolPath in $paths ) {
+        $binPath = Join-Path $toolPath $Path
+        if(Test-Path $binPath) {
+            Resolve-Path $binPath
+            return
+        }
+    }
+
+    Write-Error "No bin path found for $Path"
+
+}
