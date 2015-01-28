@@ -37,7 +37,7 @@ function Add-TrustedCaToFirefox
             if(-not $isTrusted) {
 
                 if(Get-Process firefox -ErrorAction SilentlyContinue) {
-                    Write-Warning "Firefox is running. Stop Firefox and rerun the command to trust the certificate in Firefox."
+                    Write-Warning "Firefox is running. Stop Firefox and execute 'Add-TrustedCaToFirefox $Name' to trust the certificate in Firefox."
                     return
                 }
 

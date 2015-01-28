@@ -4,7 +4,7 @@ Creates the IIS Site and IIS Application Pool for the current Sitecore Website p
 .DESCRIPTION
 Creates the IIS Site and IIS Application Pool for the current Sitecore Website
 project and adds all host-names to the hosts file. Additionally it creates an
-SSL certificate for every HTTPS binding specified in the Bob.config. 
+SSL certificate for every HTTPS binding specified in the Bob.config.
 
 .EXAMPLE
 Enable-ScSite
@@ -22,6 +22,7 @@ Function Enable-ScSite
 
     Process
     {
+
         if(-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
             Write-Error "Visual Studio is not running as Administrator. Please restart Visual Studio as Administrator."
         }
@@ -205,7 +206,7 @@ Function Enable-ScSite
             }
 
             if(-not $hostFileEntryExist) {
-                $newHostFile +=  "$ip       $($hostName) #$($localSetupConfig.HostsFileComment)"
+                $newHostFile +=  "$ip       $($hostName) # Site: $($localSetupConfig.SiteName) - $($localSetupConfig.HostsFileComment)"
 
                 Set-Content -Value ([string]::Join("`r`n",$newHostFile )) -Path $hostFilePath -Force -Encoding ASCII
                 sleep -m 2
