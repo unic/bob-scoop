@@ -35,7 +35,7 @@ Function Enable-ScSite
             }
         }
 
-        $localSetupConfig = Get-ScProjectConfig .
+        $localSetupConfig = Get-ScProjectConfig
         $siteName = $localSetupConfig.WebsiteCodeName
 
 
