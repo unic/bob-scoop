@@ -16,7 +16,8 @@ Function Enable-ScSite
         ConfirmImpact="Low"
     )]
     Param(
-        [switch] $Force = $false
+        [switch] $Force = $false,
+        [string] $ProjectPath
     )
     Begin{}
 
@@ -35,7 +36,7 @@ Function Enable-ScSite
             }
         }
 
-        $localSetupConfig = Get-ScProjectConfig
+        $localSetupConfig = Get-ScProjectConfig -ProjectPath $ProjectPath
         $siteName = $localSetupConfig.WebsiteCodeName
 
 
@@ -66,6 +67,7 @@ Function Enable-ScSite
                 Write-Error "Binding $($_.OuterXml) contains no valid url."
             }
             $uri = New-Object System.Uri $url
+
             @{
                 "port" = $uri.Port;
                 "protocol" = $uri.Scheme;
@@ -95,16 +97,15 @@ Function Enable-ScSite
             Start-sleep -milliseconds 1000
         }
 
-
+        $site = $serverManager.Sites[$siteName]
         if(-not $Force) {
-            $existingBindings = Get-WebBinding -Name $siteName | % {
+            $existingBindings = $site.Bindings | % {
                 $parts = $_.bindingInformation.Split(":")
                  @{"ip"= $parts[0] ; "port" = $parts[1]; "host" = $parts[2]; "protocol" = $_.protocol}
-
             }
         }
         else {
-            Get-WebBinding -Name $siteName | Remove-WebBinding
+            $site.Bindings.Clear()
         }
 
         $CAName = "Scoop"
@@ -113,49 +114,45 @@ Function Enable-ScSite
         foreach($binding in $bindings) {
             $port = $binding.port
             $protocol = $binding.protocol
-            $host = $binding.host
+            $hostname = $binding.host
             $ip = $binding.ip
             if(-not $ip) {
                 # Force IP to be not null
                 $ip = ""
-                $IPs += @{"ip" = "127.0.0.1"; "host" = "$host"};
+                $IPs += @{"ip" = "127.0.0.1"; "host" = "$hostname"};
             }
             else {
-                $IPs += @{"ip" = "$ip"; "host" = "$host"};
+                $IPs += @{"ip" = "$ip"; "host" = "$hostname"};
             }
 
             if(-not ($existingBindings |
-                ? {$_.port -eq $port -and $_.host -eq $host -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
+                ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
 
-                New-WebBinding -Name $siteName -Protocol $protocol -Port $port -IPAddress $ip -HostHeader $host
-                Write-Verbose "Added binding $protocol, $host, $port on IP '$ip'"
-            }
+                if($protocol -eq "https") {
+                    $ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
+                    if(-not $ca) {
+                        New-CertCA $CAName
+                        Write-Host "Created certificate authority $CAName"
+                    }
+                    Add-TrustedCaToFirefox $CAName
 
-            if($protocol -eq "https") {
-                $ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
-                if(-not $ca) {
-                    New-CertCA $CAName
-                    Write-Host "Created certificate authority $CAName"
-                }
-                Add-TrustedCaToFirefox $CAName
+                    $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
+                    if(-not $cert) {
+                        New-Cert $hostname -CA $CAName
+                        Write-Host "Created certificate for host $hostname"
+                    }
 
-                $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$Host, $ScoopCertificatePath"}
-                if(-not $cert) {
-                    New-Cert $Host -CA $CAName
-                    Write-Host "Created certificate for host $Host"
-                }
+                    $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
 
-                $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$Host, $ScoopCertificatePath"}
-
-                $sslBinding = "IIS:\SslBindings\$ip!$port"
-                if(Test-Path $sslBinding) {
-                    Set-Item -Path "IIS:\SslBindings\$ip!$port" -Value $cert
+                    $site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
                 }
                 else {
-                    New-Item -Path "IIS:\SslBindings\$ip!$port" -Value $cert
+                    $site.Bindings.Add("${ip}:${port}:${hostname}", $protocol) | Out-Null
                 }
+                Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
             }
         }
+        $serverManager.CommitChanges()
 
         $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"
         if (-not (Test-Path -Path $hostFilePath)){
