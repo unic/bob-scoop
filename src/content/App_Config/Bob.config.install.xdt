@@ -30,7 +30,7 @@
     App_Config\ConnectionStrings.config;
     App_Config\Unmanaged\*
   </UnmanagedFiles>
-  <IISBindings>
+  <IISBindings xdt:Transform="InsertIfMissing">
         <Binding IP="">http://</Binding>
   </IISBindings>
 </Configuration>
