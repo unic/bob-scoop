@@ -28,9 +28,9 @@ The following settings are relevant for Scoop.
 | AppPoolRuntime | The runtime on which the application pool should run. Either `v4.0` or `v2.0` | `<AppPoolRuntime>v4.0</AppPoolRuntime>` |
 | HostsFileComment | The comment to add on every line updated by Scoop in the hosts file. | `<HostsFileComment>inserted by bob</HostsFileComment>` |
 | GlobalWebPath | An absolute path where the WebRoot and the backup folder are. | `<GlobalWebPath>D:\web</GlobalWebPath>` |
-| SiteName | The name of the IIS website and the folder in the `GlobalWebPath`.  | `<SiteName>cust-internet</SiteName>` |
-| WebFolderName | A folder inside the `GlobalWebPath\SiteName` which will be the WebRoot. | `<WebFolderName>Web</WebFolderName>` |
-| BackupFolderName | A folder inside of `GlobalWebPath\SiteName` where all backups are written to. | `<BackupFolderName>Backup</BackupFolderName>` |
+| WebsiteCodeName | The name of the IIS website and the folder in the `GlobalWebPath`.  | `<WebsiteCodeName>customer-internet</WebsiteCodeName>` |
+| WebFolderName | A folder inside the `GlobalWebPath\WebsiteCodeName` which will be the WebRoot. | `<WebFolderName>Web</WebFolderName>` |
+| BackupFolderName | A folder inside of `GlobalWebPath\WebsiteCodeName` where all backups are written to. | `<BackupFolderName>Backup</BackupFolderName>` |
 | SerializationReferenceTemplate | A template for the serialization config file. | `<SerializationReferenceTemplate>`<br> `<![CDATA[` <br> `<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">` <br> `<sitecore>` <br> `<settings>` <br> `<setting name="SerializationFolder" set:value="" />` <br> `</settings>` <br> `</sitecore>` <br> `</configuration>` <br> `]]>` <br> `</SerializationReferenceTemplate>` |
 | SerializationReferenceXPath | The xpath inside the serialization config to the serialization reference.  | `<SerializationReferenceXPath>configuration/sitecore/settings/setting/@set:value</SerializationReferenceXPath>`|
 | SerializationPath | The path relative to the website project where the items should be serialized to. | `<SerializationPath>..\..\Serialization</SerializationPath>` |
