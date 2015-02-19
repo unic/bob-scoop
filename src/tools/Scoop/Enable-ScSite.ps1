@@ -61,7 +61,7 @@ Function Enable-ScSite
             Write-Error "No IIS bindings where found. Provide at least one in Bob.config or Bob.config.user with the key IISBindings"
         }
 
-        $bindings = $rawBindings | % {
+        $bindings = @($rawBindings | % {
             $url = $_.InnerText
             if(-not ( [System.Uri]::IsWellFormedUriString($url, "Absolute"))) {
                 Write-Error "Binding $($_.OuterXml) contains no valid url."
@@ -74,7 +74,7 @@ Function Enable-ScSite
                 "host" = $uri.Authority;
                 "ip" = $_.ip;
             }
-        }
+        })
 
         if (-not $serverManager.Sites[$siteName] ) {
             Stop-IIS
