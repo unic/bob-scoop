@@ -6,6 +6,7 @@
         <authors>Unic AG</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Muck are the tools for local deployments</description>
+        <developmentDependency>true</developmentDependency>
         <dependencies>
             <dependency id="Unic.Bob.Config" />
             <dependency id="Unic.Bob.Rubble" />
