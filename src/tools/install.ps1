@@ -3,7 +3,7 @@ param($installPath, $toolsPath, $package, $project)
 # Edits the project's packages.config file to make sure the reference to the given package uses the developmentDependency="true" attribute.
 function Set-PackageToBeDevelopmentDependency($PackageId, $ProjectDirectoryPath)
 {
-    function Get-XmlNamespaceManager(1$XmlDocument, [string]$NamespaceURI = "")
+    function Get-XmlNamespaceManager($XmlDocument, [string]$NamespaceURI = "")
     {
         # If a Namespace URI was not given, use the Xml document's default namespace.
         if ([string]::IsNullOrEmpty($NamespaceURI)) { $NamespaceURI = $XmlDocument.DocumentElement.NamespaceURI }
@@ -19,7 +19,7 @@ function Set-PackageToBeDevelopmentDependency($PackageId, $ProjectDirectoryPath)
         return "/ns:$($NodePath.Replace($($NodeSeparatorCharacter), '/ns:'))"
     }
 
-    function Get-XmlNodes(1$XmlDocument, [string]$NodePath, [string]$NamespaceURI = "", [string]$NodeSeparatorCharacter = '.')
+    function Get-XmlNodes($XmlDocument, [string]$NodePath, [string]$NamespaceURI = "", [string]$NodeSeparatorCharacter = '.')
     {
         $xmlNsManager = Get-XmlNamespaceManager -XmlDocument $XmlDocument -NamespaceURI $NamespaceURI
         [string]$fullyQualifiedNodePath = Get-FullyQualifiedXmlNodePath -NodePath $NodePath -NodeSeparatorCharacter $NodeSeparatorCharacter
