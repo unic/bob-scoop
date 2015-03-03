@@ -56,27 +56,10 @@ function Install-SitecorePackage
 
         $packageId = "Sitecore.Distribution." + $scContextInfo.type
         $version = $scContextInfo.version
-        Write-Verbose "Install $packageId $version"
+        Write-Verbose "Install $packageId $version to $OutputLocation"
         $packageToInstall = $repo.FindPackagesById($packageId) | ? {$_.Version -eq $version.ToString()}
 
         $outputFileSystem = New-Object NuGet.PhysicalFileSystem $OutputLocation
-        #$package.GetFiles().Path | % {"$Location\$_"} | ? {Test-Path $_} | % {rm $_}
         $outputFileSystem.AddFiles($packageToInstall.GetFiles(), $OutputLocation)
-
-        return
-        $packageManager = New-Object $nugetCore.GetType("NuGet.PackageManager") ($repository, $pathResolver, $packagesFolderFileSystem, $localRepository)
-        $installed = $false
-        $types = @("Mvc", "WebForms")
-        $i = 0
-        while((-not $installed) -and ($i -lt $types.Length)) {
-            $type = $types[$i]
-            $package = Get-Package -Filter "Sitecore.$type.Config"
-            if($package) {
-                Write-Verbose "Install Sitecore.Distribution.$type $($package.Version)"
-                $packageManager.InstallPackage("Sitecore.Distribution.$type", $($package.Version) )
-                $installed = $true
-            }
-            $i++;
-        }
     }
 }
