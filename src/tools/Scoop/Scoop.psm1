@@ -25,6 +25,8 @@ $partentPath = (Get-Item $PSScriptRoot).Parent.FullName
 Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude "*.Tests.ps1" | Foreach-Object{ . $_.FullName }
 Export-ModuleMember -Function * -Alias *
 
+Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig")
+
 $VerbosePreference = "Continue"
 $ScoopCertificatePath = "O=Unic AG, OU=Unic AG"
 
