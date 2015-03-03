@@ -26,13 +26,14 @@ function Invoke-BobCommand
             }
 
             if(-not ($caller.InvocationInfo.BoundParameters["ProjectPath"])) {
-                    $projectPath = Get-ScProjectPath
+                $projectPath = Get-ScProjectPath
                 $newCommand += " -ProjectPath $projectPath"
             }
 
             Write-Host   $newCommand
             write-host $module
 
+            # Sysnative will force to start a x64 PowerShell which is way cooler :)
             C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NoLogo {
                 param($module, $command)
                 $NoRestart = $true

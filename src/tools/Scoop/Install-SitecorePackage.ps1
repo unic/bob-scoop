@@ -18,18 +18,52 @@ function Install-SitecorePackage
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$true)]
-        [string] $OutputLocation
+        [string] $OutputLocation,
+        [Parameter(Mandatory=$true)]
+        [string] $PackagesConfig,
+        [Parameter(Mandatory=$true)]
+        [string] $Source
     )
     Process
     {
-        $getInstance = [NuGet.VisualStudio.ServiceLocator].GetMethod("GetInstance")
-        $getInstancePackagePackageRepo = $getInstance.MakeGenericMethod($nugetCore.GetType("NuGet.IPackageRepository"))
-        $repository = $getInstancePackagePackageRepo.Invoke($null, $null)
+        $fs = New-Object NuGet.PhysicalFileSystem $pwd
+        $setting = [NuGet.Settings]::LoadDefaultSettings($fs,  [System.Environment]::GetFolderPath("ApplicationData") + "\NuGet\NuGet.config", $null);
+        $sourceProvider = New-Object NuGet.PackageSourceProvider $setting
 
-        $packagesFolderFileSystem = New-Object $nugetCore.GetType("NuGet.PhysicalFileSystem")  $OutputLocation
-        $pathResolver = New-Object CustomPathResolver ($packagesFolderFileSystem)
-        $localRepository = New-Object $nugetCore.GetType("NuGet.LocalPackageRepository") ($pathResolver, $packagesFolderFileSystem);
-        $localRepository.PackageSaveMode = "Nuspec"
+        $credentialProvider = New-Object NuGet.SettingsCredentialProvider -ArgumentList ([NuGet.ICredentialProvider][NuGet.NullCredentialProvider]::Instance), ([NuGet.IPackageSourceProvider]$sourceProvider)
+
+        [NuGet.HttpClient]::DefaultCredentialProvider = $credentialProvider
+
+
+        $packagesFile = New-Object NuGet.PackageReferenceFile $fs, $PackagesConfig
+
+        $scTypes =  @("Mvc", "WebForms")
+        $scContextInfo =
+            foreach($type in $scTypes) {
+                $packagesFile.GetPackageReferences() | ? {$_.Id -eq "Sitecore.$type.Config"} | % {
+                    @{"type" = $type; "version" = $_.Version}
+                    break
+                }
+            }
+
+        if(-not $scContextInfo) {
+            $scTypePackages = $scTypes | % {"Sitecore.$_.Config"}
+            Write-Error ("Could not find a Sitecore config NuGet package. You must install one in the solution in order to install Sitecore." +
+            "Possible packages are: $([string]::Join(", ", $scTypes))")
+        }
+
+        $repo = New-Object  NuGet.DataServicePackageRepository $Source
+
+        $packageId = "Sitecore.Distribution." + $scContextInfo.type
+        $version = $scContextInfo.version
+        Write-Verbose "Install $packageId $version"
+        $packageToInstall = $repo.FindPackagesById($packageId) | ? {$_.Version -eq $version.ToString()}
+
+        $outputFileSystem = New-Object NuGet.PhysicalFileSystem $OutputLocation
+        #$package.GetFiles().Path | % {"$Location\$_"} | ? {Test-Path $_} | % {rm $_}
+        $outputFileSystem.AddFiles($packageToInstall.GetFiles(), $OutputLocation)
+
+        return
         $packageManager = New-Object $nugetCore.GetType("NuGet.PackageManager") ($repository, $pathResolver, $packagesFolderFileSystem, $localRepository)
         $installed = $false
         $types = @("Mvc", "WebForms")
@@ -45,29 +79,4 @@ function Install-SitecorePackage
             $i++;
         }
     }
-}
-
-if($dte) {
-  $nugetCoreName = [NuGet.VisualStudio.ServiceLocator].Assembly.GetReferencedAssemblies() | ? {$_.Name -eq "NuGet.Core"}
-  $nugetCore = [AppDomain]::CurrentDomain.GetAssemblies() | ? {$_.FullName -eq $nugetCoreName.FullName}
-  try
-  {
-    [CustomPathResolver] | Out-null
-  }
-  catch
-  {
-    #Type CustomPathResolver does not exists
-    Add-Type -ReferencedAssemblies $nugetCore -TypeDefinition @"
-        public class CustomPathResolver : NuGet.DefaultPackagePathResolver
-        {
-            public CustomPathResolver(string path) :base(path) {}
-
-            public override string GetPackageDirectory(string packageId, NuGet.SemanticVersion version)
-            {
-                return "";
-            }
-        }
-
-"@
-  }
 }
