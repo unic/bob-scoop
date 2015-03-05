@@ -91,7 +91,7 @@ function Install-Sitecore
                 }
                 $source = $config.NuGetFeed
                 if(-not $source) {
-                    Write-Error "Source for frontend package could not be found. Make sure Bob.config contains the NuGetFeed key."
+                    Write-Error "Source for Sitecore package could not be found. Make sure Bob.config contains the NuGetFeed key."
                 }
                 Install-SitecorePackage -OutputLocation $webPath -PackagesConfig $packagesConfig -Source $source
             }
