@@ -1,3 +1,5 @@
+#Requires -Version 3
+
 $ErrorActionPreference = "Stop"
 
 function ResolvePath() {
