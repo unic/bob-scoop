@@ -7,7 +7,7 @@ NUGET
     Pester (3.3.5)
   remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
   specs:
-    Unic.Bob.Config (0.2.0-scmbob356fixconfig)
+    Unic.Bob.Config (0.2.0-invokebobcommand)
     Unic.Bob.Keith (0.3.0-fixonlyoneparameter)
     Unic.Bob.Rubble (0.2.0-unstable0028)
 GITHUB
