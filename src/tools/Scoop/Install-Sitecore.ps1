@@ -58,7 +58,7 @@ function Install-Sitecore
                 {
                     if($Force)
                     {
-                        Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
+                        Write-Verbose "Web folder $webPath already exists and Force is true. Backup and delete web folder."
 
                         $backupArgs = @{}
                         if(-not $Backup) {
@@ -79,7 +79,7 @@ function Install-Sitecore
                     }
                     else
                     {
-                        Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
+                        Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
                         return
                     }
                 }
