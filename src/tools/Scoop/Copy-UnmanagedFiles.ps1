@@ -12,10 +12,12 @@ Copy-UnmanagedFiles
 function Copy-UnmanagedFiles
 {
   [CmdletBinding()]
-  Param()
+  Param(
+    [string] $ProjectPath
+  )
   Process
   {
-    $config = Get-ScProjectConfig
+    $config = Get-ScProjectConfig $ProjectPath
     $webPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.WebFolderName
     Copy-RubbleItem -Path $config.WebsitePath -Destination $webPath -Pattern (Get-RubblePattern $config.UnmanagedFiles)
   }

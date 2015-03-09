@@ -33,13 +33,16 @@ function Install-Sitecore
     [CmdletBinding()]
     Param(
         [switch]$Backup = $true,
-        [switch]$Force = $true
+        [switch]$Force = $true,
+        [string] $ProjectPath
     )
     Process
     {
+        Invoke-BobCommand {
+
         try
         {
-            $config = Get-ScProjectConfig
+            $config = Get-ScProjectConfig $ProjectPath
             $webPath = $config.WebRoot
             if(-not $WebPath) {
                 Write-Error "Could not find WebRoot. Please provide one."
@@ -55,7 +58,7 @@ function Install-Sitecore
                 {
                     if($Force)
                     {
-                        Write-Verbose "Web folder $webPath allready exists and Force is true. Backup and delete web folder."
+                        Write-Verbose "Web folder $webPath already exists and Force is true. Backup and delete web folder."
 
                         $backupArgs = @{}
                         if(-not $Backup) {
@@ -63,7 +66,7 @@ function Install-Sitecore
                         }
                         Write-Verbose "Backup $webPath to temporary location $tempBackup"
                         mv $webPath\* $tempBackup
-                        
+
                         if($Backup) {
                             $backupFile = Join-Path $backupPath "Fullbackup.zip"
                             if(Test-Path $backupFile) {
@@ -76,13 +79,21 @@ function Install-Sitecore
                     }
                     else
                     {
-                        Write-Warning "Web folder $webPath allready exists and Force is false. Nothing will be done."
+                        Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
                         return
                     }
                 }
 
                 Write-Verbose "Install Sitecore distribution to $webPath"
-                Install-SitecorePackage -OutputLocation $webPath
+                $packagesConfig = Join-Path $config.WebsitePath "packages.config"
+                if(-not (Test-Path $packagesConfig)) {
+                    throw "packages.config could not be found at '$packagesConfig'"
+                }
+                $source = $config.NuGetFeed
+                if(-not $source) {
+                    Write-Error "Source for Sitecore package could not be found. Make sure Bob.config contains the NuGetFeed key."
+                }
+                Install-SitecorePackage -OutputLocation $webPath -PackagesConfig $packagesConfig -Source $source
             }
             catch
             {
@@ -91,7 +102,9 @@ function Install-Sitecore
             finally
             {
                 Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
-                Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder)
+                if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
+                    Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder) -ProjectPath $ProjectPath
+                }
             }
         }
         catch
@@ -104,5 +117,6 @@ function Install-Sitecore
                 rm $tempBackup -Recurse
             }
         }
+    }
     }
 }

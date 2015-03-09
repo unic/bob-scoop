@@ -23,7 +23,7 @@ Function Enable-ScSite
 
     Process
     {
-
+        Invoke-BobCommand {
         if(-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
             Write-Error "Visual Studio is not running as Administrator. Please restart Visual Studio as Administrator."
         }
@@ -215,5 +215,5 @@ Function Enable-ScSite
         if($script:iisStoped) {
             iisreset /start
         }
-    }
+    }}
 }

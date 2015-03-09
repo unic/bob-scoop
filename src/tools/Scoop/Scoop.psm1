@@ -27,6 +27,11 @@ $partentPath = (Get-Item $PSScriptRoot).Parent.FullName
 Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude "*.Tests.ps1" | Foreach-Object{ . $_.FullName }
 Export-ModuleMember -Function * -Alias *
 
+Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig")
+Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble")
+$nugetCore = [System.IO.File]::ReadAllBytes((ResolvePath "NuGet.Core" "lib\net40-Client\NuGet.Core.dll"))
+[System.Reflection.Assembly]::Load($nugetCore)
+
 $VerbosePreference = "Continue"
 $ScoopCertificatePath = "O=Unic AG, OU=Unic AG"
 

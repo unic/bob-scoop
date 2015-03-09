@@ -17,11 +17,12 @@ function Merge-ConnectionStrings
   [CmdletBinding()]
   Param(
       [Parameter(Mandatory=$true)]
-      [string] $OutputLocation
+      [string] $OutputLocation,
+      [string] $ProjectPath
   )
   Process
   {
-    $config = Get-ScProjectConfig
+    $config = Get-ScProjectConfig $ProjectPath
     $file = Join-Path $config.WebsitePath $config.ConnectionStringsFolder
     $server = $config.DatabaseServer
     $content = Get-Content $file

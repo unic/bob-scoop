@@ -1,10 +1,15 @@
 NUGET
   remote: https://nuget.org/api/v2
   specs:
-    Pester (3.3.0)
+    Microsoft.Web.Xdt (2.1.1)
+    Nuget.Core (2.8.3)
+      Microsoft.Web.Xdt (>= 2.1.0)
+    Pester (3.3.5)
   remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
   specs:
-    Unic.Bob.Keith (0.3.0-fixonlyoneparameter)
+    Unic.Bob.Config (0.2.0-unstable0036)
+    Unic.Bob.Keith (0.3.0-unstable0050)
+    Unic.Bob.Rubble (0.2.0-unstable0028)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
   specs:
