@@ -205,8 +205,7 @@ Function Enable-ScSite
             if(-not $hostFileEntryExist) {
                 $newHostFile +=  "$ip       $($hostName) # Site: $($siteName) - $($localSetupConfig.HostsFileComment)"
 
-                Set-Content -Value ([string]::Join("`r`n",$newHostFile )) -Path $hostFilePath -Force -Encoding ASCII
-                sleep -m 2
+                [System.IO.File]::WriteAllLines($hostFilePath, $newHostFile)
 
                 Write-Output "Hosts file updated"
             }
