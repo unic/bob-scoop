@@ -15,6 +15,6 @@
         <file src="src\**" />
         <file src="paket-files\**" target="tools\paket-files" />
         <file src="tools\**" target="tools\bin" />
-        <file src="packages\**" target="tools\packages" />
+        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**" />
     </files>
 </package>
