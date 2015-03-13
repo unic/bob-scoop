@@ -8,7 +8,6 @@
         <description>Muck are the tools for local deployments</description>
         <dependencies>
             <dependency id="Unic.Bob.Config" />
-            <dependency id="Unic.Bob.Rubble" />
         </dependencies>
     </metadata>
     <files>
