@@ -35,7 +35,7 @@ Function Import-ScDatabases
     Process
     {
         $config = Get-ScProjectConfig $ProjectPath
-        $Server = $config.DatabaseServer
+
         $BackupShare = $config.DatabaseBackupShare;
 
         if((-not $BackupShare) -or ( -not (Test-Path $BackupShare))) {
@@ -48,6 +48,10 @@ Function Import-ScDatabases
 
         $databases = Get-ScDatabases $ProjectPath
 
+        $Server = $config.DatabaseServer
+        if(-not $Server) {
+            Write-Error "Could not find database server in Bob.config. Add the config key 'DatabaseServer' to configure the database server to use"
+        }
         $sqlServer = New-Object ("Microsoft.SqlServer.Management.Smo.Server") $server
 
         try {

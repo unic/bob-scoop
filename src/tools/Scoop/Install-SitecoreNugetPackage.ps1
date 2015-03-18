@@ -30,6 +30,9 @@ function Install-SitecoreNugetPackage
 
         Write-Verbose "Install $packageId $version to $OutputLocation"
         $packageToInstall = $repo.FindPackagesById($packageId) | ? {$_.Version -eq $version}
+        if(-not $packageToInstall) {
+            "Package $packageId with version $version not found"
+        }
 
         $outputFileSystem = New-Object NuGet.PhysicalFileSystem $OutputLocation
         $outputFileSystem.AddFiles($packageToInstall.GetFiles(), $OutputLocation)

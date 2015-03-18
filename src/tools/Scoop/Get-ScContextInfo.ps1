@@ -30,7 +30,7 @@ function Get-ScContextInfo
         $scContextInfo =
             foreach($type in $scTypes) {
                 $packagesFile.GetPackageReferences() | ? {$_.Id -eq "Sitecore.$type.Config"} | % {
-                    @{"type" = $type; "version" = $_.Version}
+                    @{"type" = $type; "version" = $_.Version.ToString()}
                     break
                 }
             }
