@@ -1,12 +1,16 @@
 <#
 .SYNOPSIS
+Gets all databases configured for the specified project.
 
 .DESCRIPTION
+Gets all databases configured in the ConnectionStrings.config of the
+specified project.
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the project to get the databases from.
 
 .EXAMPLE
+Get-ScDatabases
 
 #>
 function Get-ScDatabases

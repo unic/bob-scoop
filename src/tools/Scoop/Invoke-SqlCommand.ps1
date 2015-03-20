@@ -1,10 +1,15 @@
 <#
 .SYNOPSIS
+Invokes a script block with SQL specific error handling.
 
 .DESCRIPTION
+Invokes a script block with SQL specific error handling.
+When a error happen durring a SQL operation the real error message is hidden
+in a deep InnerException. Invoke-SqlCommand ensures that a clean error message
+is thrown when an SQL error happen.
 
-
-.PARAMETER
+.PARAMETER Command
+The command to execute.
 
 .EXAMPLE
 

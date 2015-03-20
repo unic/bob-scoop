@@ -1,10 +1,13 @@
 <#
 .SYNOPSIS
+Get the current Sitecore type and version.
 
 .DESCRIPTION
+Get the current Sitecore type and version.
+It returns an object with the properties "type" (Mvc or WebForms) and "version".
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the project to get the information for.
 
 .EXAMPLE
 

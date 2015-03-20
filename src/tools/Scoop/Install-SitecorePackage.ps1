@@ -9,6 +9,9 @@ or Sitecore.WebForms.Config installed to the Website proje
 .PARAMETER OutputLocation
 The location where to extract the Sitecore distribution
 
+.PARAMETER ProjectPath
+The project path containing the Sitecore configuration.
+
 .EXAMPLE
 Install-SitecorePackage -OutputLocation D:\Web\Magic
 

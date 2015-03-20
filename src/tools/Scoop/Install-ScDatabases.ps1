@@ -1,10 +1,33 @@
 <#
 .SYNOPSIS
+Installs all databases of the project based on empty databases.
+
 
 .DESCRIPTION
+Installs all databases of the project based on different criterias:
+- The Sitecore Core, Master and Web will be created based on the original
+databases from Sitecore.
+- For all other databases the information from the "InitDatabasesPath"  is relevant.
+If in the database path a file exists with the format "databaseName.sql",
+this SQL file will be used to create the database.
+If in the database path a file exists with the format "databaseName.ref",
+the file content must be "web", "master" or "core", the coresponding original Sitecore
+database will then be used to create this database.
+The "InitDatabasesPath" can be configured in the Bob.config
 
+.PARAMETER ProjectPath
+The path to the project for which the databases should be installed.
 
-.PARAMETER
+.PARAMETER DatabasesPath
+The path where the databases should be created.
+
+.PARAMETER Force
+If force is specified, all databases which already exists will be deleted first.
+If force is not specified, existing databases will be skipped.
+
+.PARAMETER Databases
+An alternative list of databases to install. If it's ommited the databases from
+ the connection string will be used.
 
 .EXAMPLE
 
@@ -62,8 +85,8 @@ function Install-ScDatabases
                     $scDb = "Sitecore.Web"
                 }
                 else {
-                    if($config.DatabasesPath) {
-                        $dbsPath = Join-Path $config.WebsitePath $config.DatabasesPath
+                    if($config.InitDatabasesPath) {
+                        $dbsPath = Join-Path $config.WebsitePath $config.InitDatabasesPath
                         Write-Verbose "$db is not a Sitecore database. Looking in $dbsPath for additional infos."
 
                         ls $dbsPath | ? {$_.BaseName.ToLower() -eq $db.ToLower()} | % {

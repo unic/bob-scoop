@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+Installas a Sitecore.* package to a specific location.
+
+.DESCRIPTION
+Installs a Sitecore.* package to a specific location.
+
+.PARAMETER OutputLocation
+The folder where the content of the package should be extracted.
+
+.PARAMETER PackageId
+The package id of the NuGet package to install.
+
+.PARAMETER Version
+The version of the package to install
+
+.PARAMETER ProjectPath
+The path to the project containing a Bob.config
+
+.EXAMPLE
+Install-SitecoreNugetPackage -PackageId Sitecore.Databases -OutputLocation D:\temp -Version 7.2 
+
+#>
 function Install-SitecoreNugetPackage
 {
     [CmdletBinding()]
