@@ -28,10 +28,10 @@ Function New-ScSerializationPackage
         [string]$Target,
         [Parameter(Mandatory=$true)]
         [string]$OutputFile
-    
+
 	)
     Begin{}
-    
+
     Process
     {
         $scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
@@ -44,6 +44,9 @@ Function New-ScSerializationPackage
             $OutputFile = Join-Path $PWD $OutputFile
         }
 
-        & "$scriptPath\..\..\..\tools\sitecore-courier\Sitecore.Courier.Runner.exe" /source:$Source /target:$Target /output:$OutputFile
+        & "$scriptPath\..\..\..\tools\sitecore-courier\Sitecore.Courier.Runner.exe" -s $Source -t $Target -o $OutputFile
+        if($LASTEXITCODE -ne 0) {
+            Write-Error "Generating Sitecore update package failed. The exit code of Sitecore courier was not 0."
+        }
     }
 }
