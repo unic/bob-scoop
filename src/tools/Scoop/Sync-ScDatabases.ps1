@@ -1,12 +1,18 @@
 <#
 .SYNOPSIS
+Deserialize all items to the database.
 
 .DESCRIPTION
+Deserialize all items from a repository to the database.
+This includes:
+- Perform unicorn sync for application and test data
+- Perform an update database for the default items (Not yet)
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the project for which the items should be installed.
 
 .EXAMPLE
+Sync-ScDatabases
 
 #>
 function Sync-ScDatabases
