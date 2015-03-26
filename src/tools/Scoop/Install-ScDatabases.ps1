@@ -22,7 +22,7 @@ The path to the project for which the databases should be installed.
 The path where the databases should be created.
 
 .PARAMETER Force
-If force is specified, all databases which already exists will be deleted first.
+If force is specified, all databases which already exist will be deleted first.
 If force is not specified, existing databases will be skipped.
 
 .PARAMETER Databases

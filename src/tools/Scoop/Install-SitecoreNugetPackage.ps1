@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Installas a Sitecore.* package to a specific location.
+Installs a Sitecore.* package to a specific location.
 
 .DESCRIPTION
 Installs a Sitecore.* package to a specific location.
@@ -18,7 +18,7 @@ The version of the package to install
 The path to the project containing a Bob.config
 
 .EXAMPLE
-Install-SitecoreNugetPackage -PackageId Sitecore.Databases -OutputLocation D:\temp -Version 7.2 
+Install-SitecoreNugetPackage -PackageId Sitecore.Databases -OutputLocation D:\temp -Version 7.2
 
 #>
 function Install-SitecoreNugetPackage
