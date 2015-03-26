@@ -8,12 +8,9 @@ The location of the backups to restore must be configured in the Bob.config file
 If a database already exists it will be replaced. If not it will be created at the default location or in the DatabasePath.
 
 
-.PARAMETER ConnectionStringsFile
-The path which of the configuration file which contains the ConnectionStrings
-.PARAMETER VSProjectRootPath
-The folder where the Visual Studio project is located.
-This is only used if no ConnectionStringsFile is provided to search the ConnectionStringsFile inside of this folder.
-If this Parameter is also not provided the ConnectionStringsFile is searched in the current Visual Studio project.
+.PARAMETER ProjectPath
+The path to the Website project.
+
 
 .PARAMETER DatabasePath
 The path where databases which does not exists yet should be created.
@@ -30,74 +27,31 @@ Function Import-ScDatabases
         ConfirmImpact="Low"
     )]
     Param(
-        [String]$ConnectionStringsFile = "",
-        [String]$VSProjectRootPath = "",
-        [String]$DatabasePath = ""
+        [string] $ProjectPath,
+        [String] $DatabasePath
     )
     Begin{}
 
     Process
     {
+        $config = Get-ScProjectConfig $ProjectPath
 
-        if(-not $VSProjectRootPath -and (Get-Command | ? {$_.Name -eq "Get-Project"})) {
-            $project = Get-Project
-            if($project) {
-                $VSProjectRootPath = Split-Path $project.FullName -Parent
-            }
-        }
-
-        $localSetupConfig = Get-ScProjectConfig
-        $Server = $localSetupConfig.DatabaseServer;
-        $BackupShare = $localSetupConfig.DatabaseBackupShare;
+        $BackupShare = $config.DatabaseBackupShare;
 
         if((-not $BackupShare) -or ( -not (Test-Path $BackupShare))) {
             Write-Error "The backups location '$($BackupShare)' could not be found, please check if you have access to this location and if it is well configured in the Bob.config file."
             exit
         }
-        if(-not $ConnectionStringsFile -and $VSProjectRootPath) {
-                $ConnectionStringsFile = Join-Path $VSProjectRootPath $localSetupConfig.ConnectionStringsFolder
-        }
-
-        if(-not $ConnectionStringsFile) {
-            throw "No ConnectionStringsFile found. Please provide one."
-        }
 
         $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
         Import-Module $dbutils -Force
 
-        Write-Verbose "Start  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -VSProjectRootPath '$VSProjectRootPath'";
+        $databases = Get-ScDatabases $ProjectPath
 
-        if((-not $ConnectionStringsFile) -or -not (Test-Path $ConnectionStringsFile)) {
-            Write-Error "Could not find ConnectionStrings file at '$ConnectionStringsFile'"
-            exit
+        $Server = $config.DatabaseServer
+        if(-not $Server) {
+            Write-Error "Could not find database server in Bob.config. Add the config key 'DatabaseServer' to configure the database server to use"
         }
-
-        $config = [xml](Get-Content $ConnectionStringsFile)
-
-        $databases = @();
-
-        if(-not $config.connectionStrings.add) {
-            Write-Warning "No ConnectionStrings found in '$ConnectionStringsFile'"
-        }
-
-        foreach($item in $config.connectionStrings.add) {
-            $connectionString = $item.connectionString;
-            if(-not $item.connectionString) {
-                Write-Warning "ConnectionString '$($item.name)' in '$ConnectionStringsFile' is empty."
-            }
-
-            $parts = $connectionString.split(';');
-            foreach($part in $parts)
-            {
-                $keyValue = $part.split('=');
-                $key = $keyValue[0].trim();
-                if(("Database", "Initial Catalog") -contains $key) {
-                    $databases += $keyValue[1]
-                }
-            }
-        }
-
-
         $sqlServer = New-Object ("Microsoft.SqlServer.Management.Smo.Server") $server
 
         try {
@@ -113,7 +67,7 @@ Function Import-ScDatabases
 
         $serverManager = New-Object Microsoft.Web.Administration.ServerManager
         if($serverManager.ApplicationPools) {
-            $appPoolName = $localSetupConfig.WebsiteCodeName
+            $appPoolName = $config.WebsiteCodeName
             if($appPoolName) {
                 $appPool = $serverManager.ApplicationPools[$appPoolName]
                 if($appPool -and $appPool.State -eq "Started") {
@@ -192,8 +146,6 @@ Function Import-ScDatabases
                sleep -s 1
            }
        }
-
-       Write-Verbose "End  Import-ScDatabases with params:  -ConnectionStringsFile '$ConnectionStringsFile' -VSProjectRootPath '$VSProjectRootPath' -DatabasePath '$DatabasePath'";
 
     }
 

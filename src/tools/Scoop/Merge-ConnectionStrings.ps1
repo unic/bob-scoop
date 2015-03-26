@@ -26,7 +26,7 @@ function Merge-ConnectionStrings
     $file = Join-Path $config.WebsitePath $config.ConnectionStringsFolder
     $server = $config.DatabaseServer
     $content = Get-Content $file
-    #$content = $content -replace "Database=.*?;", "Database=$server;"
+    
     $keys = @("Data Source", "Address","Addr", "Network Address",  "Server")
 
     foreach($key in $keys) {

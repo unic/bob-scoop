@@ -85,15 +85,8 @@ function Install-Sitecore
                 }
 
                 Write-Verbose "Install Sitecore distribution to $webPath"
-                $packagesConfig = Join-Path $config.WebsitePath "packages.config"
-                if(-not (Test-Path $packagesConfig)) {
-                    throw "packages.config could not be found at '$packagesConfig'"
-                }
-                $source = $config.NuGetFeed
-                if(-not $source) {
-                    Write-Error "Source for Sitecore package could not be found. Make sure Bob.config contains the NuGetFeed key."
-                }
-                Install-SitecorePackage -OutputLocation $webPath -PackagesConfig $packagesConfig -Source $source
+
+                Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath
             }
             catch
             {
