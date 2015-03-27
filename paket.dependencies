@@ -1,0 +1,12 @@
+github adoprog/Sitecore-PowerCore Framework/DBUtils/DBUtils.psm1
+
+source https://nuget.org/api/v2
+
+nuget pester
+nuget NuGet.Core
+
+source https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc/ username: "%PAKET_USER%" password: "%PAKET_PASSWORD%"
+
+nuget Unic.Bob.Keith Prerelease
+nuget Unic.Bob.Config Prerelease
+nuget Unic.Bob.Rubble Prerelease
