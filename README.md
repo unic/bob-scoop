@@ -1,4 +1,4 @@
-# Scoop
+# Scoop - Local development environmenet setup
 
 As with his front and rear shovels (scoops), Scoop provides a PowerShell based toolset for setting up a project on the local environment or on a integration server.
 
