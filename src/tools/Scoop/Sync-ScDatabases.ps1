@@ -28,7 +28,6 @@ function Sync-ScDatabases
             Write-Error "No IIS bindings could be found."
         }
         $baseUrl = $config.IISBindings[0].InnerText
-        $url = "$baseUrl/unicorn.aspx?verb=Sync"
 
         if(-not $config.WebRoot) {
             Write-Error "No WebRoot configured for project $($config.WebsitePath)"
@@ -47,9 +46,15 @@ function Sync-ScDatabases
         }
 
         $deploymentToolAuthToken = $node.Value
-        Write-Verbose "Sync unicorn on $url"
-        $result = Invoke-WebRequest -Uri $url -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
 
+        $unicornUrl = "$baseUrl/unicorn.aspx?verb=Sync"
+        Write-Verbose "Sync unicorn on $unicornUrl"
+        $result = Invoke-WebRequest -Uri $unicornUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
+        $updateDbUrl = "$baseUrl/bob/updateDatabase"
+        Write-Verbose "Update database for default items $updateDbUrl"
+        $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
     }
 }
