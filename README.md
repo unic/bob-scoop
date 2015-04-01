@@ -7,4 +7,4 @@ As with his front and rear shovels (scoops), Scoop provides a PSH based toolset 
 
 ## Documentation
 
-<https://me.unic.com/display/BULLWCMS/Scoop>
+<https://teamcity.unic.com/repository/download/Sitecore_Frameworks_Bob_TheBook_BuildTheBook/.lastSuccessful/Scoop/README.html>
