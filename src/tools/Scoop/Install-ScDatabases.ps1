@@ -123,7 +123,7 @@ function Install-ScDatabases
                         }
                     }
                     else {
-                        Write-Warning "$db is not a Sitecore database and 'DatabasesPath' is not set in Bob.config"
+                        Write-Warning "$db is not a Sitecore database and 'InitDatabasesPath' is not set in Bob.config"
                     }
                 }
 
