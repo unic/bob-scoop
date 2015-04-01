@@ -41,8 +41,13 @@ function Install-SitecoreNugetPackage
             Write-Error "Source for Sitecore package could not be found. Make sure Bob.config contains the NuGetFeed key."
         }
 
+        $nugetConfig = [System.Environment]::GetFolderPath("ApplicationData") + "\NuGet\NuGet.config"
+        if($env:NuGetConfig) {
+            $nugetConfig = $env:NuGetConfig
+        }
+
         $fs = New-Object NuGet.PhysicalFileSystem $pwd
-        $setting = [NuGet.Settings]::LoadDefaultSettings($fs,  [System.Environment]::GetFolderPath("ApplicationData") + "\NuGet\NuGet.config", $null);
+        $setting = [NuGet.Settings]::LoadDefaultSettings($fs,  $nugetConfig, $null);
         $sourceProvider = New-Object NuGet.PackageSourceProvider $setting
 
         $credentialProvider = New-Object NuGet.SettingsCredentialProvider -ArgumentList ([NuGet.ICredentialProvider][NuGet.NullCredentialProvider]::Instance), ([NuGet.IPackageSourceProvider]$sourceProvider)
