@@ -56,5 +56,18 @@ function Sync-ScDatabases
         Write-Verbose "Update database for default items $updateDbUrl"
         $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
+
+        $fullPublishUrl = "$baseUrl/bob/fullPublish"
+        Write-Verbose "Do full publish with URL $fullPublishUrl"
+        $result = Invoke-WebRequest -Uri $fullPublishUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
+        $indexes = $config.PulishIndexes
+        if($indexes) {
+                $rebuildIndexUrl = "$baseUrl/bob/rebuildIndexes?indexes=$indexes"
+                Write-Verbose "Rebuild indexes with on $rebuildIndexUrl"
+                $result = Invoke-WebRequest -Uri $rebuildIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+                $result.Content
+        }
     }
 }
