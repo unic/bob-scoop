@@ -1,12 +1,15 @@
 <#
 .SYNOPSIS
+Starts the application pool configured for the project.
 
 .DESCRIPTION
+Starts the application pool configured for the project.
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the Website project.
 
 .EXAMPLE
+Start-ScAppPool
 
 #>
 function Start-ScAppPool
