@@ -81,6 +81,9 @@ Function Import-ScDatabases
         }
 
         $myTemp = "C:\temp"
+        if($config.ImportDatabaseTempLocation) {
+            $myTemp = $config.ImportDatabaseTempLocation
+        }
         if(-not (Test-Path $myTemp)) {
             Write-Verbose "Creating temp path $myTemp"
             mkdir $myTemp | Out-Null
