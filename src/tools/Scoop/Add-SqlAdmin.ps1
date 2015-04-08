@@ -1,12 +1,18 @@
 <#
 .SYNOPSIS
+Adds a Windows User as SQL  administrator.
 
 .DESCRIPTION
+Adds a Windows User as SQL  administrator.
 
+.PARAMETER Server
+The name of the SQL server to connect to.
 
-.PARAMETER
+.PARAMETER User
+The name of the user to register as admin.
 
 .EXAMPLE
+Add-SqlAdmin -Server localhost -User "NT Authority\Service"
 
 #>
 function Add-SqlAdmin
