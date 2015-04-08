@@ -40,6 +40,7 @@ The following settings are relevant for Scoop.
 | ConnectionStringsFolder | The path inside the Website to the connection strings config.  | `<ConnectionStringsFolder>App_Config\ConnectionStrings.config</ConnectionStringsFolder>` |
 | UnmanagedFiles | A pattern of files which should be backed-up before reinstallation of Sitecore and restored after it. | `<UnmanagedFiles>` <br>  `App_Config\ConnectionStrings.config;` <br> `App_Config\Unmanaged\*` <br> `</UnmanagedFiles>` |
 | IISBindings | A list of bindings to configure on the IIS. The IP parameter is optionally. | `<IISBindings>` <br> `<Binding IP="">http://dummy</Binding>` <br> `</IISBindings>` |
+| IisAdminUser | If `IisAdminUser` is configured, this user will be granted access to the database. This should only be configured if you have a different default application pool user. | <IisAdminUser>NT Authority\Network Service</IisAdminUser> |
 
 ## Module development
 
