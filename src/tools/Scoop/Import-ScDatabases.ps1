@@ -67,7 +67,7 @@ Function Import-ScDatabases
 
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
         if($isAdmin -and $config.WebsiteCodeName) {
-            Stop-ScWebAppPool $ProjectPath
+            Stop-ScAppPool $ProjectPath
         }
 
         $myTemp = "C:\temp"
@@ -131,7 +131,7 @@ Function Import-ScDatabases
         }
 
        if($isAdmin -and $config.WebsiteCodeName) {
-           Start-ScWebAppPool $ProjectPath
+           Start-ScAppPool $ProjectPath
        }
     }
 

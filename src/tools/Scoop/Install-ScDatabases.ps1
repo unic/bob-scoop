@@ -160,7 +160,7 @@ function Install-ScDatabases
         }
 
         if($stoppedWebAppPool) {
-            Start-ScWebAppPool $PorjectPath
+            Start-ScAppPool $PorjectPath
         }
 
         }
