@@ -41,6 +41,7 @@ The following settings are relevant for Scoop.
 | UnmanagedFiles | A pattern of files which should be backed-up before reinstallation of Sitecore and restored after it. | `<UnmanagedFiles>` <br>  `App_Config\ConnectionStrings.config;` <br> `App_Config\Unmanaged\*` <br> `</UnmanagedFiles>` |
 | IISBindings | A list of bindings to configure on the IIS. The IP parameter is optionally. | `<IISBindings>` <br> `<Binding IP="">http://dummy</Binding>` <br> `</IISBindings>` |
 | IisAdminUser | If `IisAdminUser` is configured, this user will be granted access to the database. This should only be configured if you have a different default application pool user. | <IisAdminUser>NT Authority\Network Service</IisAdminUser> |
+| ImportDatabaseTempLocation | A directory where the database backups are copied to before they are restored. If it's not specified `C:\temp` will be used. | `<ImportDatabaseTempLocation>D:\temp</ImportDatabaseTempLocation>`
 
 ## Module development
 
