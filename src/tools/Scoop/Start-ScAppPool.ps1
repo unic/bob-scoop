@@ -23,7 +23,17 @@ function Start-ScAppPool
         $VerbosePreference = "Continue"
 
         $config = Get-ScProjectConfig $ProjectPath
-        Start-WebAppPool $config.WebsiteCodeName
+
+        $appPool = $config.WebsiteCodeName
+
+        if($appPool -and (ls IIS:\AppPools\ | ? {$_.Name -eq $appPool})) {
+            Write-Verbose "Start application pool $appPool"
+            Start-WebAppPool $config.WebsiteCodeName
+        }
+        else {
+            Write-Warning "Could not find application pool for project $ProjectPath"
+        }
+
         }
     }
 }

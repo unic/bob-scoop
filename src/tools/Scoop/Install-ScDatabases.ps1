@@ -70,18 +70,8 @@ function Install-ScDatabases
         $stoppedWebAppPool = $false
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
         if($Force -and $config.WebsiteCodeName -and $isAdmin) {
-            if(-not ((Get-WebAppPoolState $config.WebsiteCodeName).Value -eq "Stopped")) {
-                $stoppedWebAppPool = $true
-                $startTime = Get-Date
-                $VerbosePreference = "SilentlyContinue"
-                Import-Module WebAdministration
-                $VerbosePreference = "Continue"
-                Stop-WebAppPool $config.WebsiteCodeName
-                while(((Get-WebAppPoolState $config.WebsiteCodeName).Value -eq "Stopped") -and
-                        ((Get-Date) - $startTime).TotalSeconds -lt 60) {
-                    sleep -s 1
-                }
-            }
+            $stoppedWebAppPool = $true
+            Stop-ScAppPool $ProjectPath
         }
 
         if(-not $Databases) {
@@ -170,13 +160,7 @@ function Install-ScDatabases
         }
 
         if($stoppedWebAppPool) {
-            $startTime = Get-Date
-            Start-WebAppPool $config.WebsiteCodeName
-
-            while(((Get-WebAppPoolState $config.WebsiteCodeName).Value -eq "Stopped") -and
-                    ((Get-Date) - $startTime).TotalSeconds -lt 60) {
-                sleep -s 1
-            }
+            Start-ScWebAppPool $PorjectPath
         }
 
         }
