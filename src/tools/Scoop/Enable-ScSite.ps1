@@ -211,6 +211,15 @@ Function Enable-ScSite
             }
         }
 
+        $sqlServer = $localSetupConfig.DatabaseServer
+        if($sqlServer) {
+            $adminUser = "NT Authority\Service"
+            if($localSetupConfig.IisAdminUser) {
+                $adminUser = $adminUser
+            }
+            Add-SqlAdmin $sqlServer $adminUser
+        }
+
         if($script:iisStoped) {
             iisreset /start
         }
