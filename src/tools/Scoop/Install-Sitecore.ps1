@@ -51,7 +51,7 @@ function Install-Sitecore
 
             $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
             mkdir $tempBackup | Out-Null
-
+            Stop-ScAppPool $ProjectPath
             try
             {
                 if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
@@ -106,6 +106,7 @@ function Install-Sitecore
         }
         finally
         {
+            Start-ScAppPool $ProjectPath
             if(Test-Path $tempBackup) {
                 rm $tempBackup -Recurse
             }
