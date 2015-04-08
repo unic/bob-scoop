@@ -1,12 +1,15 @@
 <#
 .SYNOPSIS
+Stops the application pool configured for the project.
 
 .DESCRIPTION
+Stops the application pool configured for the project.
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the Website project.
 
 .EXAMPLE
+Stop-ScAppPool
 
 #>
 function Stop-ScAppPool
@@ -24,13 +27,21 @@ function Stop-ScAppPool
 
         $config = Get-ScProjectConfig $ProjectPath
 
-        $startTime = Get-Date
-        if(-not ((Get-WebAppPoolState $config.WebsiteCodeName).Value -eq "Stopped")) {
-            Stop-WebAppPool $config.WebsiteCodeName
-            while(((Get-WebAppPoolState $config.WebsiteCodeName).Value -ne "Stopped") `
-                -and ((Get-Date) - $startTime).TotalSeconds -lt 60) {
-                sleep -s 1
+        $appPool = $config.WebsiteCodeName
+
+        if($appPool -and (ls IIS:\AppPools\ | ? {$_.Name -eq $appPool})) {
+            $startTime = Get-Date
+            if(-not ((Get-WebAppPoolState $appPool).Value -eq "Stopped")) {
+                Write-Verbose "Stop application pool $appPool"
+                Stop-WebAppPool $appPool
+                while(((Get-WebAppPoolState $appPool).Value -ne "Stopped") `
+                    -and ((Get-Date) - $startTime).TotalSeconds -lt 60) {
+                    sleep -s 1
+                }
             }
+        }
+        else {
+            Write-Warning "Could not find application pool for project $ProjectPath"
         }
         }
     }

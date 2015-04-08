@@ -65,22 +65,15 @@ Function Import-ScDatabases
             exit
         }
 
-        $serverManager = New-Object Microsoft.Web.Administration.ServerManager
-        if($serverManager.ApplicationPools) {
-            $appPoolName = $config.WebsiteCodeName
-            if($appPoolName) {
-                $appPool = $serverManager.ApplicationPools[$appPoolName]
-                if($appPool -and $appPool.State -eq "Started") {
-                    $appPool.Stop() | Out-Null
-                    Write-Verbose "Stopped application pool $appPoolName"
-                    while( $appPool.State -ne "Stopped") {
-                        sleep -s 1
-                    }
-                }
-            }
+        $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
+        if($isAdmin -and $config.WebsiteCodeName) {
+            Stop-ScAppPool $ProjectPath
         }
 
         $myTemp = "C:\temp"
+        if($config.ImportDatabaseTempLocation) {
+            $myTemp = $config.ImportDatabaseTempLocation
+        }
         if(-not (Test-Path $myTemp)) {
             Write-Verbose "Creating temp path $myTemp"
             mkdir $myTemp | Out-Null
@@ -140,13 +133,9 @@ Function Import-ScDatabases
             rm $myTemp
         }
 
-       if($appPool -and $appPool.State -eq "Stopped") {
-           $appPool.Start()
-           while( $appPool.State -ne "Started") {
-               sleep -s 1
-           }
+       if($isAdmin -and $config.WebsiteCodeName) {
+           Start-ScAppPool $ProjectPath
        }
-
     }
 
     End{}
