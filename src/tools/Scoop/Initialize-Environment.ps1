@@ -20,10 +20,14 @@ function Initialize-Environment
     )
     Process
     {
-        Enable-ScSite -Verbose
-        Install-Sitecore -Verbose
-        Set-ScSerializationReference -Verbose
-        Import-ScDatabases -Verbose
+        Enable-ScSite
+        Install-Sitecore
+        Set-ScSerializationReference
+        Install-ScDatabases
+        $sb = $dte.Solution.SolutionBuild
+        $sb.Clean($true)
+        $sb.Build($true)
+        Sync-ScDatabases
     }
 }
 
