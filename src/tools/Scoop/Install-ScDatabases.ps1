@@ -74,6 +74,10 @@ function Install-ScDatabases
             Stop-ScAppPool $ProjectPath
         }
 
+        if($DatabasePath -and (-not (Test-Path $DatabasePath))) {
+            mkdir $DatabasePath
+        }
+
         if(-not $Databases) {
             $databases = Get-ScDatabases $ProjectPath
         }
@@ -160,7 +164,7 @@ function Install-ScDatabases
         }
 
         if($stoppedWebAppPool) {
-            Start-ScAppPool $PorjectPath
+            Start-ScAppPool $ProjectPath
         }
 
         }

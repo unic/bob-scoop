@@ -28,7 +28,6 @@ function Sync-ScDatabases
             Write-Error "No IIS bindings could be found."
         }
         $baseUrl = $config.IISBindings[0].InnerText
-        $url = "$baseUrl/unicorn.aspx?verb=Sync"
 
         if(-not $config.WebRoot) {
             Write-Error "No WebRoot configured for project $($config.WebsitePath)"
@@ -47,9 +46,28 @@ function Sync-ScDatabases
         }
 
         $deploymentToolAuthToken = $node.Value
-        Write-Verbose "Sync unicorn on $url"
-        $result = Invoke-WebRequest -Uri $url -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
 
+        $unicornUrl = "$baseUrl/unicorn.aspx?verb=Sync"
+        Write-Verbose "Sync unicorn on $unicornUrl"
+        $result = Invoke-WebRequest -Uri $unicornUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
+
+        $updateDbUrl = "$baseUrl/bob/updateDatabase"
+        Write-Verbose "Update database for default items $updateDbUrl"
+        $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
+        $fullPublishUrl = "$baseUrl/bob/fullPublish"
+        Write-Verbose "Do full publish with URL $fullPublishUrl"
+        $result = Invoke-WebRequest -Uri $fullPublishUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
+        $indexes = $config.PulishIndexes
+        if($indexes) {
+                $rebuildIndexUrl = "$baseUrl/bob/rebuildIndexes?indexes=$indexes"
+                Write-Verbose "Rebuild indexes with on $rebuildIndexUrl"
+                $result = Invoke-WebRequest -Uri $rebuildIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+                $result.Content
+        }
     }
 }

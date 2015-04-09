@@ -19,13 +19,14 @@ Function Set-ScSerializationReference
         ConfirmImpact="Low"
     )]
     Param(
-        [String]$WebPath = ""
+        [String]$WebPath = "",
+        [string] $ProjectPath
     )
     Begin{}
 
     Process
     {
-        $localSetupConfig = Get-ScProjectConfig
+        $localSetupConfig = Get-ScProjectConfig $ProjectPath
 
         if(-not $localSetupConfig.SerializationReferenceTemplate) {
           Write-Error "The configuration SerializationReferenceTemplate could not be found in Bob.config"
