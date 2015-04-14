@@ -51,7 +51,7 @@ function Install-Sitecore
 
             $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
             mkdir $tempBackup | Out-Null
-
+            Stop-ScAppPool $ProjectPath
             try
             {
                 if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
@@ -85,15 +85,8 @@ function Install-Sitecore
                 }
 
                 Write-Verbose "Install Sitecore distribution to $webPath"
-                $packagesConfig = Join-Path $config.WebsitePath "packages.config"
-                if(-not (Test-Path $packagesConfig)) {
-                    throw "packages.config could not be found at '$packagesConfig'"
-                }
-                $source = $config.NuGetFeed
-                if(-not $source) {
-                    Write-Error "Source for Sitecore package could not be found. Make sure Bob.config contains the NuGetFeed key."
-                }
-                Install-SitecorePackage -OutputLocation $webPath -PackagesConfig $packagesConfig -Source $source
+
+                Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath
             }
             catch
             {
@@ -113,6 +106,7 @@ function Install-Sitecore
         }
         finally
         {
+            Start-ScAppPool $ProjectPath
             if(Test-Path $tempBackup) {
                 rm $tempBackup -Recurse
             }
