@@ -24,6 +24,9 @@ function Initialize-Environment
         Install-Sitecore
         Set-ScSerializationReference
         Install-ScDatabases
+        if(Get-Command Install-Frontend) {
+            Install-Frontend
+        }
         $sb = $dte.Solution.SolutionBuild
         $sb.Clean($true)
         $sb.Build($true)
