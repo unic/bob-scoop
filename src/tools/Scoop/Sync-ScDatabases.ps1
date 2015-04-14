@@ -47,6 +47,12 @@ function Sync-ScDatabases
 
         $deploymentToolAuthToken = $node.Value
 
+
+        $disableIndexingUrl =  "$baseUrl/bob/disableIndexing"
+        Write-Verbose "Disable indexing on $disableIndexingUrl"
+        $result =  Invoke-WebRequest -Uri $disableIndexingUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
         $unicornUrl = "$baseUrl/unicorn.aspx?verb=Sync"
         Write-Verbose "Sync unicorn on $unicornUrl"
         $result = Invoke-WebRequest -Uri $unicornUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
@@ -55,6 +61,12 @@ function Sync-ScDatabases
         $updateDbUrl = "$baseUrl/bob/updateDatabase"
         Write-Verbose "Update database for default items $updateDbUrl"
         $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+        $result.Content
+
+
+        $reEnableIndexUrl =  "$baseUrl/bob/disableIndexing"
+        Write-Verbose "Re-enable indexing on $reEnableIndexUrl"
+        $result =  Invoke-WebRequest -Uri $reEnableIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
 
         $fullPublishUrl = "$baseUrl/bob/fullPublish"
