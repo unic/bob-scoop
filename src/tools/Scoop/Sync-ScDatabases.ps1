@@ -64,7 +64,7 @@ function Sync-ScDatabases
         $result.Content
 
 
-        $reEnableIndexUrl =  "$baseUrl/bob/disableIndexing"
+        $reEnableIndexUrl =  "$baseUrl/bob/reEnableIndexing"
         Write-Verbose "Re-enable indexing on $reEnableIndexUrl"
         $result =  Invoke-WebRequest -Uri $reEnableIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
