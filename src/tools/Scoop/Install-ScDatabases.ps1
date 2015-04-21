@@ -60,7 +60,7 @@ function Install-ScDatabases
         $dbCache = "$cacheLocation\$($scContext.version)"
 
         if(-not (Test-Path $dbCache)) {
-            Install-SitecoreNugetPackage `
+            Install-NugetPackage `
                 -PackageId Sitecore.Databases `
                 -Version $scContext.Version `
                 -ProjectPath $ProjectPath `
