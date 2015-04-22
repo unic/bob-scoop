@@ -95,6 +95,12 @@ function Install-ScDatabases
                 elseif($db -like "*_web") {
                     $scDb = "Sitecore.Web"
                 }
+                elseif($db -like "*_analytics") {
+                    $scDb = "Sitecore.Analytics"
+                }
+                elseif($db -like "*_sessions") {
+                    $scDb = "Sitecore.Sessions"
+                }
                 else {
                     if($config.InitDatabasesPath) {
                         $dbsPath = Join-Path $config.WebsitePath $config.InitDatabasesPath
