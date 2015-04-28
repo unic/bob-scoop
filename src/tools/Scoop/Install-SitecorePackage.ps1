@@ -28,6 +28,6 @@ function Install-SitecorePackage
     {
         $scContextInfo = Get-ScContextInfo $ProjectPath
         $packageId = "Sitecore.Distribution." + $scContextInfo.type
-        Install-SitecoreNugetPackage -PackageId $packageId -Version $scContextInfo.version -ProjectPath $ProjectPath -OutputLocation $OutputLocation
+        Install-NugetPackage -PackageId $packageId -Version $scContextInfo.version -ProjectPath $ProjectPath -OutputLocation $OutputLocation
     }
 }
