@@ -10,7 +10,7 @@ NUGET
     Unic.Bob.Config (1.1.0-scmbob407invokenewwi)
     Unic.Bob.Keith (1.1.0)
     Unic.Bob.Rubble (1.0.0)
-    Unic.Bob.Skip (0.1.0-unstable0014)
+    Unic.Bob.Skip (1.0.0)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
   specs:
