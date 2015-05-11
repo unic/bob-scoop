@@ -1,12 +1,18 @@
 <#
 .SYNOPSIS
+Updates the all NuGet packages of Sitecore to a new version.
 
 .DESCRIPTION
+Sets the allowedVersions attribute of the Sitecore packagee in packages.config
+of all projects to the new version. Then it updates every package referencing the
+Sitecore package to the new version.
 
 
-.PARAMETER
+.PARAMETER Version
+The version to update to.
 
 .EXAMPLE
+Update-Sitecore -Version 7.2.12345.56
 
 #>
 function Update-Sitecore
@@ -31,7 +37,7 @@ function Update-Sitecore
                 $packagesConfig.Save($file)
 
                 $packages = Get-Package -ProjectName $project.ProjectName
-                
+
                 $packages | ? {$_.DependencySets.Dependencies | ? {$_.Id -eq "Sitecore"}} | % {
                     Update-Package -Id $_.Id -ProjectName $project.ProjectName -Version $Version
                 }
