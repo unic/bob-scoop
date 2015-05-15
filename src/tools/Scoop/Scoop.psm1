@@ -30,6 +30,7 @@ Export-ModuleMember -Function * -Alias *
 Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig") -Force
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble") -Force
 Import-Module (ResolvePath "Unic.Bob.Skip" "Skip") -Force
+Import-Module (ResolvePath "Unic.Bob.Lofty" "Lofty") -Force
 
 $nugetCore = [System.IO.File]::ReadAllBytes((ResolvePath "NuGet.Core" "lib\net40-Client\NuGet.Core.dll"))
 [System.Reflection.Assembly]::Load($nugetCore)

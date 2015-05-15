@@ -11,3 +11,4 @@ nuget Unic.Bob.Keith
 nuget Unic.Bob.Config
 nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
+nuget Unic.Bob.Lofty Prerelease

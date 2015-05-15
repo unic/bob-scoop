@@ -26,9 +26,14 @@ function Update-ScDatabase
             mkdir $tempLocation | Out-Null
             Install-NugetPackage -PackageId Sitecore.Update -Version $context.version -ProjectPath $ProjectPath -OutputLocation $tempLocation
 
+            if((-not ($config.IISBindings)) -or ($config.IISBindings.Count -eq 0)) {
+                Write-Error "No IIS bindings could be found."
+            }
+            $baseUrl = $config.IISBindings[0].InnerText
 
-            Write-Host $tempLocation
-            #rm $tempLocation -Recurse
+            Install-ScSerializationPackage -Path (ls $tempLocation).FullName -Url $baseUrl
+
+            rm $tempLocation -Recurse
         }
     }
 }
