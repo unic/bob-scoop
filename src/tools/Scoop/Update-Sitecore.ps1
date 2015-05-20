@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Updates the all NuGet packages of Sitecore to a new version.
+Updates all NuGet packages of Sitecore to a new version.
 
 .DESCRIPTION
-Sets the allowedVersions attribute of the Sitecore packagee in packages.config
+Sets the allowedVersions attribute of the Sitecore package in packages.config
 of all projects to the new version. Then it updates every package referencing the
 Sitecore package to the new version.
 
