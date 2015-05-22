@@ -95,7 +95,7 @@ function Install-ScDatabases
                 elseif($db -like "*_web") {
                     $scDb = "Sitecore.Web"
                 }
-                elseif($db -like "*_analytics") {
+                elseif($db -like "*_analytics" -and (Test-Path "$dbCache\$scDb.mdf")) {
                     $scDb = "Sitecore.Analytics"
                 }
                 elseif($db -like "*_sessions") {
