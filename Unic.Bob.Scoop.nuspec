@@ -14,6 +14,6 @@
         <file src="src\**" />
         <file src="paket-files\**" target="tools\paket-files" />
         <file src="tools\**" target="tools\bin" />
-        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**" />
+        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**;**\Unic.Bob.Keith\**" />
     </files>
 </package>
