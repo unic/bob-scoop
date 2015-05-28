@@ -1,10 +1,14 @@
 <#
 .SYNOPSIS
+Installs the Sitecore update package of the currently installed Sitecore version.
 
 .DESCRIPTION
+Downloads the Sitecore.Update NuGet package of the
+currently installed Sitecore version and installs the update package 
+to the local database.
 
-
-.PARAMETER
+.PARAMETER ProjectPath
+The path to the project for which the database should be updated.
 
 .EXAMPLE
 
