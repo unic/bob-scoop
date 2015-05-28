@@ -13,7 +13,6 @@ function Update-ScDatabase
 {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true)]
         [string] $ProjectPath
     )
     Process
