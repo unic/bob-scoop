@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3
+* Added `Update-Sitecore` and `Update-ScDatabases`
+* Moved `Install-ScSerilaizationPackage` from Lofty to Scoop
+
+## 1.2.1
+* Fixed Analytics database for Sitecore 7.2 and lower in `Install-ScDatabases`
+
+## 1.2
+* When NuGet creadentials are not saved in the NuGet.config, Scoop will ask for
+    them and add them to NuGet.config
+* Added support for Sitecore 8 Analytics and Session database in `Install-ScDatabases`
+
+
 ## 1.1
 * Added `Install-ScDatabases`
 * Added `Sync-ScDatabases`
