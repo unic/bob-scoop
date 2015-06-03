@@ -1,0 +1,4 @@
+Bob updated all Sitecore NuGet packages for you.
+
+However now may need to perform some manual steps.
+Look at the Sitecore update guide in the SDN for more informations.
