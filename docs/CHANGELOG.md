@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4
+* `Import-ScDatabases` now ignores the web database by default
+
 ## 1.3
 * Added `Update-Sitecore` and `Update-ScDatabases`
 * Moved `Install-ScSerilaizationPackage` from Lofty to Scoop
