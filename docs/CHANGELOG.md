@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.1
+* Update Bob config to 1.2 in order to fix external console launch.
+
 ## 1.3
 * Added `Update-Sitecore` and `Update-ScDatabases`
 * Moved `Install-ScSerilaizationPackage` from Lofty to Scoop
