@@ -43,5 +43,9 @@ function Update-Sitecore
                 }
             }
         }
+
+        if($dte) {
+            $dte.ItemOperations.OpenFile("$PSScriptRoot\..\SitecoreUpdateManualActions.txt", [EnvDTE.Constants]::vsext_vk_TextView) | Out-Null
+        }
     }
 }

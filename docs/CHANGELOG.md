@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4
+* `Import-ScDatabases` now ignores the web database by default
+* Fix  `Install-ScDatabases` Analytics setup in Sitecore 8
+* Fix `bump` when Dizzy is not installed
+
 ## 1.3.1
 * Update Bob config to 1.2 in order to fix external console launch.
 

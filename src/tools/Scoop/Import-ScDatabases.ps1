@@ -11,9 +11,12 @@ If a database already exists it will be replaced. If not it will be created at t
 .PARAMETER ProjectPath
 The path to the Website project.
 
-
 .PARAMETER DatabasePath
 The path where databases which does not exists yet should be created.
+
+.PARAMETER IncludeWebDatabase
+By default `Import-ScDatabases` will skip the web databse.
+If this parameter is speecified, also the web database will be imported.
 
 .EXAMPLE
 Import-ScDatabases
@@ -28,7 +31,8 @@ Function Import-ScDatabases
     )]
     Param(
         [string] $ProjectPath,
-        [String] $DatabasePath
+        [String] $DatabasePath,
+        [switch] $IncludeWebDatabase = $false
     )
     Begin{}
 
@@ -80,6 +84,10 @@ Function Import-ScDatabases
         }
 
         foreach($databaseName in $databases) {
+            if($databaseName.EndsWith("_web") -and (-not $IncludeWebDatabase)) {
+                continue;
+            }
+
             $database = $sqlServer.databases[$databaseName]
             if(-not $database)
             {
