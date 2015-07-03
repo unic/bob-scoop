@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.1
+* Enhanced output of `Install-ScSerilaizationPackage` in order to get log file in Lofty working
+
 ## 1.4
 * `Import-ScDatabases` now ignores the web database by default
 * Fix  `Install-ScDatabases` Analytics setup in Sitecore 8

@@ -92,8 +92,8 @@ Function Install-ScSerializationPackage
 
         $status = (Get-Content $statusFile)
         if($process.ExitCode -eq 0 -and $status -ge 200 -and $status -lt 400) {
-            Write-Host "Installed SerializationPackage:  $Path with API-Url '$("$url/services/package/install/fileupload") "
-            Write-Host (Get-Content $returnFile )
+            Write-Output "Installed SerializationPackage:  $Path with API-Url '$("$url/services/package/install/fileupload") "
+            Write-Output (Get-Content $returnFile )
 
         }
         else {
