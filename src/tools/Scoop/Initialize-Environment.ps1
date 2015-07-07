@@ -20,16 +20,23 @@ function Initialize-Environment
     )
     Process
     {
+        Write-Host "Setup IIS site..."
         Enable-ScSite
+        Write-Host "Install Sitecore to web-root..."
         Install-Sitecore
+        Write-Host "Configure serialization reference..."
         Set-ScSerializationReference
+        Write-Host "Setup all databases..."
         Install-ScDatabases
         if(Get-Command Install-Frontend -ErrorAction SilentlyContinue) {
+            Write-Host "Install frontend..."
             Install-Frontend
         }
+        Write-Host "Build solution..."
         $sb = $dte.Solution.SolutionBuild
         $sb.Clean($true)
         $sb.Build($true)
+        Write-Host "Sync databases (Unicorn and update database)..."
         Sync-ScDatabases
     }
 }

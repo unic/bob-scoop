@@ -46,7 +46,9 @@ function Install-ScDatabases
         Invoke-BobCommand {
 
         $dbutils = ResolvePath -PackageId "adoprog\Sitecore-PowerCore" -RelativePath "Framework\DBUtils"
+        $VerbosePreference = "SilentlyContinue"
         Import-Module $dbutils -Force
+        $VerbosePreference = "Continue"
 
         $config = Get-ScProjectConfig $ProjectPath
         $sqlServer = Connect-SqlServer $ProjectPath
