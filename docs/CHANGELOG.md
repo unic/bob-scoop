@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5
+
+* `Import-ScDatabases` now resets the password of the "admin" user to "b"
+* `bump` will no chat a lot more
+
 ## 1.4.1
 * Enhanced output of `Install-ScSerilaizationPackage` in order to get log file in Lofty working
 

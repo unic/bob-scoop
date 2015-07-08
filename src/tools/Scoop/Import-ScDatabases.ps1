@@ -144,6 +144,10 @@ Function Import-ScDatabases
        if($isAdmin -and $config.WebsiteCodeName) {
            Start-ScAppPool $ProjectPath
        }
+       
+       $baseUrl = $config.IISBindings[0].InnerText
+       $result =  Invoke-WebRequest -Uri "$baseUrl/bob/resetAdmin" -TimeoutSec 600 -UseBasicParsing
+       $result.Content
     }
 
     End{}
