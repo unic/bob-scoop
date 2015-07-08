@@ -69,10 +69,12 @@ function Sync-ScDatabases
         $result =  Invoke-WebRequest -Uri $reEnableIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
 
-        $fullPublishUrl = "$baseUrl/bob/fullPublish"
-        Write-Verbose "Do full publish with URL $fullPublishUrl"
-        $result = Invoke-WebRequest -Uri $fullPublishUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
-        $result.Content
+        if($config.PublishAfterDeserialization -and ($config.PublishAfterDeserialization.ToUpper() -eq "TRUE")) {
+            $fullPublishUrl = "$baseUrl/bob/fullPublish"
+            Write-Verbose "Do full publish with URL $fullPublishUrl"
+            $result = Invoke-WebRequest -Uri $fullPublishUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
+            $result.Content
+        }
 
         $indexes = $config.PulishIndexes
         if($indexes) {
