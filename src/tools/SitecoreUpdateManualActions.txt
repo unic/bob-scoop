@@ -30,5 +30,5 @@ Some things you should consider before you push your branch:
    (and verify that you don't mix versions across multiple VS projects)
  - Remind your collegues to refresh their local databases, either by "Update-ScDatabase"
    or starting with a fresh DB.
- - Compile a list of this to do on all environments up to production to deploy the update.
+ - Compile a list of things to do on all environments up to production to deploy the update.
  - If the upgrade introduced changes relevant to authors, make sure to let them know
