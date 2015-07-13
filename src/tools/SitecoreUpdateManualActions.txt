@@ -22,7 +22,13 @@ Scoop updated all Sitecore NuGet packages for you!
 
 Now it's time to double check your solution for compatibility issues.
 Some things you should consider before you push your branch:
- - Read the changelog carefully
- - Check if you can remove Support DLLs from the solution
+ - Read the Sitecore release notes carefully
+ - Check if you can remove Support DLLs from the solution (or new ones are required).
+   TeamCity: https://goo.gl/ypQEwa
  - Check if items not under serialization need to be upgraded in production DBs
+ - Update Sitecore modules and NuGet packages if possible
+   (and verify that you don't mix versions across multiple VS projects)
+ - Remind your collegues to refresh their local databases, either by "Update-ScDatabase"
+   or starting with a fresh DB.
+ - Compile a list of this to do on all environments up to production to deploy the update.
  - If the upgrade introduced changes relevant to authors, make sure to let them know
