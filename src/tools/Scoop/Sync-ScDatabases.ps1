@@ -6,7 +6,7 @@ Deserialize all items to the database.
 Deserialize all items from a repository to the database.
 This includes:
 - Perform unicorn sync for application and test data
-- Perform an update database for the default items (Not yet)
+- Perform an update database for the default items
 
 .PARAMETER ProjectPath
 The path to the project for which the items should be installed.
