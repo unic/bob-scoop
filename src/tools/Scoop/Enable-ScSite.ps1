@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Creates the IIS Site and IIS Application Pool for the current Sitecore Website project.
 .DESCRIPTION
@@ -84,6 +84,14 @@ Function Enable-ScSite
             if(-not $webPath ) {
                 Write-Error "Could not find WebRoot. Please configure it in the Bob.config"
             }
+            if(-not (Split-Path -Path $webPath -Qualifier | Test-Path)) {
+                Write-Error "Drive configured in WebRoot '$webPath' not available. Please adapt it in the Bob.config(.user)"
+            }
+            if(-not (Test-Path -Path $webPath)){
+                New-Item -ItemType Directory -Path $webPath | Out-Null
+                "Created directory '$webPath'"
+            }
+
             $protocol = $bindings[0].protocol
             $port = $bindings[0].port
             $host = $bindings[0].host
