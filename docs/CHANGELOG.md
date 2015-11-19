@@ -1,7 +1,11 @@
 # Changelog
 
-## 1.5
+## 1.6
+* 'Enable-ScSite' now checks if the configured path is existing or can be created.
+* Updated Bob config to 1.4 to fix 'Import-ScDatabases'.
+* Updated Pester and Skip.
 
+## 1.5
 * `Import-ScDatabases` now resets the password of the "admin" user to "b"
 * `bump` will no chat a lot more
 

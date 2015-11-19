@@ -1,4 +1,34 @@
-Bob updated all Sitecore NuGet packages for you.
+    ::------------------`                         
+    ///----------------::`                        
+    ://:---------------::`..`                     
+  .:////::::--::::::--:+:.yy+    ...:.            
+ .---------------::::::::+ooo..--///ho/:--.`      
+   ``.-.........----::::/+y+s:..sh///-..:+/y++s   
+          `.-:``````o+.::oMhm   hN///-    ./oo/`  
+           `-/`    .No -:+syo   yN///-    :ooo++/ 
+            .::    oN-`.-:+m:`..yN+//-    +ooo+++`
+            ::-:--`/+:::-:/y/////++o+-   -/++++/- 
+           `./`+.-/`++o/--://///mNNmmo            
+            `//-..://+o/:::/shhmMNNyymh           
+            `+oo+o+/++oo+yyomMMMMm++++m:          
+        /s/..-/+//.+oooso+//yMMMNy+/++d:          
+       yNM-....---/sdmmdds//hMMMMy++/oN:`         
+      `NNMs-------+dmNNhdN+:/NMMMNyoym:.:/-``     
+       +mMMNy-..-::mNNdoyN+:-:shdmmds. `....`     
+       `.-::-...-::omNNNNs-.......```             
+                  ```.--``                   
 
-However now may need to perform some manual steps.
-Look at the Sitecore update guide in the SDN for more informations.
+Scoop updated all Sitecore NuGet packages for you!
+
+Now it's time to double check your solution for compatibility issues.
+Some things you should consider before you push your branch:
+ - Read the Sitecore release notes carefully
+ - Check if you can remove Support DLLs from the solution (or new ones are required).
+   TeamCity: https://goo.gl/ypQEwa
+ - Check if items not under serialization need to be upgraded in production DBs
+ - Update Sitecore modules and NuGet packages if possible
+   (and verify that you don't mix versions across multiple VS projects)
+ - Remind your collegues to refresh their local databases, either by "Update-ScDatabase"
+   or starting with a fresh DB.
+ - Compile a list of things to do on all environments up to production to deploy the update.
+ - If the upgrade introduced changes relevant to authors, make sure to let them know
