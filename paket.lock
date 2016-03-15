@@ -1,20 +1,38 @@
 NUGET
+  remote: https://www.nuget.org/api/v2
+  specs:
+    curl (7.30.0.2)
+      curl.redist (>= 7.30.0.2)
+      libssh2 (>= 1.4)
+    curl.redist (7.30.0.2)
+    libssh2 (1.4.3.3)
+      libssh2.redist (>= 1.4.3.3)
+      openssl (>= 1.0)
+      zlib (>= 1.2)
+    libssh2.redist (1.4.3.3)
+    Microsoft.Web.Xdt (2.1.1)
+    NuGet.Core (2.10.1)
+      Microsoft.Web.Xdt (>= 2.1.0)
+    openssl (1.0.2.1)
+      openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
+      openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
+    openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
+    openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
+    zlib (1.2.8.8)
+      zlib.v120.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
+      zlib.v140.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
+    zlib.v120.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
+    zlib.v140.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
   remote: https://chocolatey.org/api/v2
   specs:
-    curl (7.28.1)
-    pester (3.3.11)
-  remote: https://nuget.org/api/v2
-  specs:
-    Microsoft.Web.Xdt (2.1.1)
-    NuGet.Core (2.8.5)
-      Microsoft.Web.Xdt (>= 2.1.0)
+    pester (3.4.0)
   remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
   specs:
     Unic.Bob.Config (1.4.0)
     Unic.Bob.Keith (1.1.0)
-    Unic.Bob.Rubble (1.0.0)
+    Unic.Bob.Rubble (1.0.2)
     Unic.Bob.Skip (1.1.0)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
   specs:
-    Framework/DBUtils/DBUtils.psm1 (54f2283ed6099c07edb3cd0b8a30a5baa0549a82)
+    Framework/DBUtils/DBUtils.psm1 (038a01b42ea3f681fb8d05f3444d363d99f4d9ac)
