@@ -6,7 +6,9 @@ function Install-WebConfig
 {
     [CmdletBinding()]
     Param(
-        [string] $ProjectPath
+        [string] $ProjectPath,
+        [string] $Environment = "local",
+        [string] $role = "author"
     )
     Process
     {
@@ -25,7 +27,7 @@ function Install-WebConfig
         $document.PreserveWhitespace = $true
         $document.Load($baseWebconfig)
 
-        $webConfigs = @("Web.base.config", "Web.local.config")
+        $webConfigs = @("Web.base.config", "Web.$role.config", "Web.$environment.config", "Web.$environment.$role.config")
         $projects = (ls $ProjectPath -Include *.csproj -Recurse)
         
         foreach($webConfig in $webConfigs) {
