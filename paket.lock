@@ -10,6 +10,7 @@ NUGET
       openssl (>= 1.0)
       zlib (>= 1.2)
     libssh2.redist (1.4.3.3)
+    Microsoft.Web.Xdt (2.1.1)
     openssl (1.0.2.1)
       openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
       openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
@@ -28,7 +29,7 @@ NUGET
     Unic.Bob.Config (1.5.0-scmbob-585-0001)
     Unic.Bob.Keith (1.1.0)
     Unic.Bob.Rubble (1.0.2)
-    Unic.Bob.Skip (1.1.0)
+    Unic.Bob.Skip (1.2.0-scmbob-585-0003)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
   specs:
