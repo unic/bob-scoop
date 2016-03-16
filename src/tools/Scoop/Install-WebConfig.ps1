@@ -13,7 +13,7 @@ function Install-WebConfig
     Process
     {
         $config = Get-ScProjectConfig $ProjectPath
-        $ProjectPath = $config.ProjectPath 
+        $ProjectPath = $config.WebsitePath 
         $scContext = Get-ScContextInfo $ProjectPath
     
         $type = $scContext.Type
