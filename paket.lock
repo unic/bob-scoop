@@ -10,9 +10,6 @@ NUGET
       openssl (>= 1.0)
       zlib (>= 1.2)
     libssh2.redist (1.4.3.3)
-    Microsoft.Web.Xdt (2.1.1)
-    NuGet.Core (2.10.1)
-      Microsoft.Web.Xdt (>= 2.1.0)
     openssl (1.0.2.1)
       openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
       openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
