@@ -26,7 +26,7 @@ function Install-WebConfig
         $document.Load($baseWebconfig)
 
         $webConfigs = @("Web.base.config", "Web.local.config")
-        $projects = (ls . -Include *.csproj -Recurse)
+        $projects = (ls $ProjectPath -Include *.csproj -Recurse)
         
         foreach($webConfig in $webConfigs) {
             foreach($project in  $projects){
