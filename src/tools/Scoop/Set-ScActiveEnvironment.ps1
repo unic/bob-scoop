@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Sets the active environment
+Sets the active environment.
 
 .DESCRIPTION
 Sets the active environment based on the ActiveEnvironment property in the Bob.config.user.
