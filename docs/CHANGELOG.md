@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2
+* Added a new function 'Set-ScActiveEnvironment' for environment impersonation.
+
+## 1.6.1
+* Removed Keith and Pester from Nuget package
+
 ## 1.6
 * 'Enable-ScSite' now checks if the configured path is existing or can be created.
 * Updated Bob config to 1.4 to fix 'Import-ScDatabases'.
