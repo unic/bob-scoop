@@ -1,12 +1,13 @@
 <#
 .SYNOPSIS
-Sets the active role (delivery or author)
+Sets the active role (delivery or author).
+
 .DESCRIPTION
 Sets the ActiveRole property in the Bob.config.user
 and build the solution.
 
-.PARAMETER
-The role to set (delivery or author)
+.PARAMETER Role
+The role to set (delivery or author).
 
 .EXAMPLE
 Set-ScActiveRole delivery
@@ -22,8 +23,8 @@ function Set-ScActiveRole
   )
   Process
   {
-     $config = Get-ScProjectConfig
      Set-ScUserConfigValue -Key "ActiveRole" -Value $Role
+     
      if($dte) {
         $dte.Solution.SolutionBuild.Build()
      }
