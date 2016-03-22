@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.2
+* Added a new function 'Set-ScActiveEnvironment' for environment impersonation.
+
 ## 1.6.1
 * Removed Keith and Pester from Nuget package
 
