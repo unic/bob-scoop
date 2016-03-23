@@ -9,8 +9,6 @@ It returns an object with the properties "type" (Mvc or WebForms) and "version".
 .PARAMETER ProjectPath
 The path to the project to get the information for.
 
-.EXAMPLE
-
 #>
 function Get-ScContextInfo
 {
@@ -22,7 +20,7 @@ function Get-ScContextInfo
     {
         $config = Get-ScProjectConfig $ProjectPath
         return @{
-              "type" = $config.SitecoreType; 
+              "type" = $config.SitecoreType
               "version" = $config.SitecoreVersion
         }
     }

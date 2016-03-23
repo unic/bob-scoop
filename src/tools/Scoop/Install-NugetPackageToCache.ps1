@@ -1,4 +1,22 @@
 <#
+.SYNOPSIS
+Installs a NuGet package to the Bob-Cache.
+
+.DESCRIPTION
+Installs the specified NuGet package to "${env:AppData}\Bob\$PackageId 
+if it's not yet installed there.
+
+.PARAMETER PackageId
+The NuGet package id.
+
+.PARAMETER Version
+The version of the package to install.
+
+.PARAMETER ProjectPath
+The path to the project.
+
+.EXAMPLE
+Install-NugetPackageToCache  -PackageId Unic.Test -Version 3.2
 
 #>
 function Install-NugetPackageToCache 

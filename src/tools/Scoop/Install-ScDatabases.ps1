@@ -30,6 +30,7 @@ An alternative list of databases to install. If it's ommited the databases from
  the connection string will be used.
 
 .EXAMPLE
+Install-ScDatabases -DatabasePath C:\data
 
 #>
 function Install-ScDatabases

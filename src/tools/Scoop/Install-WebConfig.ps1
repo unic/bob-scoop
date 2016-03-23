@@ -1,5 +1,22 @@
 <#
+.SYNOPSIS
+Transforms all Web.*.config with the Sitecore web.config and puts it to the web-root.
 
+.DESCRIPTION
+Transforms all Web.*.config of all projects in the repo
+with the Sitecore web.config and puts it to the web-root.
+
+.PARAMETER ProjectPath
+The project path containing the Sitecore configuration.
+
+.PARAMETER Environment
+The environment for which the web-configs should be transformed.
+
+.PARAMETER Role
+The role for which the web-configs should be transformed.
+
+.EXAMPLE
+Install-WebConfig 
 
 #>
 function Install-WebConfig
@@ -30,8 +47,9 @@ function Install-WebConfig
         $webConfigs = @("Web.base.config", "Web.$role.config", "Web.$environment.config", "Web.$environment.$role.config")
         $projects = (ls $ProjectPath -Include *.csproj -Recurse)
         
-        foreach($webConfig in $webConfigs) {
-            foreach($project in  $projects){
+        
+        foreach($project in  $projects){
+            foreach($webConfig in $webConfigs) {
                 $projectFolder = Split-path $project
                 
                 $xdtPath = "$projectFolder\$webConfig"
