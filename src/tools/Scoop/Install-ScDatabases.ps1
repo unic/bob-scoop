@@ -30,6 +30,7 @@ An alternative list of databases to install. If it's ommited the databases from
  the connection string will be used.
 
 .EXAMPLE
+Install-ScDatabases -DatabasePath C:\data
 
 #>
 function Install-ScDatabases
@@ -54,20 +55,12 @@ function Install-ScDatabases
         $sqlServer = Connect-SqlServer $ProjectPath
         $scContext = Get-ScContextInfo $ProjectPath
 
-        $cacheLocation = "${env:AppData}\Bob\DatabasesCache"
-        if(-not (Test-Path $cacheLocation)) {
-            mkdir $cacheLocation | Out-Null
-        }
-
-        $dbCache = "$cacheLocation\$($scContext.version)"
-
-        if(-not (Test-Path $dbCache)) {
-            Install-NugetPackage `
-                -PackageId Sitecore.Databases `
-                -Version $scContext.Version `
-                -ProjectPath $ProjectPath `
-                -OutputLocation $dbCache
-        }
+        
+        
+        $dbCache = Install-NugetPackageToCache `
+            -PackageId Sitecore.Databases `
+            -Version $scContext.version `
+            -ProjectPath $ProjectPath
 
         $stoppedWebAppPool = $false
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")

@@ -7,11 +7,13 @@ github adoprog/Sitecore-PowerCore Framework/DBUtils/DBUtils.psm1
 source https://nuget.org/api/v2
 
 nuget pester
-nuget NuGet.Core
+nuget Microsoft.Web.Xdt
+
 
 source https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc/ username: "%PAKET_USER%" password: "%PAKET_PASSWORD%"
 
 nuget Unic.Bob.Keith
-nuget Unic.Bob.Config
+nuget Unic.Bob.Config Prerelease
 nuget Unic.Bob.Rubble
-nuget Unic.Bob.Skip
+nuget Unic.Bob.Skip 1.2.0-scmbob-585-0003
+

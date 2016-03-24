@@ -5,10 +5,7 @@
         <version>$VERSION$</version>
         <authors>Unic AG</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Muck are the tools for local deployments</description>
-        <dependencies>
-            <dependency id="Unic.Bob.Config" />
-        </dependencies>
+        <description>Scoop are the tools for local setup.</description>
     </metadata>
     <files>
         <file src="src\**" />
