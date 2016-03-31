@@ -24,7 +24,6 @@ Function Set-ScSerializationReference
         [string]$SerializationPath,
         [string]$SerializationTemplateKey = "SerializationReferenceTemplate"
     )
-    Begin{}
 
     Process
     {
@@ -77,6 +76,4 @@ Function Set-ScSerializationReference
         Write-Host "Set serialization reference in '$configPath' to $elementValue"
         Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath'  ";
     }
-
-    End{}
 }
