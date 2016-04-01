@@ -20,16 +20,17 @@ Function Set-ScSerializationReference
     )]
     Param(
         [String]$WebPath = "",
-        [string] $ProjectPath
+        [string]$ProjectPath,
+        [string]$SerializationPath,
+        [string]$SerializationTemplateKey = "SerializationReferenceTemplate"
     )
-    Begin{}
 
     Process
     {
         $localSetupConfig = Get-ScProjectConfig $ProjectPath
 
-        if(-not $localSetupConfig.SerializationReferenceTemplate) {
-          Write-Error "The configuration SerializationReferenceTemplate could not be found in Bob.config"
+        if(-not $localSetupConfig[$SerializationTemplateKey]) {
+          Write-Error "The configuration $SerializationTemplateKey could not be found in Bob.config"
           exit
         }
 
@@ -42,71 +43,37 @@ Function Set-ScSerializationReference
             exit
         }
 
-        $serializationPath = $localSetupConfig.SerializationPath
         $configFilePath = $localSetupConfig.SerializationReferenceFilePath
         if(-not $configFilePath) {
             Write-Error "No SerializationReferenceFilePath was specified in Bob.config. Please provide a value for SerializationReferenceFilePath."
             exit
         }
 
-       Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' "
+        Write-Verbose "Start  Set-ScSerializationReference with params:  -WebPath '$WebPath' "
 
-       $Path = Join-Path $localSetupConfig.WebsitePath $serializationPath
-       if(-not (Test-Path $Path)) {
-            mkdir $Path | Out-Null
-       }
-       $elementValue = (Resolve-Path $Path).Path
+        if(-not $SerializationPath) {
+            $SerializationPath = Join-Path $localSetupConfig.WebsitePath $localSetupConfig.SerializationPath
+        }
+        if(-not (Test-Path $SerializationPath)) {
+            mkdir $SerializationPath | Out-Null
+        }
+        $elementValue = (Resolve-Path $SerializationPath).Path
 
-       $configPath = Join-Path $WebPath $configFilePath ;
-       if(-not (Test-Path $configPath)) {
+        $configPath = Join-Path $WebPath $configFilePath ;
+        if(-not (Test-Path $configPath)) {
             $configFileDirecotry = Split-Path $configPath
             if($configFileDirecotry -and -not (Test-Path $configFileDirecotry) ){
                 mkdir $configFileDirecotry | Out-Null
             }
-       }
-
-
-        if(Test-Path $configPath){
-            [XML]$config = Get-Content $configPath
         }
         else {
-            $config = [xml]$localSetupConfig.SerializationReferenceTemplate
+           rm $configPath
         }
 
-        $serializationNodePath = $localSetupConfig.SerializationReferenceXPath
+        $config = $localSetupConfig[$SerializationTemplateKey]
 
-        $nsManager = new-object System.Xml.XmlNamespaceManager $config.NameTable
-        $nsManager.AddNamespace("set", "http://www.sitecore.net/xmlconfig/set/");
-
-        $node = $config.SelectSingleNode($serializationNodePath, $nsManager)
-
-        if(-not $node){
-            $currentNodePath = "";
-            $nodeNames =   $serializationNodePath.Split('/');
-            $parentNode = $config
-            foreach($nodeName in $nodeNames ) {
-                $currentNodePath += "/" + $nodeName
-                $node = $config.SelectSingleNode($currentNodePath, $nsManager)
-
-                if(-not $nodeName.StartsWith("@")) {
-                    if(-not $node) {
-                        $newNode = $config.CreateElement($nodeName)
-                        $parentNode.AppendChild($newNode) | Out-Null;
-                        $node = $config.SelectSingleNode($currentNodePath, $nsManager)
-                    }
-                }
-
-                $parentNode = $node
-            }
-        }
-
-
-        $node.InnerText = $elementValue
-
-      $config.Save($configPath);
+        $config.Replace("[BobSerializationPath]", $elementValue) | Out-File $configPath -Encoding unicode
         Write-Host "Set serialization reference in '$configPath' to $elementValue"
         Write-Verbose "End  Set-ScSerializationReference with params:  -WebPath '$WebPath'  ";
     }
-
-    End{}
 }
