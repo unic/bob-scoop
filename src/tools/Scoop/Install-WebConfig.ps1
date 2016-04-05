@@ -35,35 +35,24 @@ function Install-WebConfig
     
         $type = $scContext.Type
         $configPath = Install-NugetPackageToCache -Version $scContext.Version -PackageId "Sitecore.$type.Config" -ProjectPath $ProjectPath
-        $baseWebconfig = "$configPath\content\Web.config"
         
-        $xdtDll = ResolvePath -PackageId "Microsoft.Web.Xdt" -RelativePath "lib\net40\Microsoft.Web.XmlTransform.dll"
-        [System.Reflection.Assembly]::LoadFile($xdtDll) | Out-Null
-
-        $document = New-Object Microsoft.Web.XmlTransform.XmlTransformableDocument
-        $document.PreserveWhitespace = $true
-        $document.Load($baseWebconfig)
-
-        $webConfigs = @("Web.base.config", "Web.$role.config", "Web.$environment.config", "Web.$environment.$role.config")
-        $projects = (ls $ProjectPath -Include *.csproj -Recurse)
-        
-        
-        foreach($project in  $projects){
-            foreach($webConfig in $webConfigs) {
-                $projectFolder = Split-path $project
-                
-                $xdtPath = "$projectFolder\$webConfig"
-                if(Test-Path $xdtPath) {
-                    $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $XdtPath
-                    $transform.Apply($document) | Out-Null
-                    Write-Verbose "Applied transform $xdtPath"
-                }
-            }
-        }
         
         $webRoot = $config.WebRoot
         $webConfigPath = "$webRoot\Web.config"
-        $document.Save($webConfigPath)
-        Write-Verbose "Saved Web.config to $webConfigPath"
+        
+        cp "$configPath\Content\Web.config" "$webConfigPath"
+        
+        Write-Verbose "Copied $configPath\Web.config to $webConfigPath"
+        
+        $projects = (ls $ProjectPath -Include *.csproj -Recurse)
+        $folders = @()
+        
+        foreach($project in  $projects){
+            $folders += Split-path $project
+        }
+        write-host $webConfigPath
+        
+        Install-WebConfigByFolders $folders $webConfigPath $Environment $role
+        
     }
 }
