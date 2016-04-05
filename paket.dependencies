@@ -14,6 +14,6 @@ source https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc/ username
 
 nuget Unic.Bob.Keith
 nuget Unic.Bob.Config Prerelease
-nuget Unic.Bob.Rubble
+nuget Unic.Bob.Rubble 1.1.0-flexiblepattern0012
 nuget Unic.Bob.Skip 1.2.0-scmbob-585-0004
 

@@ -18,7 +18,6 @@ function Set-ScActiveRole
   [CmdletBinding()]
   Param(
       [Parameter(Mandatory=$true)]
-      [ValidateSet("delivery","author")]
       [string] $Role
   )
   Process
