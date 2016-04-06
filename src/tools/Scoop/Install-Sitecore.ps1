@@ -94,8 +94,7 @@ function Install-Sitecore
             }
             finally
             {
-                Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
-                if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
+               if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
                     Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder) -ProjectPath $ProjectPath
                 }
             }

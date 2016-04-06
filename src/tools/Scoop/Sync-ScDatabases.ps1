@@ -53,11 +53,6 @@ function Sync-ScDatabases
         $result =  Invoke-WebRequest -Uri $disableIndexingUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
 
-        $unicornUrl = "$baseUrl/unicorn.aspx?verb=Sync"
-        Write-Verbose "Sync unicorn on $unicornUrl"
-        $result = Invoke-WebRequest -Uri $unicornUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
-        $result.Content
-
         $updateDbUrl = "$baseUrl/bob/updateDatabase"
         Write-Verbose "Update database for default items $updateDbUrl"
         $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
