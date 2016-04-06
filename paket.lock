@@ -11,11 +11,23 @@ NUGET
       zlib (>= 1.2)
     libssh2.redist (1.4.3.3)
     Microsoft.Web.Xdt (2.1.1)
-    openssl (1.0.2.1)
-      openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
-      openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
-    openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
-    openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2.1) - framework: native
+    openssl (1.0.2)
+      openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2) - framework: native
+      openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2) - framework: native
+    openssl.v120.windesktop.msvcstl.dyn.rt-dyn (1.0.2) - framework: native
+      openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64 (1.0.2) - framework: native
+      openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86 (1.0.2) - framework: native
+    openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64 (1.0.2) - framework: native
+      zlib.v120.windesktop.msvcstl.dyn.rt-dyn (>= 1.2.8.8)
+    openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86 (1.0.2) - framework: native
+      zlib.v120.windesktop.msvcstl.dyn.rt-dyn (>= 1.2.8.8)
+    openssl.v140.windesktop.msvcstl.dyn.rt-dyn (1.0.2) - framework: native
+      openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64 (1.0.2) - framework: native
+      openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86 (1.0.2) - framework: native
+    openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64 (1.0.2) - framework: native
+      zlib.v140.windesktop.msvcstl.dyn.rt-dyn (>= 1.2.8.8)
+    openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86 (1.0.2) - framework: native
+      zlib.v140.windesktop.msvcstl.dyn.rt-dyn (>= 1.2.8.8)
     zlib (1.2.8.8)
       zlib.v120.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
       zlib.v140.windesktop.msvcstl.dyn.rt-dyn (1.2.8.8) - framework: native
@@ -28,7 +40,7 @@ NUGET
   specs:
     Unic.Bob.Config (1.5.0-scmbob-585-0001)
     Unic.Bob.Keith (1.1.0)
-    Unic.Bob.Rubble (1.0.2)
+    Unic.Bob.Rubble (1.1.0-flexiblepattern0012)
     Unic.Bob.Skip (1.2.0-scmbob-585-0004)
 GITHUB
   remote: adoprog/Sitecore-PowerCore

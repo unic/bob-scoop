@@ -23,9 +23,7 @@ function Install-WebConfig
 {
     [CmdletBinding()]
     Param(
-        [string] $ProjectPath,
-        [string] $Environment = "local",
-        [string] $role = "author"
+        [string] $ProjectPath
     )
     Process
     {
@@ -36,6 +34,14 @@ function Install-WebConfig
         $type = $scContext.Type
         $configPath = Install-NugetPackageToCache -Version $scContext.Version -PackageId "Sitecore.$type.Config" -ProjectPath $ProjectPath
         
+        $role = $config.ActiveRole
+        if(-not $role) {
+            $role = "author"
+        }
+        $environment = $config.ActiveEnvironment
+        if(-not $environment) {
+            $environment = "local"
+        }
         
         $webRoot = $config.WebRoot
         $webConfigPath = "$webRoot\Web.config"
@@ -50,9 +56,8 @@ function Install-WebConfig
         foreach($project in  $projects){
             $folders += Split-path $project
         }
-        write-host $webConfigPath
         
-        Install-WebConfigByFolders $folders $webConfigPath $Environment $role
+        Install-WebConfigByFolders $folders $webConfigPath $Environment $role.Split(";")
         
     }
 }

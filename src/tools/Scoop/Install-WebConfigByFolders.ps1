@@ -26,12 +26,10 @@ function Install-WebConfigByFolders
         [string[]] $Folders,
         [string] $ConfigPath,
         [string] $Environment = "local",
-        [string] $role = "author"
+        [string[]] $role = @("author")
     )
     Process
-    {
-        write-host $ConfigPath
-        
+    {        
         $xdtDll = ResolvePath -PackageId "Microsoft.Web.Xdt" -RelativePath "lib\net40\Microsoft.Web.XmlTransform.dll"
         [System.Reflection.Assembly]::LoadFile($xdtDll) | Out-Null
 
@@ -39,7 +37,7 @@ function Install-WebConfigByFolders
         $document.PreserveWhitespace = $true
         $document.Load($ConfigPath)
 
-        $webConfigs = @("Web.base.config", "Web.$role.config", "Web.$environment.config", "Web.$environment.$role.config")
+        $webConfigs = Get-RubblePattern  'Web.base.config;Web.$role.config;Web.$environment.config;Web.$environment.$role.config'  @{'$role' = $role; '$Environment' = $Environment}
         $projects = (ls $ProjectPath -Include *.csproj -Recurse)
         
         
