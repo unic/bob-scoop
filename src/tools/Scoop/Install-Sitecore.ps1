@@ -60,10 +60,6 @@ function Install-Sitecore
                     {
                         Write-Verbose "Web folder $webPath already exists and Force is true. Backup and delete web folder."
 
-                        $backupArgs = @{}
-                        if(-not $Backup) {
-                            $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
-                        }
                         Write-Verbose "Backup $webPath to temporary location $tempBackup"
                         mv $webPath\* $tempBackup
 
