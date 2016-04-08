@@ -60,10 +60,6 @@ function Install-Sitecore
                     {
                         Write-Verbose "Web folder $webPath already exists and Force is true. Backup and delete web folder."
 
-                        $backupArgs = @{}
-                        if(-not $Backup) {
-                            $backupArgs["Pattern"] = Get-RubblePattern $config.UnmanagedFiles
-                        }
                         Write-Verbose "Backup $webPath to temporary location $tempBackup"
                         mv $webPath\* $tempBackup
 
@@ -94,8 +90,7 @@ function Install-Sitecore
             }
             finally
             {
-                Copy-RubbleItem -Destination $webPath -Path $tempBackup -Pattern (Get-RubblePattern $config.UnmanagedFiles)
-                if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
+               if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
                     Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder) -ProjectPath $ProjectPath
                 }
             }

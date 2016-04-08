@@ -37,8 +37,11 @@ function Update-Sitecore
                 $packagesConfig.Save($file)
 
                 $packages = Get-Package -ProjectName $project.ProjectName
+                
+                $sitecorePacakges = $packages | ? {$_.ID -eq "Sitecore"}
+                $scVersion = $sitecorePacakges.Version
 
-                $packages | ? {$_.DependencySets.Dependencies | ? {$_.Id -eq "Sitecore"}} | % {
+                $packages | ? {$_.Version -eq $scVersion} | % {
                     Update-Package -Id $_.Id -ProjectName $project.ProjectName -Version $Version
                 }
             }
