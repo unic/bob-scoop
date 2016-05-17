@@ -90,8 +90,8 @@ function Install-Sitecore
             }
             finally
             {
-               if(Test-Path (Join-Path $webPath $config.ConnectionStringsFolder)) {
-                    Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.ConnectionStringsFolder) -ProjectPath $ProjectPath
+               if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath)) {
+                    Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
                 }
             }
         }
