@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1
+* Implemented updating connection strings during Install-Sitecore execution
+
+## 2.0
+* Added support for Bob 2.0
+
 ## 1.6.2
 * Added a new function 'Set-ScActiveEnvironment' for environment impersonation.
 

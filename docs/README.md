@@ -43,6 +43,7 @@ The following settings are relevant for Scoop.
 | IisAdminUser | If `IisAdminUser` is configured, this user will be granted access to the database. This should only be configured if you have a different default application pool user. | <IisAdminUser>NT Authority\Network Service</IisAdminUser> |
 | ImportDatabaseTempLocation | A directory where the database backups are copied to before they are restored. If it's not specified `C:\temp` will be used. | `<ImportDatabaseTempLocation>D:\temp</ImportDatabaseTempLocation>` |
 | PublishAfterDeserialization | When PublishAfterDeserialization is set to true, Scoop will perform a full publish after deserializing with `bump` or `Sync-ScDatabases`  | `<PublishAfterDeserialization>true</PublishAfterDeserialization>` |
+| WebRootConnectionStringsPath | When WebRootConnectionStringsPath is set to a relative path to web root directory, Scoop will create connections strings in this directory after installing Sitecore with `Install-Sitecore`. They will be based on the connection strings values stored in the file specified in `ConnectionStringsFolder` setting. The server name will be taken from `DatabaseServer` setting. | <WebRootConnectionStringsPath>App_Assets\content</WebRootConnectionStringsPath>` |
 
 ## Module development
 
