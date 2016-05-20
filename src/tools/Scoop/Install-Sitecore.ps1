@@ -90,6 +90,12 @@ function Install-Sitecore
             }
             finally
             {
+                if (-not $config.WebRootConnectionStringsPath) {
+                    
+                    Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
+                    
+                }
+                
                if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath)) {
                     Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
                 }
