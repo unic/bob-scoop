@@ -52,6 +52,7 @@ function Install-Sitecore
             if (-not $config.WebRootConnectionStringsPath) {
                     
                     Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
+                    return
                     
             }
             
