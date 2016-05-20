@@ -44,9 +44,17 @@ function Install-Sitecore
         {
             $config = Get-ScProjectConfig $ProjectPath
             $webPath = $config.WebRoot
+            
             if(-not $WebPath) {
                 Write-Error "Could not find WebRoot. Please provide one."
             }
+            
+            if (-not $config.WebRootConnectionStringsPath) {
+                    
+                    Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
+                    
+            }
+            
             $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
 
             $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
@@ -90,12 +98,6 @@ function Install-Sitecore
             }
             finally
             {
-                if (-not $config.WebRootConnectionStringsPath) {
-                    
-                    Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
-                    
-                }
-                
                if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath)) {
                     Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
                 }
