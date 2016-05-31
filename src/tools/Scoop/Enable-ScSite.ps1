@@ -134,33 +134,37 @@ Function Enable-ScSite
             else {
                 $IPs += @{"ip" = "$ip"; "host" = "$hostname"};
             }
+            
+			if($protocol -eq "https") {
+				$ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
+				if(-not $ca) {
+					New-CertCA $CAName
+					Write-Host "Created certificate authority $CAName"
+				}
+				Add-TrustedCaToFirefox $CAName
 
-            if(-not ($existingBindings |
-                ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
+				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
+				if(-not $cert) {
+					New-Cert $hostname -CA $CAName
+					Write-Host "Created certificate for host $hostname"
+				}
 
-                if($protocol -eq "https") {
-                    $ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
-                    if(-not $ca) {
-                        New-CertCA $CAName
-                        Write-Host "Created certificate authority $CAName"
-                    }
-                    Add-TrustedCaToFirefox $CAName
+				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
 
-                    $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
-                    if(-not $cert) {
-                        New-Cert $hostname -CA $CAName
-                        Write-Host "Created certificate for host $hostname"
-                    }
-
-                    $cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
-
-                    $site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
-                }
-                else {
-                    $site.Bindings.Add("${ip}:${port}:${hostname}", $protocol) | Out-Null
-                }
+				$site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
+                
                 Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
-            }
+			}
+			else {
+                
+                if(-not ($existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
+                
+				$site.Bindings.Add("${ip}:${port}:${hostname}", $protocol) | Out-Null
+                
+                Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
+                
+                }
+			}
         }
         $serverManager.CommitChanges()
 
