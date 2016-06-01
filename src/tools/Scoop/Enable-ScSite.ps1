@@ -153,11 +153,11 @@ Function Enable-ScSite
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  
-                    Write-Host $_
+                    Write-Host ($_ | Out-String)
 
                     Write-Host "--------------------------------------------"
                     
-                    Write-Host $existingBindings
+                    Write-Host ($existingBindings | Out-String)
                     
                     Write-Host "--------------------------------------------"
                  
