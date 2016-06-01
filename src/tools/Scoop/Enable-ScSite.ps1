@@ -153,7 +153,17 @@ Function Enable-ScSite
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  
+                    Write-Host $_
+
+                    Write-Host "--------------------------------------------"
+                    
+                    Write-Host $existingBindings
+                    
+                    Write-Host "--------------------------------------------"
+                 
                     $site.Bindings.Remove($existingBindings.Item($_)) | Out-Null 
+                    
+                    Write-Host "--------------------------------------------"
                     
                 }
                     
@@ -172,6 +182,7 @@ Function Enable-ScSite
                 }
 			}
         }
+        
         $serverManager.CommitChanges()
 
         $hostFilePath = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"
