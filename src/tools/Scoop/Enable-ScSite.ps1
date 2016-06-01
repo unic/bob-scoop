@@ -157,9 +157,19 @@ Function Enable-ScSite
                  
                     Write-Host "--------------------------------------------"
                     
+                    Write-Host ($_ | Out-String)
+                    
+                    Write-Host "--------------------------------------------"
+                    
                     Write-Host ($existingBindings | Out-String)
                     
                     Write-Host "--------------------------------------------"
+                 
+                    Write-Host $site.Bindings
+                    
+                    Write-Host "--------------------------------------------"
+                 
+                    Write-Host ($site.Bindings | Out-String)
                  
                     $binding = $site.Bindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | Select-Object -First 1
                  
