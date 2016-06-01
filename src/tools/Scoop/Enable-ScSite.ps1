@@ -153,7 +153,7 @@ Function Enable-ScSite
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  
-                    $site.Bindings.Remove($_) | Out-Null 
+                    $site.Bindings.Remove($existingBindings.Item($_)) | Out-Null 
                     
                 }
                     
