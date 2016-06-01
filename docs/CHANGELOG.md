@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.1
+* Added a meaningful error message for missing WebRootConnectionStringsPath setting
+
 ## 2.1
 * Implemented updating connection strings during Install-Sitecore execution
 
