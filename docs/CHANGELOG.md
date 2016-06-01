@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.2
+* Fixed a problem with certificate installation when https was the first binding
+
 ## 2.1
 * Implemented updating connection strings during Install-Sitecore execution
 

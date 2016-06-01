@@ -153,31 +153,11 @@ Function Enable-ScSite
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  
-                    Write-Host $_
-                 
-                    Write-Host "--------------------------------------------"
-                    
-                    Write-Host ($_ | Out-String)
-                    
-                    Write-Host "--------------------------------------------"
-                    
-                    Write-Host ($existingBindings | Out-String)
-                    
-                    Write-Host "--------------------------------------------"
-                 
-                    Write-Host $site.Bindings
-                    
-                    Write-Host "--------------------------------------------"
-                 
-                    Write-Host ($site.Bindings | Out-String)
-                 
                     $binding = $site.Bindings | ? { $_.BindingInformation -eq "${ip}:${port}:${hostname}" -and $_.Protocol -eq $protocol } | Select-Object -First 1
-                 
-                    Write-Host $binding
                  
                     $site.Bindings.Remove($binding) | Out-Null 
                     
-                    Write-Host "--------------------------------------------"
+                    Write-Verbose "Removed binding $protocol, $hostname, $port on IP '$ip'"
                 }
                     
 				$site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
