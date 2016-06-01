@@ -171,7 +171,7 @@ Function Enable-ScSite
                  
                     Write-Host ($site.Bindings | Out-String)
                  
-                    $binding = $site.Bindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | Select-Object -First 1
+                    $binding = $site.Bindings | ? { $_.BindingInformation -eq "${ip}:${port}:${hostname}" -and $_.Protocol -eq $protocol } | Select-Object -First 1
                  
                     Write-Host $binding
                  
