@@ -151,6 +151,12 @@ Function Enable-ScSite
 
 				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
 
+                $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} % {
+                 
+                    $site.Bindings.Remove($_) | Out-Null 
+                    
+                }
+                    
 				$site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
                 
                 Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
@@ -159,9 +165,9 @@ Function Enable-ScSite
                 
                 if(-not ($existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip})) {
                 
-				$site.Bindings.Add("${ip}:${port}:${hostname}", $protocol) | Out-Null
+				    $site.Bindings.Add("${ip}:${port}:${hostname}", $protocol) | Out-Null
                 
-                Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
+                    Write-Verbose "Added binding $protocol, $hostname, $port on IP '$ip'"
                 
                 }
 			}
