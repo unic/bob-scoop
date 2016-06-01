@@ -153,18 +153,21 @@ Function Enable-ScSite
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  
-                    Write-Host ($_ | Out-String)
-
+                    Write-Host $_
+                 
                     Write-Host "--------------------------------------------"
                     
                     Write-Host ($existingBindings | Out-String)
                     
                     Write-Host "--------------------------------------------"
                  
-                    $site.Bindings.Remove($existingBindings.Item($_)) | Out-Null 
+                    $binding = $site.Bindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | Select-Object -First 1
+                 
+                    Write-Host $binding
+                 
+                    $site.Bindings.Remove($binding) | Out-Null 
                     
                     Write-Host "--------------------------------------------"
-                    
                 }
                     
 				$site.Bindings.Add("${ip}:${port}:${hostname}", $cert.GetCertHash(), "MY") | Out-Null
