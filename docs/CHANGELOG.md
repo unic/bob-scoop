@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4
+* Remove Update-ScDatabases.ps1 as this is not supported for Sc 8.2 and later
+
 ## 2.3
 * Added support for Dizzy 3.0 functionalities
 
