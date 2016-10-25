@@ -2,9 +2,9 @@
 
 ## 2.4
 * Remove Update-ScDatabases.ps1 as this is not supported for Sc 8.2 and later
-* Change default backup behaviour of Install-Sitecore to false. With this version `bump`, `Initialize-Environment` and `Install-Sitecore` by default are not creating a backup before they do a clean install into the web root.
-* Add Install-WebConfig to `bump` (and thus `Initialize-Environment`)
-* Improve log output for indexlist updated by Scrambler.
+* Change default backup behaviour of Install-Sitecore to false. With this version `Initialize-Environment` (alias `bump`) and `Install-Sitecore` by default are not creating a backup before they do a clean install into the web root.
+* Add Install-WebConfig to `Initialize-Environment` (alias `bump`)
+* Improve log output for indexlist updated by Scrambler
 
 ## 2.3
 * Added support for Dizzy 3.0 functionalities
