@@ -74,7 +74,7 @@ function Sync-ScDatabases
         $indexes = $config.PulishIndexes
         if($indexes) {
                 $rebuildIndexUrl = "$baseUrl/bob/rebuildIndexes?indexes=$indexes"
-                Write-Verbose "Rebuild indexes: $indexes"
+                Write-Verbose "Rebuild indexes: $indexes with url $rebuildIndexUrl"
                 $result = Invoke-WebRequest -Uri $rebuildIndexUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
                 $result.Content
         }
