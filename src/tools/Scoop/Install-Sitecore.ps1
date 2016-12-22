@@ -13,7 +13,7 @@ Additionally the connectionStrings.config file will be transformed by taking the
 from the project as base, and the name of the SQL instance  from Bob.config.
 
 .PARAMETER Backup
-If $true a backup of the entire WebRoot will be done before everything gets overwritten by Scoop.
+If $true a backup of the entire WebRoot will be done before everything gets overwritten by Scoop. Default is $false
 
 .PARAMETER Force
 If $false nothing will be done if the WebRoot is not empty.
@@ -22,7 +22,7 @@ If $false nothing will be done if the WebRoot is not empty.
 Install-Sitecore
 
 .EXAMPLE
-Install-Sitecore -Backup:$false
+Install-Sitecore -Backup:$true
 
 .EXAMPLE
 Install-Sitecore -Force:$false
@@ -32,7 +32,7 @@ function Install-Sitecore
 {
     [CmdletBinding()]
     Param(
-        [switch]$Backup = $true,
+        [switch]$Backup = $false,
         [switch]$Force = $true,
         [string] $ProjectPath
     )
