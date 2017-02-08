@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.5
+* Reduce massively the package size by changing the curl package
+
 ## 2.4
 * Remove Update-ScDatabases.ps1 as this is not supported for Sc 8.2 and later
 * Change default backup behaviour of Install-Sitecore to false. With this version `Initialize-Environment` (alias `bump`) and `Install-Sitecore` by default are not creating a backup before they do a clean install into the web root.
