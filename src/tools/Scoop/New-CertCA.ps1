@@ -24,7 +24,7 @@ function New-CertCA
     {
         $expires = (Get-Date).AddYears(100)
 
-        $cert = New-SelfSignedCertificate -CertStoreLocation cert:\LocalMachine\My -dnsname $Name  -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") -KeyUsage CertSign -NotAfter $expires
+        $cert = New-SelfSignedCertificate -CertStoreLocation cert:\LocalMachine\My -dnsname $Name  -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1", "2.5.29.19={text}CA=true") -KeyUsage CertSign -NotAfter $expires 
 
         $SourceStoreScope = 'LocalMachine'
         $SourceStorename = 'My'
