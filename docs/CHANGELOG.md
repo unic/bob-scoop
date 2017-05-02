@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.6
+* Fix invalid SSL certificates in Chrome 58
+
 ## 2.5
 * Reduce massively the package size by changing the curl package
 
