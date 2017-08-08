@@ -53,8 +53,6 @@ function Install-WebConfigByFolders
             }
         }
         
-        $webRoot = $config.WebRoot
-        $webConfigPath = "$webRoot\Web.config"
         $document.Save($ConfigPath)
         Write-Verbose "Saved Web.config to $ConfigPath"
     }
