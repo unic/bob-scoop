@@ -15,6 +15,9 @@ The environment for which the web-configs should be transformed.
 .PARAMETER Role
 The role for which the web-configs should be transformed.
 
+.PARAMETER AdditionalXdtFiles
+A list of additional XDT files which should be applied to the Web.config at the end of ther process.
+
 .EXAMPLE
 Install-WebConfig 
 
