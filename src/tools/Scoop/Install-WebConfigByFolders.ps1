@@ -26,7 +26,8 @@ function Install-WebConfigByFolders
         [string[]] $Folders,
         [string] $ConfigPath,
         [string] $Environment = "local",
-        [string[]] $role = @("author")
+        [string[]] $Role = @("author"),
+        [string[]] $AdditionalXdtFiles = @()
     )
     Process
     {        
@@ -37,23 +38,30 @@ function Install-WebConfigByFolders
         $document.PreserveWhitespace = $true
         $document.Load($ConfigPath)
 
-        $webConfigs = Get-RubblePattern  'Web.base.config;Web.$role.config;Web.$environment.config;Web.$environment.$role.config'  @{'$role' = $role; '$Environment' = $Environment}
-        $projects = (ls $ProjectPath -Include *.csproj -Recurse)
-        
-        
+        $webConfigs = Get-RubblePattern  'Web.base.config;Web.$role.config;Web.$environment.config;Web.$environment.$role.config'  @{'$role' = $Role; '$environment' = $Environment}
+            
         foreach($folder in  $Folders){
             foreach($webConfig in $webConfigs) {
-                
                 $xdtPath = "$folder\$webConfig"
-                if(Test-Path $xdtPath) {
-                    $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $XdtPath
-                    $transform.Apply($document) | Out-Null
-                    Write-Verbose "Applied transform $xdtPath"
-                }
+                ApplyTransformation $document $xdtPath
             }
         }
-        
+
+        foreach($xdtFile in $AdditionalXdtFiles) {
+            ApplyTransformation $document $xdtFile
+        }
+
         $document.Save($ConfigPath)
         Write-Verbose "Saved Web.config to $ConfigPath"
+    }
+    Begin
+    {
+        function ApplyTransformation($document, $xdtPath) {
+            if(Test-Path $xdtPath) {
+                $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $XdtPath
+                $transform.Apply($document) | Out-Null
+                Write-Verbose "Applied transform $xdtPath"
+            }
+        }
     }
 }
