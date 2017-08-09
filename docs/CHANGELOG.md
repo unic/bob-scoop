@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.7
+* Added parameter  `AdditionalXdtFiles` to `Install-WebConfigByFolders`
+
 ## 2.6
 * Fix invalid SSL certificates in Chrome 58
 
