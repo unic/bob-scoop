@@ -16,10 +16,10 @@ The environment for which the web-configs should be transformed.
 The role for which the web-configs should be transformed.
 
 .PARAMETER AdditionalXdtFiles
-A list of additional XDT files which should be applied to the Web.config at the end of ther process.
+A list of additional XDT files which should be applied to the Web.config at the end of the process.
 
 .EXAMPLE
-Install-WebConfig 
+Install-WebConfigByFolders -Folders @(".\Website") -ConfigPath "." -AdditionalXdtFiles @("C:\template\Web.config.xdt")
 
 #>
 function Install-WebConfigByFolders
