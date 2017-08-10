@@ -45,8 +45,8 @@ function Install-WebConfigByFolders
             
         foreach($folder in  $Folders){
             foreach($webConfig in $webConfigs) {
-                $xdtPath = "$folder\$webConfig"
-                ApplyTransformation $document $xdtPath
+                $xdtFile = "$folder\$webConfig"
+                ApplyTransformation $document $xdtFile
             }
         }
 
@@ -59,11 +59,11 @@ function Install-WebConfigByFolders
     }
     Begin
     {
-        function ApplyTransformation($document, $xdtPath) {
-            if(Test-Path $xdtPath) {
-                $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $XdtPath
+        function ApplyTransformation($document, $xdtFile) {
+            if(Test-Path $xdtFile) {
+                $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $xdtFile
                 $transform.Apply($document) | Out-Null
-                Write-Verbose "Applied transform $xdtPath"
+                Write-Verbose "Applied transform $xdtFile"
             }
         }
     }
