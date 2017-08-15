@@ -15,8 +15,11 @@ The environment for which the web-configs should be transformed.
 .PARAMETER Role
 The role for which the web-configs should be transformed.
 
+.PARAMETER AdditionalXdtFiles
+A list of additional XDT files which should be applied to the Web.config at the end of the process.
+
 .EXAMPLE
-Install-WebConfig 
+Install-WebConfigByFolders -Folders @(".\Website") -ConfigPath "." -AdditionalXdtFiles @("C:\template\Web.config.xdt")
 
 #>
 function Install-WebConfigByFolders
@@ -26,7 +29,8 @@ function Install-WebConfigByFolders
         [string[]] $Folders,
         [string] $ConfigPath,
         [string] $Environment = "local",
-        [string[]] $role = @("author")
+        [string[]] $Role = @("author"),
+        [string[]] $AdditionalXdtFiles = @()
     )
     Process
     {        
@@ -37,25 +41,30 @@ function Install-WebConfigByFolders
         $document.PreserveWhitespace = $true
         $document.Load($ConfigPath)
 
-        $webConfigs = Get-RubblePattern  'Web.base.config;Web.$role.config;Web.$environment.config;Web.$environment.$role.config'  @{'$role' = $role; '$Environment' = $Environment}
-        $projects = (ls $ProjectPath -Include *.csproj -Recurse)
-        
-        
+        $webConfigs = Get-RubblePattern  'Web.base.config;Web.$role.config;Web.$environment.config;Web.$environment.$role.config'  @{'$role' = $Role; '$environment' = $Environment}
+            
         foreach($folder in  $Folders){
             foreach($webConfig in $webConfigs) {
-                
-                $xdtPath = "$folder\$webConfig"
-                if(Test-Path $xdtPath) {
-                    $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $XdtPath
-                    $transform.Apply($document) | Out-Null
-                    Write-Verbose "Applied transform $xdtPath"
-                }
+                $xdtFile = "$folder\$webConfig"
+                ApplyTransformation $document $xdtFile
             }
         }
-        
-        $webRoot = $config.WebRoot
-        $webConfigPath = "$webRoot\Web.config"
+
+        foreach($xdtFile in $AdditionalXdtFiles) {
+            ApplyTransformation $document $xdtFile
+        }
+
         $document.Save($ConfigPath)
         Write-Verbose "Saved Web.config to $ConfigPath"
+    }
+    Begin
+    {
+        function ApplyTransformation($document, $xdtFile) {
+            if(Test-Path $xdtFile) {
+                $transform = New-Object Microsoft.Web.XmlTransform.XmlTransformation $xdtFile
+                $transform.Apply($document) | Out-Null
+                Write-Verbose "Applied transform $xdtFile"
+            }
+        }
     }
 }
