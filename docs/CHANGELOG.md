@@ -1,9 +1,24 @@
 # Changelog
 
-## 2.4
+## 2.8
 
 * Introduce Unicorn support for `Sync-ScDatabases`
 * Add `Install-Webconfig` to `Initialize-Environment` (aka `bump`)
+
+## 2.7
+* Added parameter  `AdditionalXdtFiles` to `Install-WebConfigByFolders`
+
+## 2.6
+* Fix invalid SSL certificates in Chrome 58
+
+## 2.5
+* Reduce massively the package size by changing the curl package
+
+## 2.4
+* Remove Update-ScDatabases.ps1 as this is not supported for Sc 8.2 and later
+* Change default backup behaviour of Install-Sitecore to false. With this version `Initialize-Environment` (alias `bump`) and `Install-Sitecore` by default are not creating a backup before they do a clean install into the web root.
+* Add Install-WebConfig to `Initialize-Environment` (alias `bump`)
+* Improve log output for indexlist updated by Scrambler
 
 ## 2.3
 * Added support for Dizzy 3.0 functionalities

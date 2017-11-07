@@ -22,30 +22,19 @@ function New-CertCA
     )
     Process
     {
-        $validFrom = (Get-Date).AddDays(-1).ToString("MM/dd/yyyy", [CultureInfo]::InvariantCulture)
+        $expires = (Get-Date).AddYears(100)
 
-        $params = @("-r"
-        , "-ss"
-        , "Root"
-        , "-sr"
-        , "LocalMachine"
-        , "-n"
-        , "CN=$Name, $ScoopCertificatePath"
-        , "-sky"
-        , "signature"
-        , "-eku"
-        , "1.3.6.1.5.5.7.3.1"
-        , "-h"
-        , "1"
-        , "-cy"
-        , "authority"
-        , "-a"
-        , "sha1"
-        , "-m"
-        , "240"
-        , "-b"
-        , "$validFrom")
+        $cert = New-SelfSignedCertificate -CertStoreLocation cert:\LocalMachine\My -dnsname $Name  -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1", "2.5.29.19={text}CA=true") -KeyUsage CertSign -NotAfter $expires 
 
-        & (ResolveBinPath "makecert.exe") $params
+        $DestStoreScope = 'LocalMachine'
+        $DestStoreName = 'root'
+
+        $DestStore = New-Object  -TypeName System.Security.Cryptography.X509Certificates.X509Store  -ArgumentList $DestStoreName, $DestStoreScope
+        $DestStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+        $DestStore.Add($cert)
+
+        $DestStore.Close()
+
+        return $cert
     }
 }

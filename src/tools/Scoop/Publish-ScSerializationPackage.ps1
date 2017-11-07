@@ -61,7 +61,7 @@ Function Publish-ScSerializationPackage
 
         $params += [string]::Join($data, "&");
 
-        $process = Start-Process (ResolvePath "curl" "tools\native\v110\Win32\Release\static\curl.exe") $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait -PassThru
+        $process = Start-Process (ResolvePath "chocolatey\curl" "tools\curl.exe") $params -RedirectStandardOutput "$($env:TEMP)\install-serializationPackage-std.txt" -RedirectStandardError "$($env:TEMP)\install-serializationPackage-error.txt" -NoNewWindow  -Wait -PassThru
         if($process.ExitCode -eq 0) {
             Get-Content "$($env:TEMP)\install-serializationPackage-std.txt"
             Write-Host "Publish SerializationPackage with API-Url '$("$url/services/publish/$Mode")'  " -ForegroundColor Green;

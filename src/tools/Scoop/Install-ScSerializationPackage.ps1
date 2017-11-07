@@ -83,7 +83,7 @@ Function Install-ScSerializationPackage
             $params += "Description=$Description"
         }
 
-        $process = Start-Process (ResolvePath "curl" "tools\native\v110\Win32\Release\static\curl.exe") $params -RedirectStandardOutput $statusFile -RedirectStandardError $errorFile -NoNewWindow  -Wait -PassThru
+        $process = Start-Process (ResolvePath "chocolatey\curl" "tools\curl.exe") $params -RedirectStandardOutput $statusFile -RedirectStandardError $errorFile -NoNewWindow  -Wait -PassThru
 
         $logPath = "$((Resolve-Path $Path).Path).log"
         $errorLogPath = "$((Resolve-Path $Path).Path).error.log"

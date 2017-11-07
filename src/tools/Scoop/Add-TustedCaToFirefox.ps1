@@ -22,7 +22,7 @@ function Add-TrustedCaToFirefox
     )
     Process
     {
-        $cert = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$Name, $ScoopCertificatePath"}
+        $cert = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$Name"}
         if(-not $cert) {
             Write-Error "Cert $Name not found."
         }

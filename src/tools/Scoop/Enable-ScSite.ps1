@@ -118,7 +118,7 @@ Function Enable-ScSite
             $site.Bindings.Clear()
         }
 
-        $CAName = "Scoop"
+        $CAName = "ScoopV2"
         $IPs = @()
 
         foreach($binding in $bindings) {
@@ -136,20 +136,18 @@ Function Enable-ScSite
             }
             
 			if($protocol -eq "https") {
-				$ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName, $ScoopCertificatePath"}
+				$ca = ls Cert:\LocalMachine\Root | ? {$_.Subject -like "CN=$CAName"}
 				if(-not $ca) {
-					New-CertCA $CAName
+					$ca = New-CertCA $CAName
 					Write-Host "Created certificate authority $CAName"
 				}
 				Add-TrustedCaToFirefox $CAName
 
-				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
+				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname"}
 				if(-not $cert) {
-					New-Cert $hostname -CA $CAName
+					$cert = New-Cert $hostname -CA $ca
 					Write-Host "Created certificate for host $hostname"
 				}
-
-				$cert = ls Cert:\LocalMachine\My | ? {$_.Subject -like "CN=$hostname, $ScoopCertificatePath"}
 
                 $existingBindings | ? {$_.port -eq $port -and $_.host -eq $hostname -and $_.protocol -eq $protocol -and $_.ip -eq $ip} | % {
                  

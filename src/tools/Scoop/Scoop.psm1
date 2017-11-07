@@ -30,7 +30,6 @@ Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble") -Force
 Import-Module (ResolvePath "Unic.Bob.Skip" "Skip") -Force
 
 $VerbosePreference = "Continue"
-$ScoopCertificatePath = "O=Unic AG, OU=Unic AG"
 
 function ResolveBinPath() {
     param($Path)

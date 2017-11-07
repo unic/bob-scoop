@@ -1,6 +1,3 @@
-source https://chocolatey.org/api/v2
-
-nuget curl
 
 github adoprog/Sitecore-PowerCore Framework/DBUtils/DBUtils.psm1
 
@@ -16,4 +13,10 @@ nuget Unic.Bob.Keith
 nuget Unic.Bob.Config
 nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
+
+
+group chocolatey
+  source https://chocolatey.org/api/v2
+  nuget curl
+
 

@@ -42,6 +42,7 @@ function Initialize-Environment
         $sb = $dte.Solution.SolutionBuild
         $sb.Clean($true)
         $sb.Build($true)
+        Write-Host "Transform all Web.config files..."
         Install-WebConfig
         Write-Host "Sync databases (Unicorn and update database)..."
         Sync-ScDatabases
