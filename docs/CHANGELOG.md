@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4
+
+* Introduce Unicorn support for `Sync-ScDatabases`
+* Add `Install-Webconfig` to `Initialize-Environment` (aka `bump`)
+
 ## 2.3
 * Added support for Dizzy 3.0 functionalities
 
