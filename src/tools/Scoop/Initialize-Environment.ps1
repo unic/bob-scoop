@@ -28,9 +28,15 @@ function Initialize-Environment
         Set-ScSerializationReference
         Write-Host "Setup all databases..."
         Install-ScDatabases
+        $config = Get-ScProjectConfig
         if(Get-Command Install-Frontend -ErrorAction SilentlyContinue) {
-            Write-Host "Install frontend..."
-            Install-Frontend
+            if($config.BumpDisableInstallFrontend -ne 1) {
+                Write-Host "Install frontend..."
+                Install-Frontend
+            }
+        }
+        if($config.BumpInstallNugetPackages -eq "1") {
+            Install-ScNugetPackage
         }
         Write-Host "Build solution..."
         $sb = $dte.Solution.SolutionBuild
