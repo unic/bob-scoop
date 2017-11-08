@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8
+
+* Introduce Unicorn support for `Sync-ScDatabases`
+* Add `Install-Webconfig` to `Initialize-Environment` (aka `bump`)
+
 ## 2.7
 * Added parameter  `AdditionalXdtFiles` to `Install-WebConfigByFolders`
 

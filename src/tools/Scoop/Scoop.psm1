@@ -46,3 +46,5 @@ function ResolveBinPath() {
     Write-Error "No bin path found for $Path"
 
 }
+
+Import-Module (ResolveBinPath "UnicornPS\Unicorn.psm1")

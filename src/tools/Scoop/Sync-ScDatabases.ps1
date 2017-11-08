@@ -53,6 +53,14 @@ function Sync-ScDatabases
         $result =  Invoke-WebRequest -Uri $disableIndexingUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
         $result.Content
 
+        if($config.ScoopPerformUnicornSync -and $config.ScoopPerformUnicornSync -eq "1") {
+             $sharedSecret = $config.UnicornSharedSecret
+            if(-not $sharedSecret) {
+                Write-Error "You must add the UnicornSharedSecret config key to the Bob.config"
+            }
+            Sync-Unicorn "$baseUrl/Unicorn.aspx" $sharedSecret  @()
+        }
+
         $updateDbUrl = "$baseUrl/bob/updateDatabase"
         Write-Verbose "Update database for default items $updateDbUrl"
         $result = Invoke-WebRequest -Uri $updateDbUrl -Headers @{ "Authenticate" = $deploymentToolAuthToken } -TimeoutSec 10800 -UseBasicParsing
