@@ -25,7 +25,7 @@ $partentPath = (Get-Item $PSScriptRoot).Parent.FullName
 Get-ChildItem -Path $PSScriptRoot\*.ps1 -Exclude "*.Tests.ps1" | Foreach-Object{ . $_.FullName }
 Export-ModuleMember -Function * -Alias *
 
-Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig") -Force
+Import-Module (ResolvePath "Unic.Bob.Wendy" "tools\Wendy") -Force
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble") -Force
 Import-Module (ResolvePath "Unic.Bob.Skip" "Skip") -Force
 

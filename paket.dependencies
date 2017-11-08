@@ -3,20 +3,13 @@ github adoprog/Sitecore-PowerCore Framework/DBUtils/DBUtils.psm1
 
 source https://nuget.org/api/v2
 
-nuget pester
+nuget Pester
 nuget Microsoft.Web.Xdt
-
-
-source https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc/ username: "%PAKET_USER%" password: "%PAKET_PASSWORD%"
-
 nuget Unic.Bob.Keith
-nuget Unic.Bob.Config
+nuget Unic.Bob.Wendy
 nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
-
 
 group chocolatey
   source https://chocolatey.org/api/v2
   nuget curl
-
-
