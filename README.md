@@ -10,3 +10,4 @@ As with his front and rear shovels, Scoop provides a PowerShell based tool-set f
 ## Documentation
 
 See [latest documentation](https://unic.github.io/bob-scoop)
+
