@@ -1,12 +1,11 @@
 NUGET
   remote: https://www.nuget.org/api/v2
     Microsoft.Web.Xdt (2.1.1)
-    Pester (3.4.6)
-  remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
-    Unic.Bob.Config (2.0.0)
-    Unic.Bob.Keith (1.1.0)
-    Unic.Bob.Rubble (2.0.0)
-    Unic.Bob.Skip (2.1.0)
+    Pester (4.0.8)
+    Unic.Bob.Keith (2.0.0)
+    Unic.Bob.Wendy (2.0.0)
+    Unic.Bob.Rubble (3.0.0)
+    Unic.Bob.Skip (3.0.0)
 GITHUB
   remote: adoprog/Sitecore-PowerCore
     Framework/DBUtils/DBUtils.psm1 (038a01b42ea3f681fb8d05f3444d363d99f4d9ac)

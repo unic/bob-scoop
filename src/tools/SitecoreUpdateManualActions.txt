@@ -24,7 +24,6 @@ Now it's time to double check your solution for compatibility issues.
 Some things you should consider before you push your branch:
  - Read the Sitecore release notes carefully
  - Check if you can remove Support DLLs from the solution (or new ones are required).
-   TeamCity: https://goo.gl/ypQEwa
  - Check if items not under serialization need to be upgraded in production DBs
  - Update Sitecore modules and NuGet packages if possible
    (and verify that you don't mix versions across multiple VS projects)
