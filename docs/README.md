@@ -1,4 +1,5 @@
-<div class="chapterlogo">![Scoop](Scoop.jpg)</div>
+<div class="chapterlogo"><img src="./Scoop.jpg" /></div>
+
 # Scoop
 
 As with his front and rear shovels (scoops), Scoop provides a PSH based toolset for developers using Visual Studio.
