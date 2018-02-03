@@ -20,15 +20,43 @@ function Initialize-Environment
     )
     Process
     {
-        Write-Host "Setup IIS site..."
-        Enable-ScSite
-        Write-Host "Install Sitecore to web-root..."
-        Install-Sitecore
+        $config = Get-ScProjectConfig
+        $sitecoreMajorVersion = $config.SitecoreVersion.Substring(0, $config.SitecoreVersion.IndexOf("."))
+
+        if($sitecoreMajorVersion -ge 9){
+            $installData = Get-Sc9InstallData
+
+            Write-Host "Installing Sitecore..."
+            Install-Sitecore12 `
+                -ModuleSifPath $installData.SifPath `
+                -ModuleFundamentalsPath $installData.FundamentalsPath `
+                -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                -SitecorePackagePath $installData.SitecorePackagePath `
+                -LicenseFilePath $installData.LicenseFilePath
+
+            Write-Host "Installing xConnect..."
+            Install-XConnect12 `
+                -ModuleSifPath $installData.SifPath  `
+                -ModuleFundamentalsPath $installData.FundamentalsPath `
+                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                -SifConfigPathXConnectXp0 $installData.SifConfigPathXConnectXp0 `
+                -XConnectPackagePath $installData.XConnectPackagePath `
+                -LicenseFilePath $installData.LicenseFilePath `
+                -CertPathFolder "c:\temp\certs"
+            
+        }
+        else{
+            Write-Host "Setup IIS site..."
+            Enable-ScSite
+            Write-Host "Install Sitecore to web-root..."
+            Install-Sitecore
+            Write-Host "Setup all databases..."
+            Install-ScDatabases
+        }
+        
         Write-Host "Configure serialization reference..."
         Set-ScSerializationReference
-        Write-Host "Setup all databases..."
-        Install-ScDatabases
-        $config = Get-ScProjectConfig
+
         if(Get-Command Install-Frontend -ErrorAction SilentlyContinue) {
             if($config.BumpDisableInstallFrontend -ne 1) {
                 Write-Host "Install frontend..."

@@ -10,6 +10,10 @@ nuget Unic.Bob.Wendy
 nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
 
+source https://ci.appveyor.com/nuget/bob-scratch-scfufa9ojkqo
+
+nuget Unic.Bob.Scratch
+
 group chocolatey
   source https://chocolatey.org/api/v2
   nuget curl
