@@ -7,12 +7,15 @@ nuget Pester
 nuget Microsoft.Web.Xdt
 nuget Unic.Bob.Keith
 nuget Unic.Bob.Wendy
-nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
 
 source https://ci.appveyor.com/nuget/bob-scratch-scfufa9ojkqo
 
 nuget Unic.Bob.Scratch
+
+source https://ci.appveyor.com/nuget/bob-rubble-4b1a99msdh8a
+
+nuget Unic.Bob.Rubble
 
 group chocolatey
   source https://chocolatey.org/api/v2

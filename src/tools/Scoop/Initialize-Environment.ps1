@@ -20,10 +20,7 @@ function Initialize-Environment
     )
     Process
     {
-        $config = Get-ScProjectConfig
-        $sitecoreMajorVersion = $config.SitecoreVersion.Substring(0, $config.SitecoreVersion.IndexOf("."))
-
-        if($sitecoreMajorVersion -ge 9){
+        if((Get-ScMajorVersion) -ge 9){
             $installData = Get-Sc9InstallData
 
             Write-Host "Installing Sitecore..."
@@ -57,6 +54,8 @@ function Initialize-Environment
         Write-Host "Configure serialization reference..."
         Set-ScSerializationReference
 
+        $config = Get-ScProjectConfig
+
         if(Get-Command Install-Frontend -ErrorAction SilentlyContinue) {
             if($config.BumpDisableInstallFrontend -ne 1) {
                 Write-Host "Install frontend..."
@@ -66,12 +65,21 @@ function Initialize-Environment
         if($config.BumpInstallNugetPackages -eq "1") {
             Install-ScNugetPackage
         }
+
         Write-Host "Build solution..."
+        if(-not $dte){
+            # If we are outside the package manager console context, we will have to set
+            # the $dte variable ourselfs.
+            $dte = [System.Runtime.InteropServices.Marshal]::GetActiveObject("VisualStudio.DTE")
+        }
+
         $sb = $dte.Solution.SolutionBuild
         $sb.Clean($true)
         $sb.Build($true)
+
         Write-Host "Transform all Web.config files..."
         Install-WebConfig
+
         Write-Host "Sync databases (Unicorn and update database)..."
         Sync-ScDatabases
     }
