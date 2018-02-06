@@ -47,9 +47,10 @@ function Initialize-Environment
             Enable-ScSite
             Write-Host "Install Sitecore to web-root..."
             Install-Sitecore
-            Write-Host "Setup all databases..."
-            Install-ScDatabases
         }
+
+        Write-Host "Setup all databases..."
+        Install-ScDatabases
         
         Write-Host "Configure serialization reference..."
         Set-ScSerializationReference

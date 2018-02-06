@@ -18,6 +18,6 @@ function Get-ScMajorVersion
     Process
     {
         $contextInfo = Get-ScContextInfo $ProjectPath
-        return $contextInfo.Version.Substring(0, $config.SitecoreVersion.IndexOf("."))
+        return $contextInfo.Version.Substring(0, $contextInfo.Version.IndexOf("."))
     }
 }
