@@ -23,16 +23,6 @@ function Initialize-Environment
         if((Get-ScMajorVersion) -ge 9){
             $installData = Get-Sc9InstallData
 
-            Write-Host "Installing Sitecore..."
-            Install-Sitecore12 `
-                -ModuleSifPath $installData.SifPath `
-                -ModuleFundamentalsPath $installData.FundamentalsPath `
-                -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
-                -SitecorePackagePath $installData.SitecorePackagePath `
-                -LicenseFilePath $installData.LicenseFilePath `
-                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                -CertPathFolder $installData.CertCreationLocation
-
             Write-Host "Installing xConnect..."
             Install-XConnect12 `
                 -ModuleSifPath $installData.SifPath  `
@@ -42,7 +32,16 @@ function Initialize-Environment
                 -XConnectPackagePath $installData.XConnectPackagePath `
                 -LicenseFilePath $installData.LicenseFilePath `
                 -CertPathFolder $installData.CertCreationLocation
-            
+
+            Write-Host "Installing Sitecore..."
+            Install-Sitecore12 `
+                -ModuleSifPath $installData.SifPath `
+                -ModuleFundamentalsPath $installData.FundamentalsPath `
+                -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                -SitecorePackagePath $installData.SitecorePackagePath `
+                -LicenseFilePath $installData.LicenseFilePath `
+                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                -CertPathFolder $installData.CertCreationLocation
         }
         else{
             Write-Host "Setup IIS site..."
