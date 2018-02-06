@@ -29,7 +29,9 @@ function Initialize-Environment
                 -ModuleFundamentalsPath $installData.FundamentalsPath `
                 -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
                 -SitecorePackagePath $installData.SitecorePackagePath `
-                -LicenseFilePath $installData.LicenseFilePath
+                -LicenseFilePath $installData.LicenseFilePath `
+                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                -CertPathFolder $installData.CertCreationLocation
 
             Write-Host "Installing xConnect..."
             Install-XConnect12 `
@@ -39,7 +41,7 @@ function Initialize-Environment
                 -SifConfigPathXConnectXp0 $installData.SifConfigPathXConnectXp0 `
                 -XConnectPackagePath $installData.XConnectPackagePath `
                 -LicenseFilePath $installData.LicenseFilePath `
-                -CertPathFolder "c:\temp\certs"
+                -CertPathFolder $installData.CertCreationLocation
             
         }
         else{
@@ -76,7 +78,10 @@ function Initialize-Environment
 
         $sb = $dte.Solution.SolutionBuild
         $sb.Clean($true)
+
+        Stop-ScAppPool $ProjectPath
         $sb.Build($true)
+        Start-ScAppPool $ProjectPath
 
         Write-Host "Transform all Web.config files..."
         Install-WebConfig

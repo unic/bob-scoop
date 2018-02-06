@@ -38,7 +38,8 @@ function Get-Sc9InstallData
             SifConfigPathCreateCerts = $(Join-Path $sifConfigsInstallPath "xconnect-createcert.json");
             SitecorePackagePath = $(Join-Path $xp0WdpInstallPath "xp0.scwdp.zip");
             XConnectPackagePath = $(Join-Path $xconnectWdpInstallPath "xp0xconnect.scwdp.zip");
-            LicenseFilePath = $(Join-Path $(Get-ScProjectPath) $config.LicensePath)
+            LicenseFilePath = $(Join-Path $(Get-ScProjectPath $ProjectPath) $config.LicensePath);
+            CertCreationLocation = $config.CertCreationLocation
         }
     }
 }

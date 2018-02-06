@@ -6,7 +6,7 @@ NUGET
     Unic.Bob.Wendy (3.0.1)
     Unic.Bob.Skip (3.0.0)
   remote: https://ci.appveyor.com/nuget/bob-scratch-scfufa9ojkqo
-    Unic.Bob.Scratch (0.1.1-scratch-from-scr0039)
+    Unic.Bob.Scratch (0.1.1-scratch-from-scr0040)
   remote: https://ci.appveyor.com/nuget/bob-rubble-4b1a99msdh8a
     Unic.Bob.Rubble (3.0.2-add-zip-extracti0002)
 
