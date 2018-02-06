@@ -21,29 +21,7 @@ function Initialize-Environment
     Process
     {
         if((Get-ScMajorVersion) -ge 9){
-            $installData = Get-Sc9InstallData
-
-            Invoke-BobCommand {
-                Write-Host "Installing xConnect..."
-                Install-XConnect12 `
-                    -ModuleSifPath $installData.SifPath  `
-                    -ModuleFundamentalsPath $installData.FundamentalsPath `
-                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                    -SifConfigPathXConnectXp0 $installData.SifConfigPathXConnectXp0 `
-                    -XConnectPackagePath $installData.XConnectPackagePath `
-                    -LicenseFilePath $installData.LicenseFilePath `
-                    -CertPathFolder $installData.CertCreationLocation
-
-                Write-Host "Installing Sitecore..."
-                Install-Sitecore12 `
-                    -ModuleSifPath $installData.SifPath `
-                    -ModuleFundamentalsPath $installData.FundamentalsPath `
-                    -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
-                    -SitecorePackagePath $installData.SitecorePackagePath `
-                    -LicenseFilePath $installData.LicenseFilePath `
-                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                    -CertPathFolder $installData.CertCreationLocation
-            }
+            Initialize-EnvironmentSc9
         }
         else{
             Write-Host "Setup IIS site..."
@@ -71,18 +49,12 @@ function Initialize-Environment
         }
 
         Write-Host "Build solution..."
-        if(-not $dte){
-            # If we are outside the package manager console context, we will have to set
-            # the $dte variable ourselfs.
-            $dte = [System.Runtime.InteropServices.Marshal]::GetActiveObject("VisualStudio.DTE")
-        }
 
-        $sb = $dte.Solution.SolutionBuild
-
-        Stop-ScAppPool $ProjectPath
+        Stop-ScAppPool
+        $sb = $dte.Solution.SolutionBuild        
         $sb.Clean($true)
         $sb.Build($true)
-        Start-ScAppPool $ProjectPath
+        Start-ScAppPool
 
         Write-Host "Transform all Web.config files..."
         Install-WebConfig
