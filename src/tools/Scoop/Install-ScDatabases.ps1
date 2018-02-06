@@ -12,7 +12,8 @@ If in the database path a file exists with the format "databaseName.sql",
 this SQL file will be used to create the database.
 If in the database path a file exists with the format "databaseName.ref",
 the file content must be "web", "master" or "core", the coresponding original Sitecore
-database will then be used to create this database.
+database will then be used to create this database. On a Sitecore 9 instance the corresponding
+.dacpac packages will be used for the creation.
 The "InitDatabasesPath" can be configured in the Bob.config
 
 .PARAMETER ProjectPath
@@ -23,6 +24,7 @@ The path where the databases should be created.
 
 .PARAMETER Force
 If force is specified, all databases which already exist will be deleted first.
+Specifying force on a Sitecore 9 instance will invoke the Scratch/Sif task for installing all Sitecore DBs (excluding xconnect).
 If force is not specified, existing databases will be skipped.
 
 .PARAMETER Databases
@@ -55,12 +57,20 @@ function Install-ScDatabases
         $sqlServer = Connect-SqlServer $ProjectPath
         $scContext = Get-ScContextInfo $ProjectPath
 
-        
-        
-        $dbCache = Install-NugetPackageToCache `
+        $scMajorVersion = Get-ScMajorVersion $ProjectPath
+        if($scMajorVersion -ge 9){
+            $dbCache = Install-NugetPackageToCache -Version $config.SitecoreXp0WdpVersion -PackageId "Sitecore.Xp0.Wdp"
+            Expand-RubbleArchive `
+                -Path $(Join-Path $dbCache "xp0.scwdp.zip") `
+                -OutputLocation $dbCache `
+                -FileFilter ".dacpac$"
+        }
+        else{
+            $dbCache = Install-NugetPackageToCache `
             -PackageId Sitecore.Databases `
             -Version $scContext.version `
             -ProjectPath $ProjectPath
+        }
 
         $stoppedWebAppPool = $false
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
@@ -78,6 +88,7 @@ function Install-ScDatabases
         }
 
         foreach($db in $databases) {
+            $isNonSitecoreDatabase = $false;
             if(-not $sqlServer.Databases[$db] -or $Force) {
                 $scDb = ""
                 $sql = ""
@@ -96,8 +107,33 @@ function Install-ScDatabases
                 elseif($db -like "*_sessions") {
                     $scDb = "Sitecore.Sessions"
                 }
+                elseif($db -like "*_EXM.Master" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Exm.master"
+                }
+                elseif($db -like "*_ExperienceForms" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Experienceforms"
+                }
+                elseif($db -like "*_MarketingAutomation" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Marketingautomation"
+                }
+                elseif($db -like "*_Messaging" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Messaging"
+                }
+                elseif($db -like "*_Processing.Pools" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Processing.pools"
+                }
+                elseif($db -like "*_Processing.Tasks" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Processing.tasks"
+                }
+                elseif($db -like "*_ReferenceData" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Referencedata"
+                }
+                elseif($db -like "*_Reporting" -and $scMajorVersion -ge 9) {
+                    $scDb = "Sitecore.Reporting"
+                }
                 else {
                     if($config.InitDatabasesPath) {
+                        $isNonSitecoreDatabase = $true
                         $dbsPath = Join-Path $config.WebsitePath $config.InitDatabasesPath
                         Write-Verbose "$db is not a Sitecore database. Looking in $dbsPath for additional infos."
 
@@ -140,19 +176,29 @@ function Install-ScDatabases
                 	    $logFileFolder = $sqlServer.Settings.DefaultLog
                     }
 
-                    $mdfSource = "$dbCache\$scDb.mdf"
-                    $ldfSource = "$dbCache\$scDb.ldf"
-                    $mdfTarget = "$dataFileFolder\$db.mdf"
-                    $ldfTarget = "$logFileFolder\$db.ldf"
+                    if($scMajorVersion -ge 9){
+                        if($isNonSitecoreDatabase){
+                            $dacPacName = "$scDb.dacpac"
+                            $dacPacPath = Join-Path $dbCache $dacPacName
+                            Write-Verbose "Using $dacPacPath for creation of $db"
+                            Install-DataTierApplication $dacPacPath $db $config.DatabaseServer $ProjectPath
+                        }
+                    }
+                    else{
+                        $mdfSource = "$dbCache\$scDb.mdf"
+                        $ldfSource = "$dbCache\$scDb.ldf"
+                        $mdfTarget = "$dataFileFolder\$db.mdf"
+                        $ldfTarget = "$logFileFolder\$db.ldf"
 
-                    Write-Verbose "Copy database file $mdfSource to $mdfTarget"
-                    cp $mdfSource $mdfTarget
-
-                    Write-Verbose "Copy database file $ldfSource to $ldfTarget"
-                    cp $ldfSource $ldfTarget
-
-                    Invoke-SqlCommand {
-                        Attach-Database $sqlServer $db $mdfTarget $ldfTarget
+                        Write-Verbose "Copy database file $mdfSource to $mdfTarget"
+                        cp $mdfSource $mdfTarget
+    
+                        Write-Verbose "Copy database file $ldfSource to $ldfTarget"
+                        cp $ldfSource $ldfTarget
+    
+                        Invoke-SqlCommand {
+                            Attach-Database $sqlServer $db $mdfTarget $ldfTarget
+                        }
                     }
                 }
                 if($sql) {
@@ -162,6 +208,16 @@ function Install-ScDatabases
                     }
                 }
             }
+        }
+
+        if($Force -and $scMajorVersion -ge 9){
+            Write-Verbose "Invoking creation of all Sitecore 9 databases"
+            $installData = Get-Sc9InstallData $ProjectPath
+            Install-Sitecore12Databases `
+                -ModuleSifPath $installData.SifPath `
+                -ModuleFundamentalsPath $installData.FundamentalsPath `
+                -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                -SitecorePackagePath $installData.SitecorePackagePath
         }
 
         if($stoppedWebAppPool) {

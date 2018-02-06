@@ -18,10 +18,11 @@ function Get-Sc9InstallData
 {
     [CmdletBinding()]
     Param(
+        [String]$ProjectPath
     )
     Process
     {
-        $config = Get-ScProjectConfig
+        $config = Get-ScProjectConfig $ProjectPath
 
         $sifInstallPath = Install-NugetPackageToCache -PackageId "Sitecore.Sif" -Version $config.SitecoreSifVersion        
         $fundamentalsInstallPath = Install-NugetPackageToCache -PackageId "Sitecore.Fundamentals" -Version $config.SitecoreFundamentalsVersion
