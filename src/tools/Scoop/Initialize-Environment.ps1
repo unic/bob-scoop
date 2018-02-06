@@ -23,25 +23,27 @@ function Initialize-Environment
         if((Get-ScMajorVersion) -ge 9){
             $installData = Get-Sc9InstallData
 
-            Write-Host "Installing xConnect..."
-            Install-XConnect12 `
-                -ModuleSifPath $installData.SifPath  `
-                -ModuleFundamentalsPath $installData.FundamentalsPath `
-                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                -SifConfigPathXConnectXp0 $installData.SifConfigPathXConnectXp0 `
-                -XConnectPackagePath $installData.XConnectPackagePath `
-                -LicenseFilePath $installData.LicenseFilePath `
-                -CertPathFolder $installData.CertCreationLocation
+            Invoke-BobCommand {
+                Write-Host "Installing xConnect..."
+                Install-XConnect12 `
+                    -ModuleSifPath $installData.SifPath  `
+                    -ModuleFundamentalsPath $installData.FundamentalsPath `
+                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                    -SifConfigPathXConnectXp0 $installData.SifConfigPathXConnectXp0 `
+                    -XConnectPackagePath $installData.XConnectPackagePath `
+                    -LicenseFilePath $installData.LicenseFilePath `
+                    -CertPathFolder $installData.CertCreationLocation
 
-            Write-Host "Installing Sitecore..."
-            Install-Sitecore12 `
-                -ModuleSifPath $installData.SifPath `
-                -ModuleFundamentalsPath $installData.FundamentalsPath `
-                -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
-                -SitecorePackagePath $installData.SitecorePackagePath `
-                -LicenseFilePath $installData.LicenseFilePath `
-                -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                -CertPathFolder $installData.CertCreationLocation
+                Write-Host "Installing Sitecore..."
+                Install-Sitecore12 `
+                    -ModuleSifPath $installData.SifPath `
+                    -ModuleFundamentalsPath $installData.FundamentalsPath `
+                    -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                    -SitecorePackagePath $installData.SitecorePackagePath `
+                    -LicenseFilePath $installData.LicenseFilePath `
+                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                    -CertPathFolder $installData.CertCreationLocation
+            }
         }
         else{
             Write-Host "Setup IIS site..."
@@ -76,9 +78,9 @@ function Initialize-Environment
         }
 
         $sb = $dte.Solution.SolutionBuild
-        $sb.Clean($true)
 
         Stop-ScAppPool $ProjectPath
+        $sb.Clean($true)
         $sb.Build($true)
         Start-ScAppPool $ProjectPath
 
