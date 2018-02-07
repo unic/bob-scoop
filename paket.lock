@@ -5,10 +5,9 @@ NUGET
     Unic.Bob.Keith (2.0.0)
     Unic.Bob.Wendy (3.0.1)
     Unic.Bob.Skip (3.0.0)
+    Unic.Bob.Rubble (3.1.0)
   remote: https://ci.appveyor.com/nuget/bob-scratch-scfufa9ojkqo
     Unic.Bob.Scratch (0.1.1-scratch-from-scr0045)
-  remote: https://ci.appveyor.com/nuget/bob-rubble-4b1a99msdh8a
-    Unic.Bob.Rubble (3.0.2-add-zip-extracti0002)
 
 GITHUB
   remote: adoprog/Sitecore-PowerCore
