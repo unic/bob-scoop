@@ -21,7 +21,7 @@ function Initialize-Environment
     Process
     {
         if((Get-ScMajorVersion) -ge 9){
-            Initialize-EnvironmentSc9
+            Initialize-EnvironmentSetup
         }
         else{
             Write-Host "Setup IIS site..."

@@ -6,10 +6,10 @@ Initializes a Sitecore 9 base installation.
 Uses Scratch to create a Sitecore 9 installation including xconnect
 
 .EXAMPLE
-Initialize-EnvironmentSc9
+Initialize-EnvironmentSetup
 
 #>
-function Initialize-EnvironmentSc9
+function Initialize-EnvironmentSetup
 {
     [CmdletBinding()]
     Param(
@@ -21,7 +21,7 @@ function Initialize-EnvironmentSc9
             $installData = Get-Sc9InstallData $ProjectPath
         
             Write-Host "Installing xConnect..."
-            Install-XConnect12 `
+            Install-XConnectSetup `
                 -ModuleSifPath $installData.SifPath  `
                 -ModuleFundamentalsPath $installData.FundamentalsPath `
                 -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
@@ -31,7 +31,7 @@ function Initialize-EnvironmentSc9
                 -CertPathFolder $installData.CertCreationLocation
 
             Write-Host "Installing Sitecore..."
-            Install-Sitecore12 `
+            Install-SitecoreSetup `
                 -ModuleSifPath $installData.SifPath `
                 -ModuleFundamentalsPath $installData.FundamentalsPath `
                 -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `

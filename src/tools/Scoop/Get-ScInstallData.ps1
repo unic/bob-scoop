@@ -14,7 +14,7 @@ Installs the following nuget packages:
 Get-Sc9InstallData
 
 #>
-function Get-Sc9InstallData
+function Get-ScInstallData
 {
     [CmdletBinding()]
     Param(

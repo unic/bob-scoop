@@ -213,7 +213,7 @@ function Install-ScDatabases
         if($Force -and $scMajorVersion -ge 9){
             Write-Verbose "Invoking creation of all Sitecore 9 databases"
             $installData = Get-Sc9InstallData $ProjectPath
-            Install-Sitecore12Databases `
+            Install-SitecoreDatabasesSetup `
                 -ModuleSifPath $installData.SifPath `
                 -ModuleFundamentalsPath $installData.FundamentalsPath `
                 -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
