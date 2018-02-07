@@ -32,40 +32,36 @@ function Install-Sitecore
 {
     [CmdletBinding()]
     Param(
-        [switch]$Backup = $false,
-        [switch]$Force = $true,
+        [switch] $Backup = $false,
+        [switch] $Force = $true,
         [string] $ProjectPath
     )
     Process
     {
         Invoke-BobCommand {
 
-        try
-        {
-            $config = Get-ScProjectConfig $ProjectPath
-            $webPath = $config.WebRoot
-            
-            if(-not $WebPath) {
-                Write-Error "Could not find WebRoot. Please provide one."
-            }
-            
-            $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
-
-            $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
-            mkdir $tempBackup | Out-Null
-            Stop-ScAppPool $ProjectPath
             try
             {
-                if((Test-Path $webPath) -and (ls $webPath).Count -gt 0)
+                $config = Get-ScProjectConfig $ProjectPath
+                $webPath = $config.WebRoot
+                
+                if(-not $WebPath) {
+                    Write-Error "Could not find WebRoot. Please provide one."
+                }
+                
+                $backupPath = Join-Path (Join-Path  $config.GlobalWebPath ($config.WebsiteCodeName)) $config.BackupFolderName
+                $tempBackup = Join-Path $backupPath ([GUID]::NewGuid())
+                mkdir $tempBackup | Out-Null
+
+                Stop-ScAppPool $ProjectPath
+
+                try
                 {
-                    if($Force)
-                    {
-                        Write-Verbose "Web folder $webPath already exists and Force is true. Backup and delete web folder."
-
-                        Write-Verbose "Backup $webPath to temporary location $tempBackup"
-                        mv $webPath\* $tempBackup
-
+                    if((Test-Path $webPath) -and (ls $webPath).Count -gt 0) {
                         if($Backup) {
+                            Write-Verbose "Backup $webPath to temporary location $tempBackup"
+                            mv $webPath\* $tempBackup
+
                             $backupFile = Join-Path $backupPath "Fullbackup.zip"
                             if(Test-Path $backupFile) {
                                 Write-Verbose "Remove old backup file $backupFile"
@@ -74,17 +70,49 @@ function Install-Sitecore
                             Write-Verbose "Write backup to $backupFile"
                             Write-RubbleArchive -Path $tempBackup -OutputLocation $backupFile
                         }
-                    }
-                    else
-                    {
-                        Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
-                        return
+
+                        if($Force) {
+                            if((Get-ScMajorVersion) -ge 9){
+                                $installData = Get-Sc9InstallData $ProjectPath
+                                Write-Host "Installing Sitecore..."
+                                Install-SitecoreSetup `
+                                    -ModuleSifPath $installData.SifPath `
+                                    -ModuleFundamentalsPath $installData.FundamentalsPath `
+                                    -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                                    -SitecorePackagePath $installData.SitecorePackagePath `
+                                    -LicenseFilePath $installData.LicenseFilePath `
+                                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                                    -CertPathFolder $installData.CertCreationLocation
+                            }
+                            else {
+                                Write-Verbose "Web folder $webPath already exists and Force is true. Overwrite web folder."
+                                Write-Verbose "Install Sitecore distribution to $webPath"
+                                Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath    
+                            }
+                        }
+                        else {
+                            Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
+                            return
+                        }
                     }
                 }
-
-                Write-Verbose "Install Sitecore distribution to $webPath"
-
-                Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath
+                catch
+                {
+                    Write-Error $_
+                }
+                finally
+                {
+                                
+                    if (-not $config.WebRootConnectionStringsPath)
+                    {
+                        Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
+                    }
+                    
+                if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath))
+                {
+                        Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
+                    }
+                }
             }
             catch
             {
@@ -92,29 +120,11 @@ function Install-Sitecore
             }
             finally
             {
-                            
-            if (-not $config.WebRootConnectionStringsPath) {
-                    
-                    Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
-
-            }
-                
-               if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath)) {
-                    Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
+                Start-ScAppPool $ProjectPath
+                if(Test-Path $tempBackup) {
+                    rm $tempBackup -Recurse
                 }
             }
         }
-        catch
-        {
-            Write-Error $_
-        }
-        finally
-        {
-            Start-ScAppPool $ProjectPath
-            if(Test-Path $tempBackup) {
-                rm $tempBackup -Recurse
-            }
-        }
-    }
     }
 }
