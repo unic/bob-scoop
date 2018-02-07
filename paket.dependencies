@@ -9,9 +9,6 @@ nuget Unic.Bob.Keith
 nuget Unic.Bob.Wendy
 nuget Unic.Bob.Skip
 nuget Unic.Bob.Rubble
-
-source https://ci.appveyor.com/nuget/bob-scratch-scfufa9ojkqo
-
 nuget Unic.Bob.Scratch
 
 group chocolatey
