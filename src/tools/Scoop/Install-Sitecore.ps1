@@ -73,7 +73,7 @@ function Install-Sitecore
 
                         if($Force) {
                             if((Get-ScMajorVersion) -ge 9){
-                                $installData = Get-Sc9InstallData $ProjectPath
+                                $installData = Get-ScInstallData $ProjectPath
                                 Write-Host "Installing Sitecore..."
                                 Install-SitecoreSetup `
                                     -ModuleSifPath $installData.SifPath `

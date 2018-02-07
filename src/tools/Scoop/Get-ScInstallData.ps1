@@ -11,7 +11,7 @@ Installs the following nuget packages:
 - Sitecore.Sif.Config
 
 .EXAMPLE
-Get-Sc9InstallData
+Get-ScInstallData
 
 #>
 function Get-ScInstallData

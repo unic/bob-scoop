@@ -18,7 +18,7 @@ function Initialize-EnvironmentSetup
     Process
     {
         Invoke-BobCommand {
-            $installData = Get-Sc9InstallData $ProjectPath
+            $installData = Get-ScInstallData $ProjectPath
         
             Write-Host "Installing xConnect..."
             Install-XConnectSetup `
