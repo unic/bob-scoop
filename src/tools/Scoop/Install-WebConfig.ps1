@@ -32,7 +32,18 @@ function Install-WebConfig
         $scContext = Get-ScContextInfo $ProjectPath
     
         $type = $scContext.Type
-        $configPath = Install-NugetPackageToCache -Version $scContext.Version -PackageId "Sitecore.$type.Config" -ProjectPath $ProjectPath
+        if((Get-ScMajorVersion) -ge 9){
+            $configPath = Install-NugetPackageToCache -Version $config.SitecoreXp0WdpVersion -PackageId "Sitecore.Xp0.Wdp"
+            Expand-RubbleArchive `
+                -Path $(Join-Path $configPath "xp0.scwdp.zip") `
+                -OutputLocation $configPath `
+                -FileFilter "Content/Website/Web.config$"
+            $configPath = Join-Path $configPath "Content/Website"
+        }
+        else{
+            $configPath = Install-NugetPackageToCache -Version $scContext.Version -PackageId "Sitecore.$type.Config" -ProjectPath $ProjectPath
+            $configPath = Join-Path $configPath "Content"
+        }
         
         $role = $config.ActiveRole
         if(-not $role) {
@@ -46,7 +57,7 @@ function Install-WebConfig
         $webRoot = $config.WebRoot
         $webConfigPath = "$webRoot\Web.config"
         
-        cp "$configPath\Content\Web.config" "$webConfigPath"
+        cp "$configPath\Web.config" "$webConfigPath"
         
         Write-Verbose "Copied $configPath\Web.config to $webConfigPath"
         

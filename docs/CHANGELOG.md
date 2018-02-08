@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1
+
+* Add support for Sitecore 9
+
 ## 3.0
 
 * Initial release on GH

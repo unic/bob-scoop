@@ -28,6 +28,8 @@ Export-ModuleMember -Function * -Alias *
 Import-Module (ResolvePath "Unic.Bob.Wendy" "tools\Wendy") -Force
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble") -Force
 Import-Module (ResolvePath "Unic.Bob.Skip" "Skip") -Force
+Import-Module (ResolvePath "Unic.Bob.Scratch" "Scratch") -Force
+Export-ModuleMember -Function Get-ScScratchProjectConfig
 
 $VerbosePreference = "Continue"
 

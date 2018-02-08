@@ -7,8 +7,9 @@ nuget Pester
 nuget Microsoft.Web.Xdt
 nuget Unic.Bob.Keith
 nuget Unic.Bob.Wendy
-nuget Unic.Bob.Rubble
 nuget Unic.Bob.Skip
+nuget Unic.Bob.Rubble
+nuget Unic.Bob.Scratch
 
 group chocolatey
   source https://chocolatey.org/api/v2
