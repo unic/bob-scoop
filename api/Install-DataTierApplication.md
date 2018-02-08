@@ -1,55 +1,62 @@
 
 
-# Install-ScDatabases
+# Install-DataTierApplication
 
-
+Installs a .dacpac file
 ## Syntax
 
-    Install-ScDatabases [[-ProjectPath] <string>] [[-DatabasePath] <string>] [[-Databases] <string[]>] [-Force] [<CommonParameters>]
+    Install-DataTierApplication [-DacPacPath] <String> [-DatabaseName] <String> [[-ServerName] <String>] [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+## Description
+
+Installs a .dacpac file on the specified server with the defined database name.
+
+
 
 
 
 ## Parameters
 
     
-    -DatabasePath <string>
+    -DacPacPath <String>
 
 | Position | Required | Default value | Accept pipeline input | Accept wildchard characters |
 | -------- | -------- | ------------- | --------------------- | --------------------------- |
-| 1 | false |  | false |  |
+| 1 | true |  | false | false |
 
 
 ----
 
     
     
-    -Databases <string[]>
+    -DatabaseName <String>
 
 | Position | Required | Default value | Accept pipeline input | Accept wildchard characters |
 | -------- | -------- | ------------- | --------------------- | --------------------------- |
-| 2 | false |  | false |  |
+| 2 | true |  | false | false |
 
 
 ----
 
     
     
-    -Force <>
+    -ServerName <String>
 
 | Position | Required | Default value | Accept pipeline input | Accept wildchard characters |
 | -------- | -------- | ------------- | --------------------- | --------------------------- |
-| Named | false |  | false |  |
+| 3 | false | localhost | false | false |
 
 
 ----
 
     
     
-    -ProjectPath <string>
+    -ProjectPath <String>
 
 | Position | Required | Default value | Accept pipeline input | Accept wildchard characters |
 | -------- | -------- | ------------- | --------------------- | --------------------------- |
-| 0 | false |  | false |  |
+| 4 | false |  | false | false |
 
 
 ----
@@ -57,5 +64,37 @@
     
 
 ## Examples
+
+### -------------------------- EXAMPLE 1 --------------------------
+    Install-DataTierApplication "c:\temp\Sitecore.Master.dacpac" "sitecore_master"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

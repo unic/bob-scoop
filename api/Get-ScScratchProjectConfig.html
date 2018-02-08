@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Set-ScSerializationReference · GitBook</title>
+        <title>Get-ScScratchProjectConfig · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Start-ScAppPool.html" />
+    <link rel="next" href="GetSqlExcpetion.html" />
     
     
-    <link rel="prev" href="Set-ScActiveRole.html" />
+    <link rel="prev" href="Get-ScMajorVersion.html" />
     
 
     </head>
@@ -237,7 +237,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.10" data-path="Get-ScScratchProjectConfig.html">
+        <li class="chapter active" data-level="1.2.10" data-path="Get-ScScratchProjectConfig.html">
             
                 <a href="Get-ScScratchProjectConfig.html">
             
@@ -510,7 +510,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2.31" data-path="Set-ScSerializationReference.html">
+        <li class="chapter " data-level="1.2.31" data-path="Set-ScSerializationReference.html">
             
                 <a href="Set-ScSerializationReference.html">
             
@@ -636,7 +636,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Set-ScSerializationReference</a>
+        <a href=".." >Get-ScScratchProjectConfig</a>
     </h1>
 </div>
 
@@ -651,16 +651,18 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="set-scserializationreference">Set-ScSerializationReference</h1>
-<p>Sets the SerializationReference path of the current project.</p>
+                                <h1 id="get-scscratchprojectconfig">Get-ScScratchProjectConfig</h1>
+<p>Reads the configuration files required for Scratch and returns it as a hashtable</p>
 <h2 id="syntax">Syntax</h2>
-<pre><code>Set-ScSerializationReference [[-WebPath] &lt;String&gt;] [[-ProjectPath] &lt;String&gt;] [[-SerializationPath] &lt;String&gt;] [[-SerializationTemplateKey] &lt;String&gt;] [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
+<pre><code>Get-ScScratchProjectConfig [[-ProjectPath] &lt;String&gt;] [&lt;CommonParameters&gt;]
 </code></pre><h2 id="description">Description</h2>
-<p>Creates or edits the serialization reference configuration path in the local IIS web path to a configured directoy in Bob.config.
-This configuration is used by Sitecore to know where items should be automaticaly serialized.</p>
+<p>Reads the configuration files and returns it as a hashtable. Priority will be given to Bob.config and Bob.config.user
+If no Bob.config(.user) is found, the Installation.config(.user) will be used.
+Per default the config file is taken from the the first config that we come across going from where we are upwards.</p>
 <h2 id="parameters">Parameters</h2>
-<pre><code>-WebPath &lt;String&gt;
-</code></pre><p><em>The Web-Folder of the IIS Site.</em></p>
+<pre><code>-ProjectPath &lt;String&gt;
+</code></pre><p><em>The path of the project for which the config should be read.
+If not provided the current Visual Studio project or the *.Website project will be used.</em></p>
 <table>
 <thead>
 <tr>
@@ -682,119 +684,11 @@ This configuration is used by Sitecore to know where items should be automatical
 </tbody>
 </table>
 <hr>
-<pre><code>-ProjectPath &lt;String&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-SerializationPath &lt;String&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-SerializationTemplateKey &lt;String&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>4</td>
-<td>false</td>
-<td>SerializationReferenceTemplate</td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-WhatIf &lt;SwitchParameter&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>named</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-Confirm &lt;SwitchParameter&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>named</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
 <h2 id="examples">Examples</h2>
 <h3 id="--------------------------example-1---------------------------">-------------------------- EXAMPLE 1 --------------------------</h3>
-<pre><code>Set-ScSerializationReference
+<pre><code>Get-ScScratchProjectConfig
+</code></pre><h3 id="--------------------------example-2---------------------------">-------------------------- EXAMPLE 2 --------------------------</h3>
+<pre><code>Get-ScScratchProjectConfig -ProjectPath D:\projects\Spider\src\Spider.Website
 </code></pre>
                                 
                                 </section>
@@ -822,12 +716,12 @@ This configuration is used by Sitecore to know where items should be automatical
 
             
                 
-                <a href="Set-ScActiveRole.html" class="navigation navigation-prev " aria-label="Previous page: Set-ScActiveRole">
+                <a href="Get-ScMajorVersion.html" class="navigation navigation-prev " aria-label="Previous page: Get-ScMajorVersion">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="Start-ScAppPool.html" class="navigation navigation-next " aria-label="Next page: Start-ScAppPool">
+                <a href="GetSqlExcpetion.html" class="navigation navigation-next " aria-label="Next page: GetSqlExcpetion">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -838,7 +732,7 @@ This configuration is used by Sitecore to know where items should be automatical
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Set-ScSerializationReference","level":"1.2.31","depth":2,"next":{"title":"Start-ScAppPool","level":"1.2.32","depth":2,"path":"api/Start-ScAppPool.md","ref":"api/Start-ScAppPool.md","articles":[]},"previous":{"title":"Set-ScActiveRole","level":"1.2.30","depth":2,"path":"api/Set-ScActiveRole.md","ref":"api/Set-ScActiveRole.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-unic@git+https://github.com/unic/gitbook-plugin-theme-unic.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":[]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-unic":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"links":{"sharing":{"all":false}},"gitbook":"3.2.3"},"file":{"path":"api/Set-ScSerializationReference.md","mtime":"2018-02-08T00:34:28.312Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-02-08T00:35:43.916Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Get-ScScratchProjectConfig","level":"1.2.10","depth":2,"next":{"title":"GetSqlExcpetion","level":"1.2.11","depth":2,"path":"api/GetSqlExcpetion.md","ref":"api/GetSqlExcpetion.md","articles":[]},"previous":{"title":"Get-ScMajorVersion","level":"1.2.9","depth":2,"path":"api/Get-ScMajorVersion.md","ref":"api/Get-ScMajorVersion.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-unic@git+https://github.com/unic/gitbook-plugin-theme-unic.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":[]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-unic":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"links":{"sharing":{"all":false}},"gitbook":"3.2.3"},"file":{"path":"api/Get-ScScratchProjectConfig.md","mtime":"2018-02-08T00:34:21.137Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-02-08T00:35:43.916Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

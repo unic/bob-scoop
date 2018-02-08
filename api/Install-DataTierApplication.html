@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Set-ScSerializationReference · GitBook</title>
+        <title>Install-DataTierApplication · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Start-ScAppPool.html" />
+    <link rel="next" href="Install-NugetPackageToCache.html" />
     
     
-    <link rel="prev" href="Set-ScActiveRole.html" />
+    <link rel="prev" href="Initialize-EnvironmentSetup.html" />
     
 
     </head>
@@ -302,7 +302,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.15" data-path="Install-DataTierApplication.html">
+        <li class="chapter active" data-level="1.2.15" data-path="Install-DataTierApplication.html">
             
                 <a href="Install-DataTierApplication.html">
             
@@ -510,7 +510,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2.31" data-path="Set-ScSerializationReference.html">
+        <li class="chapter " data-level="1.2.31" data-path="Set-ScSerializationReference.html">
             
                 <a href="Set-ScSerializationReference.html">
             
@@ -636,7 +636,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Set-ScSerializationReference</a>
+        <a href=".." >Install-DataTierApplication</a>
     </h1>
 </div>
 
@@ -651,17 +651,15 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="set-scserializationreference">Set-ScSerializationReference</h1>
-<p>Sets the SerializationReference path of the current project.</p>
+                                <h1 id="install-datatierapplication">Install-DataTierApplication</h1>
+<p>Installs a .dacpac file</p>
 <h2 id="syntax">Syntax</h2>
-<pre><code>Set-ScSerializationReference [[-WebPath] &lt;String&gt;] [[-ProjectPath] &lt;String&gt;] [[-SerializationPath] &lt;String&gt;] [[-SerializationTemplateKey] &lt;String&gt;] [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
+<pre><code>Install-DataTierApplication [-DacPacPath] &lt;String&gt; [-DatabaseName] &lt;String&gt; [[-ServerName] &lt;String&gt;] [[-ProjectPath] &lt;String&gt;] [&lt;CommonParameters&gt;]
 </code></pre><h2 id="description">Description</h2>
-<p>Creates or edits the serialization reference configuration path in the local IIS web path to a configured directoy in Bob.config.
-This configuration is used by Sitecore to know where items should be automaticaly serialized.</p>
+<p>Installs a .dacpac file on the specified server with the defined database name.</p>
 <h2 id="parameters">Parameters</h2>
-<pre><code>-WebPath &lt;String&gt;
-</code></pre><p><em>The Web-Folder of the IIS Site.</em></p>
-<table>
+<pre><code>-DacPacPath &lt;String&gt;
+</code></pre><table>
 <thead>
 <tr>
 <th>Position</th>
@@ -674,8 +672,52 @@ This configuration is used by Sitecore to know where items should be automatical
 <tbody>
 <tr>
 <td>1</td>
-<td>false</td>
+<td>true</td>
 <td></td>
+<td>false</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<pre><code>-DatabaseName &lt;String&gt;
+</code></pre><table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Required</th>
+<th>Default value</th>
+<th>Accept pipeline input</th>
+<th>Accept wildchard characters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>true</td>
+<td></td>
+<td>false</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<pre><code>-ServerName &lt;String&gt;
+</code></pre><table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Required</th>
+<th>Default value</th>
+<th>Accept pipeline input</th>
+<th>Accept wildchard characters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>false</td>
+<td>localhost</td>
 <td>false</td>
 <td>false</td>
 </tr>
@@ -695,95 +737,7 @@ This configuration is used by Sitecore to know where items should be automatical
 </thead>
 <tbody>
 <tr>
-<td>2</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-SerializationPath &lt;String&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-SerializationTemplateKey &lt;String&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
 <td>4</td>
-<td>false</td>
-<td>SerializationReferenceTemplate</td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-WhatIf &lt;SwitchParameter&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>named</td>
-<td>false</td>
-<td></td>
-<td>false</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<pre><code>-Confirm &lt;SwitchParameter&gt;
-</code></pre><table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Required</th>
-<th>Default value</th>
-<th>Accept pipeline input</th>
-<th>Accept wildchard characters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>named</td>
 <td>false</td>
 <td></td>
 <td>false</td>
@@ -794,7 +748,7 @@ This configuration is used by Sitecore to know where items should be automatical
 <hr>
 <h2 id="examples">Examples</h2>
 <h3 id="--------------------------example-1---------------------------">-------------------------- EXAMPLE 1 --------------------------</h3>
-<pre><code>Set-ScSerializationReference
+<pre><code>Install-DataTierApplication &quot;c:\temp\Sitecore.Master.dacpac&quot; &quot;sitecore_master&quot;
 </code></pre>
                                 
                                 </section>
@@ -822,12 +776,12 @@ This configuration is used by Sitecore to know where items should be automatical
 
             
                 
-                <a href="Set-ScActiveRole.html" class="navigation navigation-prev " aria-label="Previous page: Set-ScActiveRole">
+                <a href="Initialize-EnvironmentSetup.html" class="navigation navigation-prev " aria-label="Previous page: Initialize-EnvironmentSetup">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="Start-ScAppPool.html" class="navigation navigation-next " aria-label="Next page: Start-ScAppPool">
+                <a href="Install-NugetPackageToCache.html" class="navigation navigation-next " aria-label="Next page: Install-NugetPackageToCache">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -838,7 +792,7 @@ This configuration is used by Sitecore to know where items should be automatical
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Set-ScSerializationReference","level":"1.2.31","depth":2,"next":{"title":"Start-ScAppPool","level":"1.2.32","depth":2,"path":"api/Start-ScAppPool.md","ref":"api/Start-ScAppPool.md","articles":[]},"previous":{"title":"Set-ScActiveRole","level":"1.2.30","depth":2,"path":"api/Set-ScActiveRole.md","ref":"api/Set-ScActiveRole.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-unic@git+https://github.com/unic/gitbook-plugin-theme-unic.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":[]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-unic":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"links":{"sharing":{"all":false}},"gitbook":"3.2.3"},"file":{"path":"api/Set-ScSerializationReference.md","mtime":"2018-02-08T00:34:28.312Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-02-08T00:35:43.916Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Install-DataTierApplication","level":"1.2.15","depth":2,"next":{"title":"Install-NugetPackageToCache","level":"1.2.16","depth":2,"path":"api/Install-NugetPackageToCache.md","ref":"api/Install-NugetPackageToCache.md","articles":[]},"previous":{"title":"Initialize-EnvironmentSetup","level":"1.2.14","depth":2,"path":"api/Initialize-EnvironmentSetup.md","ref":"api/Initialize-EnvironmentSetup.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-unic@git+https://github.com/unic/gitbook-plugin-theme-unic.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":[]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-unic":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"links":{"sharing":{"all":false}},"gitbook":"3.2.3"},"file":{"path":"api/Install-DataTierApplication.md","mtime":"2018-02-08T00:34:22.757Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-02-08T00:35:43.916Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

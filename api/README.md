@@ -49,6 +49,27 @@ Gets all databases configured for the specified project.
 
 
  [Read more](Get-ScDatabases.md)
+##  Get-ScInstallData
+Installs all required packages and returns the paths required for a Sitecore 9 installation.    
+    
+    Get-ScInstallData [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+ [Read more](Get-ScInstallData.md)
+##  Get-ScMajorVersion
+Get the current major Sitecore version.    
+    
+    Get-ScMajorVersion [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+ [Read more](Get-ScMajorVersion.md)
+##  Get-ScScratchProjectConfig
+Reads the configuration files required for Scratch and returns it as a hashtable    
+    
+    Get-ScScratchProjectConfig [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+ [Read more](Get-ScScratchProjectConfig.md)
 ##  GetSqlExcpetion
     GetSqlExcpetion [[-ex] <Object>]
 
@@ -68,6 +89,20 @@ Performs all actions required on the local system to get started with a new proj
 
 
  [Read more](Initialize-Environment.md)
+##  Initialize-EnvironmentSetup
+Initializes a Sitecore 9 base installation.    
+    
+    Initialize-EnvironmentSetup [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+ [Read more](Initialize-EnvironmentSetup.md)
+##  Install-DataTierApplication
+Installs a .dacpac file    
+    
+    Install-DataTierApplication [-DacPacPath] <String> [-DatabaseName] <String> [[-ServerName] <String>] [[-ProjectPath] <String>] [<CommonParameters>]
+
+
+ [Read more](Install-DataTierApplication.md)
 ##  Install-NugetPackageToCache
 Installs a NuGet package to the Bob-Cache.    
     
@@ -76,9 +111,7 @@ Installs a NuGet package to the Bob-Cache.
 
  [Read more](Install-NugetPackageToCache.md)
 ##  Install-ScDatabases
-Installs all databases of the project based on empty databases.    
-    
-    Install-ScDatabases [[-ProjectPath] <String>] [[-DatabasePath] <String>] [-Force] [[-Databases] <String[]>] [<CommonParameters>]
+    Install-ScDatabases [[-ProjectPath] <string>] [[-DatabasePath] <string>] [[-Databases] <string[]>] [-Force] [<CommonParameters>]
 
 
  [Read more](Install-ScDatabases.md)
