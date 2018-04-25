@@ -72,6 +72,8 @@ function Install-ScDatabases
             -ProjectPath $ProjectPath
         }
 
+        $dbCache = $dbCache.TrimEnd('\')
+
         $stoppedWebAppPool = $false
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
         if($Force -and $config.WebsiteCodeName -and $isAdmin) {
