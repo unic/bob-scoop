@@ -72,6 +72,8 @@ function Install-ScDatabases
             -ProjectPath $ProjectPath
         }
 
+        $dbCache = $dbCache.TrimEnd('\')
+
         $stoppedWebAppPool = $false
         $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
         if($Force -and $config.WebsiteCodeName -and $isAdmin) {
@@ -98,7 +100,7 @@ function Install-ScDatabases
                 elseif($db -like "*_master") {
                     $scDb = "Sitecore.Master"
                 }
-                elseif($db -like "*_web") {
+                elseif(($db -like "*_web") -and ($db -notlike "*exm_web")) {
                     $scDb = "Sitecore.Web"
                 }
                 elseif(($db -like "*_analytics" -or $db -like "*_reporting") -and (Test-Path "$dbCache\Sitecore.Analytics.mdf")) {
