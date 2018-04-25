@@ -98,7 +98,7 @@ function Install-ScDatabases
                 elseif($db -like "*_master") {
                     $scDb = "Sitecore.Master"
                 }
-                elseif($db -like "*_web") {
+                elseif(($db -like "*_web") -and ($db -notlike "*exm_web")) {
                     $scDb = "Sitecore.Web"
                 }
                 elseif(($db -like "*_analytics" -or $db -like "*_reporting") -and (Test-Path "$dbCache\Sitecore.Analytics.mdf")) {
