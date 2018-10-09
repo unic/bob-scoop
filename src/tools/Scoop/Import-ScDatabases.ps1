@@ -83,6 +83,12 @@ Function Import-ScDatabases
             mkdir $myTemp | Out-Null
         }
 
+        $DatabaseDbPrefix = $config.DatabaseDbPrefix;
+        $BackupPrefix = $config.DatabaseBackupPrefix;
+        if(-not $BackupPrefix) {
+            Write-Verbose "The backups prefix could not be found. Database name will be used to find the correct backup."
+        }
+
         foreach($databaseName in $databases) {
             if($databaseName.EndsWith("_web") -and (-not $IncludeWebDatabase)) {
                 continue;
@@ -108,7 +114,15 @@ Function Import-ScDatabases
                 }
 
             }
-            $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$databaseName*.bak" } | select -Last 1
+
+            $backupName = $databaseName;
+
+            if($BackupPrefix) {
+                $backupName = $databaseName.replace($DatabaseDbPrefix, $BackupPrefix);
+            }
+            
+            $file = ls ($BackupShare + "\" ) | ? {$_.Name -like "$backupName*.bak" } | select -Last 1
+            
             if($file) {
                 $tempPath = "$myTemp\$($file.Name)"
                 Write-Verbose "Copy backup file from $($file.FullName) to $tempPath"
@@ -132,7 +146,7 @@ Function Import-ScDatabases
                 }
             }
             else {
-                Write-Error "No *.bak file found for database $databaseName on file share $BackupShare"
+                Write-Error "No *.bak file found for database $backupName on file share $BackupShare"
             }
 
        }
