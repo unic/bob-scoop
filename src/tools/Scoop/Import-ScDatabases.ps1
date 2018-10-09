@@ -41,7 +41,7 @@ Function Import-ScDatabases
         $config = Get-ScProjectConfig $ProjectPath
 
         $BackupShare = $config.DatabaseBackupShare;
-        
+
         if((-not $BackupShare) -or ( -not (Test-Path $BackupShare))) {
             Write-Error "The backups location '$($BackupShare)' could not be found, please check if you have access to this location and if it is well configured in the Bob.config file."
             exit
@@ -86,7 +86,7 @@ Function Import-ScDatabases
         $DatabaseDbPrefix = $config.DatabaseDbPrefix;
         $BackupPrefix = $config.DatabaseBackupPrefix;
         if(-not $BackupPrefix) {
-            Write-Verbose "The backups prefix could not be found. Default database prefix '$($DatabaseDbPrefix)' will be used."
+            Write-Verbose "The backups prefix could not be found. Database name will be used to find the correct backup."
         }
 
         foreach($databaseName in $databases) {
