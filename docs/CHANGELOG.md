@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2
+
+* Add database backup prefix to handle different source environments
+
 ## 3.1
 
 * Add support for Sitecore 9
