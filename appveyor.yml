@@ -34,7 +34,6 @@ build_script:
 
 after_build:
   - cmd: appveyor PushArtifact %Artefact_Output_Dir%\%NuGet_PackageId%.%GitVersion_NuGetVersionV2%.nupkg
-  - cmd: appveyor PushArtifact %Artefact_Output_Dir%\docs.zip
 
 test_script:
   - ps: .\runTests.ps1
