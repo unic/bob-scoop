@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.1
+
+* Remove documents generation
+
 ## 3.2
 
 * Add database backup prefix to handle different source environments
