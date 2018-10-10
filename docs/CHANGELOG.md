@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.2
+
+* Restore documents generation
+
 ## 3.2.1
 
 * Remove documents generation
