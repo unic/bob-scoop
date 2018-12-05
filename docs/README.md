@@ -55,7 +55,7 @@ Scoop can also be used in Modules. The installation is the same as for Websites.
 Currently `Set-ScSerializationReference` ist the only command suposed to be used in modules.
 
 ## SSL/TLS certificates
-When configuring `IISBindings` with an HTTPS url a certificate will be created
+When configuring `IISBindings` with HTTPS, a certificate will be created
 and configured automatically in `Enable-ScSite`. It will be signed with a
 certificate authority named Scoop. The certificate authority will be created
 automatically if it not exists yet and will be trusted in the windows
