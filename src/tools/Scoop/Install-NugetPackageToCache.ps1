@@ -40,7 +40,7 @@ function Install-NugetPackageToCache
             Install-NugetPackage `
                 -PackageId $PackageId `
                 -Version $Version `
-                -OutputLocation $cacheLocation
+                -OutputLocation $cacheLocation | Out-Null
         }
         
         return $cacheLocation
