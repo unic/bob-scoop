@@ -57,43 +57,42 @@ function Install-Sitecore
 
                 try
                 {
-                    if((Test-Path $webPath) -and (ls $webPath).Count -gt 0) {
-                        if($Backup) {
-                            Write-Verbose "Backup $webPath to temporary location $tempBackup"
-                            mv $webPath\* $tempBackup
+                    $ExistingFolder = Test-Path $webPath -and (ls $webPath).Count -gt 0
 
-                            $backupFile = Join-Path $backupPath "Fullbackup.zip"
-                            if(Test-Path $backupFile) {
-                                Write-Verbose "Remove old backup file $backupFile"
-                                rm $backupFile
-                            }
-                            Write-Verbose "Write backup to $backupFile"
-                            Write-RubbleArchive -Path $tempBackup -OutputLocation $backupFile
-                        }
+                    if($ExistingFolder -and -not ($Backup -or -$Force)) {
+                        Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
+                        return
+                    }
 
-                        if($Force) {
-                            if((Get-ScMajorVersion $ProjectPath) -ge 9){
-                                $installData = Get-ScInstallData $ProjectPath
-                                Write-Host "Installing Sitecore..."
-                                Install-SitecoreSetup `
-                                    -ModuleSifPath $installData.SifPath `
-                                    -ModuleFundamentalsPath $installData.FundamentalsPath `
-                                    -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
-                                    -SitecorePackagePath $installData.SitecorePackagePath `
-                                    -LicenseFilePath $installData.LicenseFilePath `
-                                    -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
-                                    -CertPathFolder $installData.CertCreationLocation
-                            }
-                            else {
-                                Write-Verbose "Web folder $webPath already exists and Force is true. Overwrite web folder."
-                                Write-Verbose "Install Sitecore distribution to $webPath"
-                                Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath    
-                            }
+                    if($Backup -and $ExistingFolder) {
+                        Write-Verbose "Backup $webPath to temporary location $tempBackup"
+                        mv $webPath\* $tempBackup
+
+                        $backupFile = Join-Path $backupPath "Fullbackup.zip"
+                        if(Test-Path $backupFile) {
+                            Write-Verbose "Remove old backup file $backupFile"
+                            rm $backupFile
                         }
-                        else {
-                            Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
-                            return
-                        }
+                        Write-Verbose "Write backup to $backupFile"
+                        Write-RubbleArchive -Path $tempBackup -OutputLocation $backupFile
+                    }
+
+                    if((Get-ScMajorVersion $ProjectPath) -ge 9){
+                        $installData = Get-ScInstallData $ProjectPath
+                        Write-Host "Installing Sitecore..."
+                        Install-SitecoreSetup `
+                            -ModuleSifPath $installData.SifPath `
+                            -ModuleFundamentalsPath $installData.FundamentalsPath `
+                            -SifConfigPathSitecoreXp0 $installData.SifConfigPathSitecoreXp0 `
+                            -SitecorePackagePath $installData.SitecorePackagePath `
+                            -LicenseFilePath $installData.LicenseFilePath `
+                            -SifConfigPathCreateCerts $installData.SifConfigPathCreateCerts `
+                            -CertPathFolder $installData.CertCreationLocation
+                    }
+                    else {
+                        Write-Verbose "Web folder $webPath already exists and Force is true. Overwrite web folder."
+                        Write-Verbose "Install Sitecore distribution to $webPath"
+                        Install-SitecorePackage -OutputLocation $webPath -ProjectPath $ProjectPath    
                     }
                 }
                 catch
@@ -102,14 +101,13 @@ function Install-Sitecore
                 }
                 finally
                 {
-                                
                     if (-not $config.WebRootConnectionStringsPath)
                     {
                         Write-Error "The WebRootConnectionStringsPath setting must be set in order to handle connection strings correctly."
                     }
                     
-                if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath))
-                {
+                    if(Test-Path (Join-Path $webPath $config.WebRootConnectionStringsPath))
+                    {
                         Merge-ConnectionStrings -OutputLocation (Join-Path $webPath $config.WebRootConnectionStringsPath) -ProjectPath $ProjectPath
                     }
                 }
