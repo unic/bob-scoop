@@ -59,7 +59,7 @@ function Install-Sitecore
                 {
                     $ExistingFolder = (Test-Path $webPath) -and ((ls $webPath).Count -gt 0)
 
-                    if($ExistingFolder -and -not ($Backup -or -$Force)) {
+                    if($ExistingFolder -and -not ($Backup -or $Force)) {
                         Write-Warning "Web folder $webPath already exists and Force is false. Nothing will be done."
                         return
                     }
